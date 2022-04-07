@@ -4,13 +4,17 @@
   "description": "",
   "main": "./dist/index.mjs",
   "scripts": {
-    "build": "rimraf ./dist && node esbuild.config.mjs",
+    "build": "rimraf ./dist && npm run prisma:generate && node esbuild.config.mjs",
     "dev": "wrangler dev --port 3000",
-    "dev:miniflare": "miniflare --watch --debug --env .env --port=3000"
+    "dev:miniflare": "miniflare --watch --debug --env .env --port=3000",
+    "prisma:generate": "PRISMA_CLIENT_ENGINE_TYPE=dataproxy prisma generate"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^3.12.0"
+  },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.4.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
@@ -30,6 +34,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
     "miniflare": "^2.4.0",
+    "prisma": "^3.12.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.3",
     "wrangler": "^0.0.4"
