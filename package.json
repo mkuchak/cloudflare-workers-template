@@ -2,8 +2,9 @@
   "name": "cloudflare-workers-template",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
   "scripts": {
+    "build": "rimraf ./dist && node esbuild.config.mjs",
     "dev": "wrangler dev --port 3000",
     "dev:miniflare": "miniflare --watch --debug --env .env --port=3000"
   },
