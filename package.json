@@ -4,6 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
+    "dev": "wrangler dev --port 3000",
     "dev:miniflare": "miniflare --watch --debug --env .env --port=3000"
   },
   "keywords": [],
