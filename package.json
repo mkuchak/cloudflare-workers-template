@@ -4,7 +4,8 @@
   "description": "",
   "main": "./dist/index.mjs",
   "scripts": {
-    "build": "rimraf ./dist && npm run prisma:generate && node esbuild.config.mjs",
+    "prepublish": "rimraf ./dist && npm run prisma:generate && npm run build",
+    "build": "node esbuild.config.mjs",
     "dev": "wrangler dev --port 3000",
     "dev:miniflare": "miniflare --watch --debug --env .env --port=3000",
     "prisma:generate": "PRISMA_CLIENT_ENGINE_TYPE=dataproxy prisma generate"
