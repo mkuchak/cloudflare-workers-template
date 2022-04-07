@@ -1,0 +1,14 @@
+name = "cloudflare-workers-template"
+type = "javascript"
+route = ''
+zone_id = ''
+usage_model = ''
+compatibility_flags = []
+workers_dev = true
+compatibility_date = "2022-04-07"
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format = "service-worker"
