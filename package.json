@@ -4,8 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "rimraf ./dist && esbuild ./src/index.ts --outdir=./dist --minify --bundle --sourcemap",
-    "dev": "wrangler dev --port 3000"
+    "dev:miniflare": "miniflare --watch --debug --env .env --port=3000"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +23,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
+    "miniflare": "^2.4.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.3",
     "wrangler": "^0.0.4"
