@@ -9,13 +9,16 @@ const { NodeModulesPolyfillPlugin } = NodeModulesPolyfill
 const { createRequire } = NodeModule
 const require = createRequire(import.meta.url)
 
+const isDev = process.env.NODE_ENV === 'development'
+
 try {
   await build({
     bundle: true,
-    // minify: true,
+    minify: !isDev,
     sourcemap: true,
     format: 'esm',
     target: 'esnext',
+    platform: 'browser',
     entryPoints: ['./src/index.ts'],
     outdir: './dist',
     outExtension: { '.js': '.mjs' },
