@@ -93,5 +93,11 @@ The default schema and API brings some useful things to start a project like use
 - Start a clean architecture model
 - Start a durable object model
 - Create a test suite with Jest
+- Create http/request/response adapter
+- Use [Web Crypto API](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/) to use less CPU-time
+- Add SendGrid mailer with provider to confirm email
+- Implement authentication and authorization
+- Add error handling with response
+- Start a CI/CD pipeline example with wrangler and GitHub Actions
 - ...
 - This is under construction yet
