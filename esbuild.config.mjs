@@ -19,7 +19,7 @@ try {
     format: 'esm',
     target: 'esnext',
     platform: 'browser',
-    entryPoints: ['./src/index.ts'],
+    entryPoints: ['./src/infra/http/app.ts'],
     outdir: './dist',
     outExtension: { '.js': '.mjs' },
     plugins: [

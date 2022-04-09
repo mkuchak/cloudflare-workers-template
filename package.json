@@ -2,13 +2,14 @@
   "name": "cloudflare-workers-template",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.mjs",
   "scripts": {
     "build": "rimraf ./dist && node esbuild.config.mjs",
-    "dev": "NODE_ENV=development miniflare --watch --debug --env .env --port=3000 --global-async-io --global-timers --global-random",
+    "dev": "NODE_ENV=development miniflare --watch --debug --env .env --port=3000",
+    "dev:globals": "NODE_ENV=development miniflare --watch --debug --env .env --port=3000 --global-async-io --global-timers --global-random",
     "dev:staging": "wrangler dev --port 3000",
-    "publish": "wrangler publish",
     "credentials": "wrangler login",
+    "publish": "wrangler publish",
+    "logs": "wrangler tail",
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
@@ -18,16 +19,24 @@
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix",
     "postinstall": "patch-package"
   },
+  "prisma": {
+    "schema": "./src/infra/repository/prisma/schema.prisma"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^3.12.0"
+    "@prisma/client": "^3.12.0",
+    "bcryptjs": "^2.4.3",
+    "itty-router": "^2.6.1",
+    "itty-router-extras": "^0.4.2",
+    "nanoid": "^3.3.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.4.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+    "@types/itty-router-extras": "^0.4.0",
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
@@ -45,6 +54,7 @@
     "miniflare": "^2.4.0",
     "patch-package": "^6.4.7",
     "prisma": "^3.12.0",
+    "prisma-erd-generator": "^0.11.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.6.3",
     "wrangler": "^0.0.4"
