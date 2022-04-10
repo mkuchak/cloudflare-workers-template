@@ -25,7 +25,7 @@ npm install
 # Generate Prisma Client with types using DataProxy
 npm run prisma:generate
 
-# Start development mode
+# Start development mode in a local environment that emulates production resources (Durable Objects, KV, etc.)
 npm run dev
 ```
 
@@ -42,13 +42,16 @@ npm run build
 # Authenticate with Cloudflare
 npm run credentials
 
-# Start development mode without globalAsyncIO, globalTimers and globalRandom
+# Start development mode in local environment with globalAsyncIO, globalTimers and globalRandom enabled
 npm run dev:globals
 
-# Start app to develop in staging mode
+# Start development mode in a production-like environment on Cloudflare
 npm run dev:staging
 
-# Deploy app in production mode
+# Deploy app on Cloudflare in staging mode
+npm run publish:staging
+
+# Deploy app on Cloudflare in production mode
 npm run publish
 
 # Track the logs in production mode
