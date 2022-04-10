@@ -1,7 +1,11 @@
-import { Router } from 'itty-router'
+import { StatusError, ThrowableRouter } from 'itty-router-extras'
 
 import { userRoute } from './userRoute'
 
-export const router = Router()
+export const router = ThrowableRouter()
 
-router.all('/', userRoute.handle)
+router.all('/users/*', userRoute.handle)
+
+router.all('*', () => {
+  throw new StatusError(404, 'Not Found')
+})

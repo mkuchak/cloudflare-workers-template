@@ -5,6 +5,6 @@ import { CreateUserController } from '@/infra/controller/CreateUserController'
 
 const createUserController = new CreateUserController()
 
-export const userRoute = Router()
+export const userRoute = Router({ base: '/users' })
 
 userRoute.post('/', withContent, withCookies, createUserController.handle)
