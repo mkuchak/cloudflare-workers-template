@@ -1,11 +1,14 @@
 name = "cloudflare-workers-template"
 type = "javascript"
-route = ''
-zone_id = ''
-usage_model = ''
+route = ""
+zone_id = ""
+usage_model = ""
 compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-04-07"
+
+[env.staging]
+name = "cloudflare-workers-template-staging"
 
 [build]
 command = "npm run build"

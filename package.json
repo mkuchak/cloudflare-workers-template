@@ -9,6 +9,7 @@
     "dev:staging": "wrangler dev --port 3000",
     "credentials": "wrangler login",
     "publish": "wrangler publish",
+    "publish:staging": "wrangler publish --env staging",
     "logs": "wrangler tail",
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
