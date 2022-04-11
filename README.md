@@ -4,6 +4,18 @@ Quickly go from MVP to scale with this template.
 
 **Why this is amazing**? Start with a simple `hello world` Worker and see how quickly you can get up and running. Then, add more features and see how quickly you can scale. If your app grows, you can easily eject from Workers or split into multiple and reuse the entire codebase.
 
+<div align="center">
+
+![TypeScript](https://img.shields.io/badge/TypeScript-3178c6.svg?logo=typescript&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F6821F?logo=cloudflare&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-0C3249?logo=prisma)
+![Jest](https://img.shields.io/badge/Jest-C21325.svg?logo=jest&logoColor=white)
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
+![ESBuild](https://img.shields.io/badge/ESBuild-EDB30B?logo=esbuild&logoColor=white)
+![GitHubActions](https://img.shields.io/badge/GitHub_Actions-%232671E5.svg?logo=githubactions&logoColor=white)
+
+</div>
+
 ## Quick start
 
 Clone this repository without commit history:
