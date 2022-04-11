@@ -1,9 +1,9 @@
-import { status } from 'itty-router-extras'
+import { StatusError } from 'itty-router-extras'
 
 import { CryptoAdapter } from '@/application/adapter/CryptoAdapter'
 import { User } from '@/domain/entity/User'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { BcryptjsAdapter } from '@/infra/adapter/BcryptjsAdapter'
+import { BcryptjsAdapter } from '@/infra/adapter/CryptoAdapter/BcryptjsAdapter'
 
 import { CreateUserInputDTO } from './CreateUserInputDTO'
 import { CreateUserOutputDTO } from './CreateUserOutputDTO'
@@ -22,9 +22,7 @@ export class CreateUserUseCase {
     const emailAlreadyExists = !!(await this.userRepository.findByEmail(email))
 
     if (emailAlreadyExists) {
-      return status(409, {
-        message: 'User already exists',
-      })
+      throw new StatusError(409, 'User Already Exists')
     }
 
     const hashedPassword = await this.cryptoAdapter.hash(password)
