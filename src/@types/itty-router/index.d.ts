@@ -2,4 +2,5 @@
 interface Request {
   content?: any;
   cookies?: any;
+  params?: any;
 }
