@@ -1,9 +1,9 @@
 import { StatusError } from 'itty-router-extras'
 
-import { CryptoAdapter } from '@/application/adapter/CryptoAdapter'
 import { User } from '@/domain/entity/User'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { BcryptjsAdapter } from '@/infra/adapter/CryptoAdapter/BcryptjsAdapter'
+import { BcryptjsAdapter } from '@/infra/adapter/crypto/BcryptjsAdapter'
+import { Crypto } from '@/infra/adapter/crypto/Crypto'
 
 import { CreateUserInputDTO } from './CreateUserInputDTO'
 import { CreateUserOutputDTO } from './CreateUserOutputDTO'
@@ -11,7 +11,7 @@ import { CreateUserOutputDTO } from './CreateUserOutputDTO'
 export class CreateUserUseCase {
   constructor (
     private readonly userRepository: UserRepository,
-    private readonly cryptoAdapter: CryptoAdapter = new BcryptjsAdapter(),
+    private readonly cryptoAdapter: Crypto = new BcryptjsAdapter(),
   ) {}
 
   async execute (

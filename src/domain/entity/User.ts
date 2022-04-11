@@ -1,4 +1,4 @@
-import { WebCryptoUUIDAdapter } from '@/infra/adapter/UUIDAdapter/WebCryptoUUIDAdapter'
+import { WebCryptoUUIDAdapter } from '@/infra/adapter/uuid/WebCryptoUUIDAdapter'
 
 export class User {
   id?: string = new WebCryptoUUIDAdapter().generate();

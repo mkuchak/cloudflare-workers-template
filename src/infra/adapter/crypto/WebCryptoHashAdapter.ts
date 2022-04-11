@@ -1,13 +1,10 @@
-import {
-  CryptoAdapter,
-  ICryptoAdapterOptions,
-} from '@/application/adapter/CryptoAdapter'
+import { Crypto, ICryptoOptions } from './Crypto'
 
-export class WebCryptoHashAdapter implements CryptoAdapter {
+export class WebCryptoHashAdapter implements Crypto {
   // @warning Iterations should be at least >= 15,000
   // Recommended is 100,000, but Workers have a CPU runtime limit of 10-50 ms
   // An alternative is to active Workers Unbound that can reach until 30 seconds
-  async hash (value: string, options: ICryptoAdapterOptions = {}) {
+  async hash (value: string, options: ICryptoOptions = {}) {
     let salt =
       options?.saltBuffer || crypto.getRandomValues(new Uint8Array(16))
     const iterations = options.iterations || 15000
