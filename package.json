@@ -37,6 +37,7 @@
     "@cloudflare/workers-types": "^3.4.0",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+    "@types/bcryptjs": "^2.4.2",
     "@types/itty-router-extras": "^0.4.0",
     "@types/jest": "^27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
