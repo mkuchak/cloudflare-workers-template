@@ -1,7 +1,7 @@
-import { NanoidAdapter } from '@/infra/adapter/NanoidAdapter'
+import { WebCryptoUUIDAdapter } from '@/infra/adapter/UUIDAdapter/WebCryptoUUIDAdapter'
 
 export class User {
-  id?: string = new NanoidAdapter().generate();
+  id?: string = new WebCryptoUUIDAdapter().generate();
   email: string;
   password: string;
   name?: string;
