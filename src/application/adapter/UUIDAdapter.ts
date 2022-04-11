@@ -1,3 +1,3 @@
-export interface UniqueIdAdapter {
+export interface UUIDAdapter {
   generate(length?: number): string;
 }
