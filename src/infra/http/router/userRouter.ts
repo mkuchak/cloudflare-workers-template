@@ -1,16 +1,9 @@
-import { Router } from 'itty-router'
-import { withContent, withCookies, withParams } from 'itty-router-extras'
-
 import { CreateUserController } from '@/infra/controller/CreateUserController'
+
+import { IttyRouterAdapter } from '../IttyRouterAdapter'
 
 const createUserController = new CreateUserController()
 
-export const userRouter = Router({ base: '/users' })
+export const userRouter = new IttyRouterAdapter('/users')
 
-userRouter.post(
-  '/',
-  withContent,
-  withCookies,
-  withParams,
-  createUserController.handle,
-)
+userRouter.on('post', '/', createUserController.handle)

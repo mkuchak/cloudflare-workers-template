@@ -1,11 +1,11 @@
-import { StatusError, ThrowableRouter } from 'itty-router-extras'
-
+import { IttyRouterAdapter } from '../IttyRouterAdapter'
+import { ResponseError } from '../response/ResponseError'
 import { userRouter } from './userRouter'
 
-export const router = ThrowableRouter()
+export const router = new IttyRouterAdapter()
 
-router.all('/users/*', userRouter.handle)
+router.join('/users/*', userRouter.listen)
 
-router.all('*', () => {
-  throw new StatusError(404, 'Not Found')
+router.join('*', () => {
+  throw new ResponseError(404, 'Not Found')
 })

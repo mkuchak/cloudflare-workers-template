@@ -1,7 +1,7 @@
-import { status } from 'itty-router-extras'
-
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
 import { UserRepositoryPrisma } from '@/infra/repository/prisma/implementation/UserRepositoryPrisma'
+
+import { ResponseJson } from '../http/response/ResponseJson'
 
 export class CreateUserController {
   async handle (request: Request): Promise<Response> {
@@ -18,6 +18,6 @@ export class CreateUserController {
       picture,
     })
 
-    return status(201, output)
+    return new ResponseJson(201, output)
   }
 }
