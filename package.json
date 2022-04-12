@@ -6,7 +6,7 @@
     "build": "rimraf ./dist && node esbuild.config.mjs",
     "dev": "NODE_ENV=development miniflare --watch --debug --env .env --port=3000",
     "dev:globals": "NODE_ENV=development miniflare --watch --debug --env .env --port=3000 --global-async-io --global-timers --global-random",
-    "dev:staging": "wrangler dev --port 3000",
+    "dev:staging": "wrangler dev --inspect --port 3000",
     "credentials": "wrangler login",
     "publish": "wrangler publish",
     "publish:staging": "wrangler publish --env staging",
