@@ -9,6 +9,7 @@ Quickly go from MVP to scale with this template.
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178c6.svg?logo=typescript&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F6821F?logo=cloudflare&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-0C3249?logo=prisma)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
 ![Jest](https://img.shields.io/badge/Jest-C21325.svg?logo=jest&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
 ![ESBuild](https://img.shields.io/badge/ESBuild-EDB30B?logo=esbuild&logoColor=white)
