@@ -14,6 +14,7 @@
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:sync": "prisma db push",
     "prisma:reset": "prisma migrate reset --force",
     "prisma:generate": "PRISMA_CLIENT_ENGINE_TYPE=dataproxy prisma generate",
     "lint": "eslint ./src/**/*.{ts,tsx}",

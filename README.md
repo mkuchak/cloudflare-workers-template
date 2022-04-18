@@ -78,6 +78,9 @@ npm run prisma:migrate
 # Create and apply migrations
 npm run prisma:migrate:dev
 
+# Synchronize schema and database without changing migrations table (useful in PlanetScale)
+npm run prisma:sync
+
 # Reset entire database
 npm run prisma:reset
 
