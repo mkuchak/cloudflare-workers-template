@@ -4,10 +4,10 @@ import { User } from '@/domain/entity/User'
 import { UserRepository } from '@/domain/repository/UserRepository'
 
 export class UserRepositoryPrisma implements UserRepository {
-  constructor (private readonly prisma = new PrismaClient()) {}
+  constructor (readonly client = new PrismaClient()) {}
 
   async save (user: User): Promise<void> {
-    await this.prisma.user.upsert({
+    await this.client.user.upsert({
       where: {
         id: user.id,
       },
@@ -17,7 +17,7 @@ export class UserRepositoryPrisma implements UserRepository {
   }
 
   async findById (id: string): Promise<User> {
-    return await this.prisma.user.findFirst({
+    return await this.client.user.findFirst({
       where: {
         id,
       },
@@ -25,7 +25,7 @@ export class UserRepositoryPrisma implements UserRepository {
   }
 
   async findByEmail (email: string): Promise<User> {
-    return await this.prisma.user.findFirst({
+    return await this.client.user.findFirst({
       where: {
         email,
       },

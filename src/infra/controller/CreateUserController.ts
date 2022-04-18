@@ -1,15 +1,15 @@
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
-import { UserRepositoryPrisma } from '@/infra/repository/prisma/implementation/UserRepositoryPrisma'
+import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
 import { ResponseJson } from '../http/response/ResponseJson'
 
 export class CreateUserController {
+  constructor (readonly repositoryFactory: RepositoryFactory) {}
+
   async handle (request: Request): Promise<Response> {
     const { email, password, name, picture } = request.content
 
-    const userRepositoryPrisma = new UserRepositoryPrisma()
-
-    const createUserUseCase = new CreateUserUseCase(userRepositoryPrisma)
+    const createUserUseCase = new CreateUserUseCase(this.repositoryFactory)
 
     const output = await createUserUseCase.execute({
       email,

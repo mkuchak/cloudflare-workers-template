@@ -1,17 +1,23 @@
 import { User } from '@/domain/entity/User'
+import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
 import { BcryptjsAdapter } from '@/infra/adapter/crypto/BcryptjsAdapter'
 import { Crypto } from '@/infra/adapter/crypto/Crypto'
+import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 import { ResponseError } from '@/infra/http/response/ResponseError'
 
 import { CreateUserInputDTO } from './CreateUserInputDTO'
 import { CreateUserOutputDTO } from './CreateUserOutputDTO'
 
 export class CreateUserUseCase {
+  userRepository: UserRepository;
+
   constructor (
-    private readonly userRepository: UserRepository,
-    private readonly cryptoAdapter: Crypto = new BcryptjsAdapter(),
-  ) {}
+    readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
+    readonly cryptoAdapter: Crypto = new BcryptjsAdapter(),
+  ) {
+    this.userRepository = repositoryFactory.createUserRepository()
+  }
 
   async execute (input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
     const { email, password, name, picture } = input

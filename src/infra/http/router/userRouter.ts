@@ -1,9 +1,12 @@
 import { CreateUserController } from '@/infra/controller/CreateUserController'
+import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
-import { IttyRouterAdapter } from '../IttyRouterAdapter'
+import { IttyRouterHttp } from '../IttyRouterHttp'
 
-const createUserController = new CreateUserController()
+const repositoryFactoryPrisma = new RepositoryFactoryPrisma()
 
-export const userRouter = new IttyRouterAdapter('/users')
+const createUserController = new CreateUserController(repositoryFactoryPrisma)
+
+export const userRouter = new IttyRouterHttp('/users')
 
 userRouter.on('post', '/', createUserController.handle)

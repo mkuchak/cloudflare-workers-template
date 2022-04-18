@@ -32,7 +32,8 @@
     "bcryptjs": "^2.4.3",
     "itty-router": "^2.6.1",
     "itty-router-extras": "^0.4.2",
-    "nanoid": "^3.3.2"
+    "nanoid": "^3.3.2",
+    "worktop": "^0.8.0-next.12"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.4.0",

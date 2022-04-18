@@ -1,8 +1,8 @@
-import { IttyRouterAdapter } from '../IttyRouterAdapter'
+import { IttyRouterHttp } from '../IttyRouterHttp'
 import { ResponseError } from '../response/ResponseError'
 import { userRouter } from './userRouter'
 
-export const router = new IttyRouterAdapter()
+export const router = new IttyRouterHttp()
 
 router.join('/users/*', userRouter.listen)
 
