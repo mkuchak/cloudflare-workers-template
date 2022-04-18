@@ -15,26 +15,38 @@ generator erd {
 }
 
 model User {
-  id               String             @id @default(uuid())
-  email            String             @unique
-  password         String
-  name             String?
-  picture          String?
-  emailVerified    Boolean            @default(false)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now()) @updatedAt
-  UserRefreshToken UserRefreshToken[]
+  id            String      @id @default(uuid())
+  email         String      @unique
+  password      String
+  name          String?
+  picture       String?
+  emailVerified Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now()) @updatedAt
+  UserToken     UserToken[]
 }
 
-model UserRefreshToken {
-  id                  String    @id @default(uuid())
-  user                User      @relation(fields: [userId], references: [id])
-  userId              String
-  token               String    @unique @default(uuid())
-  userAgent           String?
-  lastIp              String?
-  isEmailVerification Boolean   @default(false)
-  expiresAt           DateTime?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @default(now()) @updatedAt
+model UserToken {
+  id             String    @id @default(uuid())
+  user           User      @relation(fields: [userId], references: [id])
+  userId         String
+  token          String    @unique @default(uuid())
+  code           String?
+  userAgent      String?
+  lastIp         String?
+  asn            Int?
+  asOrganization String?
+  timezone       String?
+  continent      String?
+  country        String?
+  region         String?
+  regionCode     String?
+  city           String?
+  postalCode     String?
+  longitude      String?
+  latitude       String?
+  isEmailToken   Boolean   @default(false)
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now()) @updatedAt
 }
