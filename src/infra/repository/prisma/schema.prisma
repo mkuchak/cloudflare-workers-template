@@ -32,6 +32,7 @@ model UserToken {
   userId         String
   token          String    @unique @default(uuid())
   code           String?
+  codeAttempts   Int?
   userAgent      String?
   lastIp         String?
   asn            Int?
