@@ -15,6 +15,7 @@ try {
   await build({
     bundle: true,
     minify: !isDev,
+    treeShaking: !isDev,
     sourcemap: true,
     format: 'esm',
     target: 'esnext',
