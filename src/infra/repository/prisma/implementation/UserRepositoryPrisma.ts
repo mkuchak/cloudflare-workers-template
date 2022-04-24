@@ -17,18 +17,22 @@ export class UserRepositoryPrisma implements UserRepository {
   }
 
   async findById (id: string): Promise<User> {
-    return await this.client.user.findFirst({
+    const user = await this.client.user.findFirst({
       where: {
         id,
       },
     })
+
+    return user && new User(user)
   }
 
   async findByEmail (email: string): Promise<User> {
-    return await this.client.user.findFirst({
+    const user = await this.client.user.findFirst({
       where: {
         email,
       },
     })
+
+    return user && new User(user)
   }
 }

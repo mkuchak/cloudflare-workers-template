@@ -3,8 +3,8 @@ import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
 import { BcryptjsAdapter } from '@/infra/adapter/crypto/BcryptjsAdapter'
 import { Crypto } from '@/infra/adapter/crypto/Crypto'
+import { APIError } from '@/infra/error/APIError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
-import { ResponseError } from '@/infra/http/response/ResponseError'
 
 import { CreateUserInputDTO } from './CreateUserInputDTO'
 import { CreateUserOutputDTO } from './CreateUserOutputDTO'
@@ -14,7 +14,7 @@ export class CreateUserUseCase {
 
   constructor (
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
-    readonly cryptoAdapter: Crypto = new BcryptjsAdapter(),
+    readonly crypto: Crypto = new BcryptjsAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
   }
@@ -22,20 +22,23 @@ export class CreateUserUseCase {
   async execute (input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
     const { email, password, name, picture } = input
 
-    const emailAlreadyExists = !!(await this.userRepository.findByEmail(email))
+    const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(
+      email,
+    ))
 
-    if (emailAlreadyExists) {
-      throw new ResponseError(409, 'User Already Exists')
+    if (isEmailAlreadyRegistered) {
+      throw new APIError(409, 'User Already Exists')
     }
 
-    const hashedPassword = await this.cryptoAdapter.hash(password)
+    const user = new User({ email, password, name, picture })
 
-    const user = new User({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      name,
-      picture,
-    })
+    const isValidPassword = user.validatePassword()
+
+    if (!isValidPassword) {
+      throw new APIError(400, 'Weak Password')
+    }
+
+    await user.hashPassword()
 
     await this.userRepository.save(user)
 
