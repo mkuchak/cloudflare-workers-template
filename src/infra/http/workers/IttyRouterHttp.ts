@@ -20,7 +20,7 @@ export class IttyRouterHttp implements Http {
     // TODO: add observability/logging
   }
 
-  async join (...handlers: any): Promise<void> {
+  async join (...handlers: any[]): Promise<void> {
     if (typeof handlers[0] === 'string') {
       const path = handlers.shift()
 
@@ -30,7 +30,7 @@ export class IttyRouterHttp implements Http {
     }
   }
 
-  async on (method: string, path: string, ...handlers: any): Promise<void> {
+  async on (method: string, path: string, ...handlers: any[]): Promise<void> {
     const callback = handlers.pop()
 
     this.router[method](

@@ -35,7 +35,7 @@ export class ExpressFlareHttp implements Http {
     }
   }
 
-  async on (method: any, path: string, ...handlers: any) {
+  async on (method: any, path: string, ...handlers: any[]) {
     const callback = handlers.pop()
 
     this.router[method.toLowerCase()](

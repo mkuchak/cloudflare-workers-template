@@ -48,7 +48,7 @@ export class WorktopHttp implements Http {
     request.query = Object.fromEntries(new URL(request.url).searchParams)
   }
 
-  async join (...handlers: any): Promise<void> {
+  async join (...handlers: any[]): Promise<void> {
     if (typeof handlers[0] === 'string') {
       const [path, handlerOrRouter] = handlers
 
@@ -64,7 +64,7 @@ export class WorktopHttp implements Http {
     this.globalMiddlewares.push(...handlers)
   }
 
-  async on (method: string, path: string, ...handlers: any): Promise<void> {
+  async on (method: string, path: string, ...handlers: any[]): Promise<void> {
     const callback = handlers.pop()
 
     this.router.add(
