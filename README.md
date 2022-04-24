@@ -120,3 +120,7 @@ The default schema and API brings some useful things to start a project like use
 - Start a CI/CD pipeline example with wrangler and GitHub Actions
 - ...
 - This is under construction yet
+
+## License
+
+This project is licensed with the [MIT License](LICENSE).
