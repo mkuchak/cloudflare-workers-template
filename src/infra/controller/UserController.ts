@@ -1,3 +1,4 @@
+import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/AuthenticateUserUseCase'
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
@@ -10,6 +11,36 @@ export class UserController {
     const createUserUseCase = new CreateUserUseCase(this.repositoryFactory)
 
     const output = await createUserUseCase.execute(input)
+
+    return output
+  }
+
+  async authenticateUser (request: Request) {
+    const input = {
+      email: request.content.email.toLowerCase(),
+      password: request.content.password,
+      lastIp:
+        request.headers.get('cf-connecting-ip') ||
+        request.headers.get('x-forwarded-for'),
+      userAgent: request.headers.get('user-agent'),
+      asn: request.cf.asn,
+      asOrganization: request.cf.asOrganization,
+      timezone: request.cf.timezone,
+      continent: request.cf.continent,
+      country: request.cf.country,
+      region: request.cf.region,
+      regionCode: request.cf.regionCode,
+      city: request.cf.city,
+      postalCode: request.cf.postalCode,
+      longitude: request.cf.longitude,
+      latitude: request.cf.latitude,
+    }
+
+    const authenticateUserUseCase = new AuthenticateUserUseCase(
+      this.repositoryFactory,
+    )
+
+    const output = await authenticateUserUseCase.execute(input)
 
     return output
   }
