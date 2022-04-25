@@ -3,8 +3,10 @@ import { PrismaClient } from '@prisma/client'
 import { User } from '@/domain/entity/User'
 import { UserRepository } from '@/domain/repository/UserRepository'
 
+import { DataProxyPrismaClient } from '..'
+
 export class UserRepositoryPrisma implements UserRepository {
-  constructor (readonly client = new PrismaClient()) {}
+  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   async save (user: User): Promise<void> {
     await this.client.user.upsert({

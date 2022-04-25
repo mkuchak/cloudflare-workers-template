@@ -1,0 +1,24 @@
+{
+  "name": "dataproxy",
+  "scripts": {
+    "start": "ts-node-dev --inspect --exit-child --respawn --ignore-watch node_modules --no-notify --clear --quiet ./index.ts",
+    "prisma:create": "prisma migrate dev --create-only",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:sync": "prisma db push",
+    "prisma:reset": "prisma migrate reset --force",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio --browser none --port 9090"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "express": "^4.17.3",
+    "prisma-proxy-express-server": "^0.0.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "prisma": "^3.12.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  }
+}

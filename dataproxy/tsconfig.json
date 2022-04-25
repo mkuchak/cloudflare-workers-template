@@ -1,31 +1,20 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["esnext"],
+    "target": "es2016",
+    "lib": ["esnext", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
-    "moduleResolution": "node",
     "rootDir": "./",
     "baseUrl": "./",
-    "paths": {
-      "@/*": ["./src/*"],
-      "#/*": ["./test/*"]
-    },
-    "typeRoots": ["./node_modules/@types", "./src/@types"],
-    "types": ["@cloudflare/workers-types"],
     "resolveJsonModule": true,
     "allowJs": true,
     "sourceMap": true,
-    "outDir": "./dist",
     "removeComments": true,
-    "preserveConstEnums": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "strictNullChecks": false,
     "skipLibCheck": true
-  },
-  "include": ["./src/**/*"],
-  "exclude": ["node_modules", "dist", "dataproxy"]
+  }
 }

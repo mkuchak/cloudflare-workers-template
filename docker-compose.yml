@@ -1,0 +1,37 @@
+version: "3.7"
+services:
+  database:
+    container_name: cfw-database
+    image: mariadb:10.7.3-focal
+    ports:
+        - "9306:3306"
+    restart: always
+    volumes:
+        - db_data:/var/lib/mysql
+        - db_conf:/etc/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+
+  dataproxy:
+    container_name: cfw-dataproxy
+    build:
+      context: ./dataproxy
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    restart: always
+    depends_on:
+      - "database"
+    volumes:
+      - ./src/infra/repository/prisma:/home/dataproxy/prisma # maps schema.prisma directory
+    command: >
+      sh -c "sleep 10 &&
+             npm run prisma:generate &&
+             npm run prisma:migrate &&
+             npm run start"
+    environment:
+      DATABASE_URL: "mysql://root:root@database:3306/app"
+
+volumes:
+    db_data:
+    db_conf:

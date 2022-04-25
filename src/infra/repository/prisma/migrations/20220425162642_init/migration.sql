@@ -19,6 +19,7 @@ CREATE TABLE `UserToken` (
     `userId` VARCHAR(191) NOT NULL,
     `token` VARCHAR(191) NOT NULL,
     `code` VARCHAR(191) NULL,
+    `codeAttempts` INTEGER NULL,
     `userAgent` VARCHAR(191) NULL,
     `lastIp` VARCHAR(191) NULL,
     `asn` INTEGER NULL,

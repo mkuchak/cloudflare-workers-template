@@ -1,6 +1,7 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import NodeModulesPolyfill from '@esbuild-plugins/node-modules-polyfill'
 import { build } from 'esbuild'
+import envFilePlugin from 'esbuild-envfile-plugin'
 import alias from 'esbuild-plugin-alias'
 import NodeModule from 'module'
 
@@ -24,6 +25,7 @@ try {
     outdir: './dist',
     outExtension: { '.js': '.mjs' },
     plugins: [
+      envFilePlugin,
       NodeGlobalsPolyfillPlugin({
         process: true,
         buffer: true,

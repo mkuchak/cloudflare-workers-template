@@ -1,9 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 
 import { UserToken } from '@/domain/entity/UserToken'
+import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
 
-export class UserTokenRepositoryPrisma {
-  constructor (readonly client = new PrismaClient()) {}
+import { DataProxyPrismaClient } from '..'
+
+export class UserTokenRepositoryPrisma implements UserTokenRepository {
+  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   async save (userToken: UserToken): Promise<void> {
     await this.client.userToken.upsert({
