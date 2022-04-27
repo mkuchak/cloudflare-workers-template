@@ -1,5 +1,4 @@
-import * as env from 'env'
-
 export const config = {
-  dataProxyURL: env.DATAPROXY_URL,
+  nodeEnv: process.env.NODE_ENV,
+  dataProxyURL: process.env.DATAPROXY_URL,
 }

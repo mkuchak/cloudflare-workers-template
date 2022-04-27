@@ -1,7 +1,7 @@
 {
   "name": "dataproxy",
   "scripts": {
-    "start": "ts-node-dev --inspect --exit-child --respawn --ignore-watch node_modules --no-notify --clear --quiet ./index.ts",
+    "start": "ts-node-dev --respawn --ignore-watch node_modules --no-notify --clear --quiet ./index.ts",
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",

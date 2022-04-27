@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  database-test:
+    container_name: cfw-database-test
+    image: mariadb:10.7.3-focal
+    ports:
+        - "9307:3306"
+    restart: always
+    tmpfs: /var/lib/mysql # run test database in-memory to speed up tests
+    command: --default-authentication-plugin=mysql_native_password --innodb_flush_log_at_trx_commit=0 --sync-binlog=0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+
+  dataproxy-test:
+    container_name: cfw-dataproxy-test
+    build:
+      context: ./dataproxy
+    ports:
+      - "9001:9000"
+    tty: true
+    depends_on:
+      - "database"
+    volumes:
+      - ./src/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
+    environment:
+      DATABASE_URL: "mysql://root:root@database-test:3306/test"

@@ -10,7 +10,7 @@ services:
         - db_data:/var/lib/mysql
         - db_conf:/etc/mysql
     environment:
-      MARIADB_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
 
   dataproxy:
     container_name: cfw-dataproxy
@@ -18,12 +18,12 @@ services:
       context: ./dataproxy
     ports:
       - "9000:9000"
-      - "9090:9090"
+      - "9090:9090" # prisma studio port (npm run prisma:studio)
     restart: always
     depends_on:
       - "database"
     volumes:
-      - ./src/infra/repository/prisma:/home/dataproxy/prisma # maps schema.prisma directory
+      - ./src/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
     command: >
       sh -c "sleep 10 &&
              npm run prisma:generate &&

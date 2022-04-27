@@ -4,7 +4,7 @@ import { createFetchClient } from 'prisma-client-dataproxy'
 import { config } from '@/config'
 
 export const DataProxyPrismaClient =
-  process.env.NODE_ENV === 'development' &&
+  (config.nodeEnv === 'development' || config.nodeEnv === 'test') &&
   createFetchClient<PrismaClient>({
     baseUrl: config.dataProxyURL,
   })
