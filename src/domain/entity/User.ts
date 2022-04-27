@@ -18,21 +18,21 @@ export class User {
     Object.assign(this, user)
     this.id = user.id ?? uuid.generate()
     this.email = this.validateEmail() && user.email.trim().toLowerCase()
-    this.name = this.capitalize(user.name)
+    this.name = user.name && this.capitalize(user.name)
   }
 
   get firstName (): string {
-    return this.name?.split(' ')[0] || null
+    return this.name?.split(' ')[0] || undefined
   }
 
   get middleName (): string {
-    return this.name?.split(' ').slice(1, -1).join(' ') || null
+    return this.name?.split(' ').slice(1, -1).join(' ') || undefined
   }
 
   get lastName (): string {
     const splittedName = this.name?.split(' ')
 
-    return splittedName?.length >= 2 ? splittedName.slice(-1)[0] : null
+    return splittedName?.length >= 2 ? splittedName.slice(-1)[0] : undefined
   }
 
   get nameInitials (): string {
@@ -41,16 +41,14 @@ export class User {
       this.lastName?.charAt(0) || '',
     ]
 
-    return (firstLetter + secondLetter).toUpperCase() || null
+    return (firstLetter + secondLetter).toUpperCase() || undefined
   }
 
   private capitalize (text: string): string {
     return text
-      ? text
-        .trim()
-        .toLowerCase()
-        .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))
-      : undefined
+      .trim()
+      .toLowerCase()
+      .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()))
   }
 
   private validateEmail (): boolean {

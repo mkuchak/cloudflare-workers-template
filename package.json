@@ -34,6 +34,7 @@
     "@prisma/client": "^3.12.0",
     "@tsndr/cloudflare-worker-jwt": "^1.1.7",
     "bcryptjs": "^2.4.3",
+    "country-locale-map": "^1.8.0",
     "express-flare": "^1.4.9",
     "itty-router": "^2.6.1",
     "itty-router-extras": "^0.4.2",

@@ -1,3 +1,4 @@
+import clm from 'country-locale-map'
 import UAParser from 'ua-parser-js'
 
 import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
@@ -35,7 +36,8 @@ export class UserToken {
     Object.assign(this, userToken)
     this.id = userToken.id ?? uuid.generate()
     this.token = userToken.token ?? uuid.generate(128)
-    this.expiresAt = userToken.expiresAt && this.formatToDate(userToken.expiresAt)
+    this.expiresAt =
+      userToken.expiresAt && this.formatToDate(userToken.expiresAt)
   }
 
   private formatToDate (expiresAt: Date | number): Date {
@@ -76,7 +78,51 @@ export class UserToken {
     return this.userAgentParsed().device.type ?? 'desktop'
   }
 
-  get location () {
-    return `${this.city}, ${this.region}`
+  get locale () {
+    const { default_locale } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return default_locale
+  }
+
+  get locales () {
+    const { locales } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return locales
+  }
+
+  get languages () {
+    const { languages } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return languages
+  }
+
+  get currency () {
+    const { currency } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return currency
+  }
+
+  get countryEmoji () {
+    const { emoji } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return emoji
+  }
+
+  get countryCapital () {
+    const { capital } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return capital
+  }
+
+  get countryName () {
+    const { name } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return name
+  }
+
+  get continentName () {
+    const { region } = clm.getCountryByAlpha2(this.country ?? 'US')
+
+    return region
   }
 }
