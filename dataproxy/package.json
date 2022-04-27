@@ -5,7 +5,6 @@
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:sync": "prisma db push",
     "prisma:reset": "prisma migrate reset --force",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio --browser none --port 9090"

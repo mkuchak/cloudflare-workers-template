@@ -57,7 +57,7 @@ export class WorktopHttp implements Http {
           this.router.add(method, path, handlerOrRouter),
         )
       }
-      console.log('fez o mount')
+
       return this.router.mount(path, handlerOrRouter)
     }
 

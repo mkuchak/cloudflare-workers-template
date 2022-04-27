@@ -4,7 +4,7 @@ import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 export class UserTokenController {
   constructor (readonly repositoryFactory: RepositoryFactory) {}
 
-  async refreshUserToken (request: Request, context?: any) {
+  async refreshUserToken (request: Request) {
     const input = {
       refreshToken: request.params.refreshToken,
       lastIp:

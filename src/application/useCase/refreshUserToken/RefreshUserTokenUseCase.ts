@@ -49,9 +49,7 @@ export class RefreshUserTokenUseCase {
       createdAt: userToken.createdAt,
     })
 
-    await this.repositoryFactory
-      .createUserTokenRepository()
-      .save(updatedUserToken)
+    await this.userTokenRepository.save(updatedUserToken)
 
     return {
       accessToken,

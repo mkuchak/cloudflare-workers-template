@@ -4,17 +4,18 @@ import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma
 
 describe('create user use case', () => {
   it('should create user', async () => {
-    const repositoryFactoryPrisma = new RepositoryFactoryPrisma()
-    const createUserUseCase = new CreateUserUseCase(repositoryFactoryPrisma)
+    const repositoryFactory = new RepositoryFactoryPrisma()
+    const createUserUseCase = new CreateUserUseCase(repositoryFactory)
 
     const newUser = new User({
       email: 'johndoe44@gmail.com',
       password: '12345@Aa',
+      name: 'John Doe',
     })
 
     await createUserUseCase.execute(newUser)
 
-    const userRepository = repositoryFactoryPrisma.createUserRepository()
+    const userRepository = repositoryFactory.createUserRepository()
     const user = await userRepository.findByEmail('johndoe44@gmail.com')
 
     console.log(user)

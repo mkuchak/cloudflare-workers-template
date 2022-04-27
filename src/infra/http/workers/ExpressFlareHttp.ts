@@ -31,7 +31,6 @@ export class ExpressFlareHttp implements Http {
       this.router.all(path, ...handlers)
     } else {
       handlers.forEach((handler: any) => this.router.use(handler))
-      // this.router.use(...handlers)
     }
   }
 
