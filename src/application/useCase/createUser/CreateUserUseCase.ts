@@ -20,7 +20,7 @@ export class CreateUserUseCase {
   }
 
   async execute (input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
-    const { email, password, name, picture } = input
+    const { email, ...restInput } = input
 
     const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(
       email,
@@ -30,7 +30,7 @@ export class CreateUserUseCase {
       throw new APIError(409, 'User Already Exists')
     }
 
-    const user = new User({ email, password, name, picture })
+    const user = new User({ email, ...restInput })
 
     const isValidPassword = user.validatePassword()
 

@@ -34,7 +34,7 @@ Rename the app name in `package.json` and `wrangler.toml`.
 # Copy the example .env file and modify as needed
 cp .env.example .env
 
-# Start database and dataproxy to develop locally (wait ~10s for container processes to rise)
+# Start database and dataproxy to develop locally (wait some seconds for container processes to rise)
 docker-compose up -d
 
 # Install dependencies
@@ -65,12 +65,6 @@ docker-compose -f docker-compose.test.yml down
 ### Useful commands:
 
 ```bash
-# Start only develop containers and (re)build them
-docker-compose up -d --build -V
-
-# Remove all containers and volumes (database data is lost)
-docker-compose down --remove-orphans -v
-
 # Build the app using ESBuild
 npm run build
 
@@ -115,6 +109,18 @@ npm run prisma:reset
 
 # Start Prisma Studio in development database
 npm run prisma:studio
+
+# Start only development containers (not test ones, it needs to start with test command)
+npm run dataproxy:start
+
+# Stop all containers (including the test ones)
+npm run dataproxy:stop
+
+# Stop all containers and start development containers
+npm run dataproxy:restart
+
+# Remove all containers and volumes (database data is lost) and up it again (excluding test containers)
+npm run dataproxy:reset
 
 # Detect and fix linting errors
 npm run lint

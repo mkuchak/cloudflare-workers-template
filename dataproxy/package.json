@@ -1,10 +1,11 @@
 {
   "name": "dataproxy",
   "scripts": {
-    "start": "ts-node-dev --respawn --ignore-watch node_modules --no-notify --clear --quiet ./index.ts",
+    "start": "ts-node-dev --respawn --deps --watch ./node_modules/.prisma --clear --quiet ./index.ts",
     "prisma:create": "prisma migrate dev --create-only",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev",
+    "prisma:seed": "echo \"Error: no seed specified\" && exit 1",
     "prisma:reset": "prisma migrate reset --force",
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio --browser none --port 9090"

@@ -11,6 +11,7 @@ services:
         - db_conf:/etc/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
 
   dataproxy:
     container_name: cfw-dataproxy
@@ -18,16 +19,17 @@ services:
       context: ./dataproxy
     ports:
       - "9000:9000"
-      - "9090:9090" # prisma studio port (npm run prisma:studio)
+      - "9090:9090" # prisma studio port
     restart: always
     depends_on:
       - "database"
     volumes:
       - ./src/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
     command: >
-      sh -c "sleep 10 &&
+      sh -c "until nc -z cfw-database 3306; do sleep 1; done &&
              npm run prisma:generate &&
              npm run prisma:migrate &&
+             npm run prisma:studio &
              npm run start"
     environment:
       DATABASE_URL: "mysql://root:root@database:3306/app"
