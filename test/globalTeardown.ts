@@ -6,8 +6,11 @@ export default async function () {
   if (isCI) {
     down()
   } else {
-    await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:reset'], {
-      cwd: join(__dirname),
-    })
+    // Clean the database occasionally
+    if (Math.ceil(Math.random() * 10) === 10) {
+      await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:reset'], {
+        cwd: join(__dirname),
+      })
+    }
   }
 }
