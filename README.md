@@ -56,6 +56,12 @@ When running the tests, an in-memory `MariaDB` database is instantiated with doc
 # Start Jest tests
 npm run test
 
+# Start tests, watch for changes and re-run tests if any source files change
+npm run test:watch
+
+# Start tests and generate coverage report
+npm run test:coverage
+
 # Drop test containers
 docker-compose -f docker-compose.test.yml down
 ```
