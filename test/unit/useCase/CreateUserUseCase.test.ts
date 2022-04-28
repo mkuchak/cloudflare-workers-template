@@ -26,6 +26,11 @@ describe('create user use case', () => {
 
     console.log(user)
 
-    expect(user).toBeDefined()
+    expect(user).toEqual(
+      expect.objectContaining({
+        id: expect.any(String),
+        email,
+      }),
+    )
   })
 })

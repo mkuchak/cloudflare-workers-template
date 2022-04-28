@@ -17,5 +17,14 @@ export default {
     './dist',
     './coverage',
     './dataproxy',
+    './patches',
+  ],
+  coveragePathIgnorePatterns: [
+    './node_modules',
+    './dist',
+    './coverage',
+    './dataproxy',
+    './test',
+    './patches',
   ],
 }

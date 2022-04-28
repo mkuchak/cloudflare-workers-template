@@ -22,31 +22,32 @@ for (const k in process.env) {
 }
 
 const isDev = process.env.NODE_ENV === 'development'
+const isTest = process.env.NODE_ENV === 'test'
+
+const options = {
+  bundle: true,
+  minify: !isDev && !isTest,
+  treeShaking: !isDev && !isTest,
+  sourcemap: !isTest,
+  format: 'esm',
+  target: 'esnext',
+  platform: 'browser',
+  entryPoints: ['./src/index.ts'],
+  outfile: isTest ? './dist/index.test.mjs' : './dist/index.mjs',
+  plugins: [
+    NodeGlobalsPolyfillPlugin({
+      process: true,
+      buffer: true,
+    }),
+    NodeModulesPolyfillPlugin(),
+    alias({
+      '@prisma/client': require.resolve('@prisma/client'),
+    }),
+  ],
+}
 
 try {
-  await build({
-    bundle: true,
-    minify: !isDev,
-    treeShaking: !isDev,
-    sourcemap: true,
-    format: 'esm',
-    target: 'esnext',
-    platform: 'browser',
-    entryPoints: ['./src/index.ts'],
-    outdir: './dist',
-    outExtension: { '.js': '.mjs' },
-    define,
-    plugins: [
-      NodeGlobalsPolyfillPlugin({
-        process: true,
-        buffer: true,
-      }),
-      NodeModulesPolyfillPlugin(),
-      alias({
-        '@prisma/client': require.resolve('@prisma/client'),
-      }),
-    ],
-  })
+  await build({ ...options, define })
 } catch {
   process.exitCode = 1
 }
