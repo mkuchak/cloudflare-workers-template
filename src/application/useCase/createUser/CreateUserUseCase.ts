@@ -1,6 +1,9 @@
+import { Password } from '@/domain/entity/Password'
 import { User } from '@/domain/entity/User'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
+import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
+import { Hash } from '@/infra/adapter/hash/Hash'
 import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
@@ -12,31 +15,23 @@ export class CreateUserUseCase {
 
   constructor (
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
-    readonly crypto: Crypto = new BcryptjsAdapter(),
+    readonly hash: Hash = new BcryptjsHashAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
   }
 
   async execute (input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
-    const { email, ...restInput } = input
-
     const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(
-      email,
+      input.email,
     ))
 
     if (isEmailAlreadyRegistered) {
       throw new AppError('User Already Exists', 409)
     }
 
-    const user = new User({ email, ...restInput })
+    const user = new User(input)
 
-    const isValidPassword = user.validatePassword()
-
-    if (!isValidPassword) {
-      throw new APIError(400, 'Weak Password')
-    }
-
-    await user.hashPassword()
+    user.password = await Password.hash(user.password, this.hash)
 
     await this.userRepository.save(user)
 

@@ -1,10 +1,10 @@
-import { Crypto, ICryptoOptions } from './Crypto'
+import { Hash, IHashOptions } from './Hash'
 
-export class WebCryptoHashAdapter implements Crypto {
+export class WebCryptoHashAdapter implements Hash {
   // @warning Iterations should be at least >= 15,000
   // Recommended is 100,000, but Workers have a CPU runtime limit of 10-50 ms
   // An alternative is to active Workers Unbound that can reach until 30 seconds
-  async hash (value: string, options: ICryptoOptions = {}) {
+  async generate (value: string, options: IHashOptions = {}) {
     let salt =
       options?.saltBuffer || crypto.getRandomValues(new Uint8Array(16))
     const iterations = options.iterations || 15000
@@ -50,7 +50,7 @@ export class WebCryptoHashAdapter implements Crypto {
       iterations: parseInt(hash.split(';i=')[1].split(';')[0]),
     }
 
-    const hashedPassword = await this.hash(value, options)
+    const hashedPassword = await this.generate(value, options)
 
     let isValid = true
 

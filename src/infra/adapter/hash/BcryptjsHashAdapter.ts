@@ -1,12 +1,12 @@
 import { compare, hash } from 'bcryptjs'
 
-import { Crypto, ICryptoOptions } from './Crypto'
+import { Hash, IHashOptions } from './Hash'
 
-export class BcryptjsAdapter implements Crypto {
+export class BcryptjsHashAdapter implements Hash {
   // @warning Salt rounds should be at least 6
   // Recommended is 10, but Workers have a CPU runtime limit of 10-50 ms
   // An alternative is to active Workers Unbound that can reach until 30 seconds
-  async hash (value: string, options?: ICryptoOptions): Promise<string> {
+  async generate (value: string, options?: IHashOptions): Promise<string> {
     const salt = options?.saltRounds || 6
 
     return await hash(value, salt)

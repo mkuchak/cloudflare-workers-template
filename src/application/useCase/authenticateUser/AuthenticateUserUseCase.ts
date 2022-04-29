@@ -1,9 +1,12 @@
 import jwt from '@tsndr/cloudflare-worker-jwt'
 
+import { Password } from '@/domain/entity/Password'
 import { UserToken } from '@/domain/entity/UserToken'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
 import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
+import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
+import { Hash } from '@/infra/adapter/hash/Hash'
 import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
@@ -16,7 +19,7 @@ export class AuthenticateUserUseCase {
 
   constructor (
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
-    readonly crypto: Crypto = new BcryptjsAdapter(),
+    readonly hash: Hash = new BcryptjsHashAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
@@ -33,10 +36,8 @@ export class AuthenticateUserUseCase {
       throw new AppError('Invalid Password', 401) // avoid exposing the non-existence of the user
     }
 
-    const isPasswordCorrect = await user.checkPassword(password)
-
-    if (!isPasswordCorrect) {
-      throw new APIError(401, 'Invalid Password')
+    if (!(await Password.isValid(password, user.password, this.hash))) {
+      throw new AppError('Invalid Password', 401)
     }
 
     // const accessToken = await new JwtAdapter().sign({
@@ -51,8 +52,7 @@ export class AuthenticateUserUseCase {
     const userToken = new UserToken({
       userId: user.id,
       ...restInput,
-      // expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
-      expiresAt: 60 * 60 * 24 * 30, // 30 days
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
     })
 
     await this.userTokenRepository.save(userToken)
