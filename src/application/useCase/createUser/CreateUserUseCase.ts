@@ -4,6 +4,8 @@ import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
 import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
 import { Hash } from '@/infra/adapter/hash/Hash'
+import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
+import { UUID } from '@/infra/adapter/uuid/UUID'
 import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
@@ -16,6 +18,7 @@ export class CreateUserUseCase {
   constructor (
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly hash: Hash = new BcryptjsHashAdapter(),
+    readonly uuid: UUID = new NanoidAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
   }
@@ -29,7 +32,7 @@ export class CreateUserUseCase {
       throw new AppError('User Already Exists', 409)
     }
 
-    const user = new User(input)
+    const user = new User(input, this.uuid)
 
     user.password = await Password.hash(user.password, this.hash)
 

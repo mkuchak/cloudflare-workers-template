@@ -2,13 +2,26 @@ import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
+import { BcryptjsHashAdapter } from '../adapter/hash/BcryptjsHashAdapter'
+import { Hash } from '../adapter/hash/Hash'
+import { NanoidAdapter } from '../adapter/uuid/NanoidAdapter'
+import { UUID } from '../adapter/uuid/UUID'
+
 export class UserController {
-  constructor (readonly repositoryFactory: RepositoryFactory) {}
+  constructor (
+    readonly repositoryFactory: RepositoryFactory,
+    readonly hash: Hash = new BcryptjsHashAdapter(),
+    readonly uuid: UUID = new NanoidAdapter(),
+  ) {}
 
   async createUser (request: Request) {
     const input = request.content
 
-    const createUserUseCase = new CreateUserUseCase(this.repositoryFactory)
+    const createUserUseCase = new CreateUserUseCase(
+      this.repositoryFactory,
+      this.hash,
+      this.uuid,
+    )
 
     const output = await createUserUseCase.execute(input)
 
@@ -38,6 +51,8 @@ export class UserController {
 
     const authenticateUserUseCase = new AuthenticateUserUseCase(
       this.repositoryFactory,
+      this.hash,
+      this.uuid,
     )
 
     const output = await authenticateUserUseCase.execute(input)

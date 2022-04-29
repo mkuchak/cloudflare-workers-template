@@ -1,4 +1,8 @@
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
+import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
+import { Hash } from '@/infra/adapter/hash/Hash'
+import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
+import { UUID } from '@/infra/adapter/uuid/UUID'
 
 import { UserController } from '../../controller/UserController'
 import { UserTokenController } from '../../controller/UserTokenController'
@@ -9,6 +13,8 @@ export class AuthenticationRouter {
   constructor (
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
+    readonly hash: Hash = new BcryptjsHashAdapter(),
+    readonly uuid: UUID = new NanoidAdapter(),
   ) {}
 
   init (path: string = '') {
@@ -17,9 +23,11 @@ export class AuthenticationRouter {
       `${path}/register`,
       async (request: Request): Promise<RouterResponse> => ({
         status: 201,
-        payload: await new UserController(this.repositoryFactory).createUser(
-          request,
-        ),
+        payload: await new UserController(
+          this.repositoryFactory,
+          this.hash,
+          this.uuid,
+        ).createUser(request),
       }),
     )
 
@@ -30,6 +38,8 @@ export class AuthenticationRouter {
         status: 201,
         payload: await new UserController(
           this.repositoryFactory,
+          this.hash,
+          this.uuid,
         ).authenticateUser(request),
       }),
     )

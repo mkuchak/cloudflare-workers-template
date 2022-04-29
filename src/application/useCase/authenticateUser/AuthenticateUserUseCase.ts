@@ -7,6 +7,8 @@ import { UserRepository } from '@/domain/repository/UserRepository'
 import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
 import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
 import { Hash } from '@/infra/adapter/hash/Hash'
+import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
+import { UUID } from '@/infra/adapter/uuid/UUID'
 import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
@@ -20,6 +22,7 @@ export class AuthenticateUserUseCase {
   constructor (
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly hash: Hash = new BcryptjsHashAdapter(),
+    readonly uuid: UUID = new NanoidAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
@@ -49,11 +52,14 @@ export class AuthenticateUserUseCase {
       'secret',
     )
 
-    const userToken = new UserToken({
-      userId: user.id,
-      ...restInput,
-      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
-    })
+    const userToken = new UserToken(
+      {
+        userId: user.id,
+        ...restInput,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+      },
+      this.uuid,
+    )
 
     await this.userTokenRepository.save(userToken)
 

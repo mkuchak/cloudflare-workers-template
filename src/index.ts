@@ -1,3 +1,5 @@
+import { BcryptjsHashAdapter } from './infra/adapter/hash/BcryptjsHashAdapter'
+import { NanoidAdapter } from './infra/adapter/uuid/NanoidAdapter'
 import { RepositoryFactoryPrisma } from './infra/factory/RepositoryFactoryPrisma'
 import { Router } from './infra/http/router/Router'
 import { WorktopHttp } from './infra/http/workers/WorktopHttp'
@@ -10,6 +12,8 @@ const router = new Router(
   // new ExpressFlareHttp(),
   // new ExpressHttp(), // TODO: only works on Node.js (npm run dev:node)
   new RepositoryFactoryPrisma(),
+  new BcryptjsHashAdapter(),
+  new NanoidAdapter(),
 )
 
 router.init('/api/v1')

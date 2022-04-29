@@ -1,15 +1,18 @@
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
-import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
+import { WebCryptoHashAdapter } from '@/infra/adapter/hash/WebCryptoHashAdapter'
+import { WebCryptoUUIDAdapter } from '@/infra/adapter/uuid/WebCryptoUUIDAdapter'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
+let uuid: WebCryptoUUIDAdapter
+let hash: WebCryptoHashAdapter
 let repositoryFactory: RepositoryFactoryPrisma
 let createUserUseCase: CreateUserUseCase
-let uuid: NanoidAdapter
 
 beforeAll(async () => {
+  uuid = new WebCryptoUUIDAdapter()
+  hash = new WebCryptoHashAdapter()
   repositoryFactory = new RepositoryFactoryPrisma()
-  createUserUseCase = new CreateUserUseCase(repositoryFactory)
-  uuid = new NanoidAdapter()
+  createUserUseCase = new CreateUserUseCase(repositoryFactory, hash, uuid)
 })
 
 describe('CreateUserUseCase', () => {
