@@ -1,5 +1,5 @@
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
-import { APIError } from '@/infra/error/APIError'
+import { AppError } from '@/infra/error/AppError'
 
 import { Http } from '../Http'
 import { AuthenticationRouter } from './AuthenticationRouter'
@@ -28,7 +28,7 @@ export class Router {
     authenticationRouter.init(`${path}/account`)
 
     this.http.join('*', () => {
-      throw new APIError(404, 'Not Found')
+      throw new AppError('Not Found', 404)
     })
   }
 }

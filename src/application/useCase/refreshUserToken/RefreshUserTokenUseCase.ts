@@ -3,7 +3,7 @@ import jwt from '@tsndr/cloudflare-worker-jwt'
 import { UserToken } from '@/domain/entity/UserToken'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
-import { APIError } from '@/infra/error/APIError'
+import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
 import { RefreshUserTokenOutputDTO } from './RefreshUserTokenInputDTO'
@@ -30,7 +30,7 @@ export class RefreshUserTokenUseCase {
       userToken.expiresAt < new Date() ||
       userToken.isEmailToken
     ) {
-      throw new APIError(401, 'Invalid Refresh Token')
+      throw new AppError('Invalid Refresh Token', 401)
     }
 
     const accessToken = await jwt.sign(

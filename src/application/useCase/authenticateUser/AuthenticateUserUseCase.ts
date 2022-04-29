@@ -4,9 +4,7 @@ import { UserToken } from '@/domain/entity/UserToken'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
 import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
-import { BcryptjsAdapter } from '@/infra/adapter/crypto/BcryptjsAdapter'
-import { Crypto } from '@/infra/adapter/crypto/Crypto'
-import { APIError } from '@/infra/error/APIError'
+import { AppError } from '@/infra/error/AppError'
 import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
 
 import { AuthenticateUserInputDTO } from './AuthenticateUserInputDTO'
@@ -32,7 +30,7 @@ export class AuthenticateUserUseCase {
     const user = await this.userRepository.findByEmail(email)
 
     if (!user) {
-      throw new APIError(401, 'Invalid Password') // avoid exposing the non-existence of the user
+      throw new AppError('Invalid Password', 401) // avoid exposing the non-existence of the user
     }
 
     const isPasswordCorrect = await user.checkPassword(password)
