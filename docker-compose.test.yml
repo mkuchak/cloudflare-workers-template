@@ -18,6 +18,7 @@ services:
       context: ./dataproxy
     ports:
       - "9001:9000"
+      - "9091:9090" # prisma studio port (localhost:9091)
     tty: true
     depends_on:
       - "database"

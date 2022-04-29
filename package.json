@@ -19,7 +19,6 @@
     "prisma:sync:reverse": "prisma db pull",
     "prisma:reset": "docker exec -it cfw-dataproxy sh -c \"npm run prisma:reset\"",
     "prisma:generate": "PRISMA_CLIENT_ENGINE_TYPE=dataproxy prisma generate",
-    "prisma:studio": "docker exec -it cfw-dataproxy sh -c \"npm run prisma:studio\"",
     "dataproxy:start": "docker-compose up -d",
     "dataproxy:restart": "docker-compose down --remove-orphans && docker-compose up -d",
     "dataproxy:reset": "docker-compose down --remove-orphans -v && docker-compose up -d --build -V",
