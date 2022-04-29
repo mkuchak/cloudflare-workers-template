@@ -24,9 +24,9 @@
     "dataproxy:restart": "docker-compose down --remove-orphans && docker-compose up -d",
     "dataproxy:reset": "docker-compose down --remove-orphans -v && docker-compose up -d --build -V",
     "dataproxy:stop": "docker-compose down --remove-orphans",
-    "test": "NODE_ENV=test dotenv -e .env.test -- node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:watch": "npm run test -- --watch",
-    "test:coverage": "npm run test -- --coverage",
+    "test": "NODE_ENV=test dotenv -e .env.test -- node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --verbose",
+    "test:watch": "npm run test -- --watch --verbose",
+    "test:coverage": "npm run test -- --coverage --verbose",
     "lint": "eslint ./src/**/*.{ts,tsx}",
     "lint:fix": "eslint ./src/**/*.{ts,tsx} --fix",
     "postinstall": "patch-package"
