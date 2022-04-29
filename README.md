@@ -110,11 +110,9 @@ npm run prisma:sync
 # Synchronize remote database with local schema (Prisma Introspection)
 npm run prisma:sync:reverse
 
-# Reset entire database
+# Reset entire development/test database
 npm run prisma:reset
-
-# Start Prisma Studio in development database
-npm run prisma:studio
+npm run prisma:reset:test
 
 # Start only development containers (not test ones, it needs to start with test command)
 npm run dataproxy:start
