@@ -1,10 +1,12 @@
 import { User } from '@/domain/entity/User'
 
-describe('User', () => {
-  it('should create a new user with a valid email and password', () => {
-    const validEmails = ['johndoe@gmail.com', 'john_doe@gmail.com', 'john.doe@gmail.com', 'john-doe@gmail.com', 'johndoe@hotmail.com.br', 'jd@pm.me']
-    const validPasswords = ['12345@Aa', 'Abcd1@#$', 'abcD~1234', 'abcD!1234', 'abcD1#234', 'abcD12$34', 'abcD123%4', 'abcD1234^', 'abcD&1234', 'abc*D1234', 'ab(cD1234', 'a)bcD1234', '-abcD1234', 'abcD=1234', 'abc1D+234', 'abc.1D234', 'ab4cD;123', 'bcD,12a34']
+const validEmails = ['johndoe@gmail.com', 'john_doe@gmail.com', 'john.doe@gmail.com', 'john-doe@gmail.com', 'johndoe@hotmail.com.br', 'jd@pm.me']
+const validPasswords = ['12345@Aa', 'Abcd1@#$', 'abcD~1234', 'abcD!1234', 'abcD1#234', 'abcD12$34', 'abcD123%4', 'abcD1234^', 'abcD&1234', 'abc*D1234', 'ab(cD1234', 'a)bcD1234', '-abcD1234', 'abcD=1234', 'abc1D+234', 'abc.1D234', 'ab4cD;123', 'bcD,12a34']
+const invalidEmails = ['johndoe+1@gmail.com', 'johndoe@gmailcom', 'johndoegmail.com', 'johndoegmailcom', 'johndoe@', '@gmail.com', '@.com']
+const invalidPasswords = ['1234567', '12345Aa', '1234@Aa', '12345@AA', '12345@aa', '!@#$%^&*', 'Abcd1234', 'Abcd!@#$', '123!@#$%^&*', '123!@#$%^&*A', '123!@#$%^&*a', 'password', 'PASSWORD', 'PASSWORD123', 'passworD', '1password2', '1pass@word2', 'p4ssword', 'P@SSWORD']
 
+describe('User', () => {
+  it('should create a new user with a valid email', () => {
     validEmails.forEach((email) => {
       const data = {
         email,
@@ -17,7 +19,9 @@ describe('User', () => {
       expect(user.password).toBe(data.password)
       expect(user).toEqual(expect.objectContaining(data))
     })
+  })
 
+  it('should create a new user with a valid password', () => {
     validPasswords.forEach((password) => {
       const data = {
         email: validEmails[Math.floor(Math.random() * validEmails.length)],
@@ -33,28 +37,24 @@ describe('User', () => {
   })
 
   it('should throw an error if email is not valid', () => {
-    const invalidEmails = ['johndoe+1@gmail.com', 'johndoe@gmailcom', 'johndoegmail.com', 'johndoegmailcom', 'johndoe@', '@gmail.com', '@.com']
-
     invalidEmails.forEach((email) => {
       expect(
         () =>
           new User({
             id: '123',
             email,
-            password: '12345@Aa',
+            password: validPasswords[Math.floor(Math.random() * validPasswords.length)],
           }),
       ).toThrowError('Invalid Email')
     })
   })
 
   it('should throw an error if password is not valid', () => {
-    const invalidPasswords = ['1234567', '12345Aa', '1234@Aa', '12345@AA', '12345@aa', '!@#$%^&*', 'Abcd1234', 'Abcd!@#$', '123!@#$%^&*', '123!@#$%^&*A', '123!@#$%^&*a', 'password', 'PASSWORD', 'PASSWORD123', 'passworD', '1password2', '1pass@word2', 'p4ssword', 'P@SSWORD']
-
     invalidPasswords.forEach((password) => {
       expect(
         () =>
           new User({
-            email: 'johndoe@gmail.com',
+            email: validEmails[Math.floor(Math.random() * validEmails.length)],
             password,
           }),
       ).toThrowError('Weak Password')
