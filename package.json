@@ -45,14 +45,14 @@
     "express-flare": "^1.4.9",
     "itty-router": "^2.6.1",
     "itty-router-extras": "^0.4.2",
-    "nanoid": "^3.3.2",
+    "nanoid": "^3.3.3",
     "prisma-client-dataproxy": "^0.0.8",
     "ua-parser-js": "^1.0.2",
     "worktop": "^0.8.0-next.12"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.4.0",
-    "@cloudflare/wrangler": "^1.19.11",
+    "@cloudflare/workers-types": "^3.8.0",
+    "@cloudflare/wrangler": "^1.19.12",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@types/bcryptjs": "^2.4.2",
@@ -82,6 +82,6 @@
     "miniflare": "^2.4.0",
     "patch-package": "^6.4.7",
     "prisma": "^3.12.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.6.4"
   }
 }
