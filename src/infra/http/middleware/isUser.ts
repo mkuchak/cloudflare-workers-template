@@ -2,8 +2,8 @@ import jwt from '@tsndr/cloudflare-worker-jwt'
 
 import { AppError } from '@/infra/error/AppError'
 
+// User Access Control List
 interface UserACL {
-  // access control list
   id: string;
   roles: string[];
   permissions: string[];
@@ -26,11 +26,12 @@ export const isUser = (roles: string[] = [], matchAll: boolean = false) => {
       permissions: userPermissions,
     } = jwt.decode(accessToken) as UserACL
 
-    if (
-      roles.length > 0 &&
-      ((matchAll && !roles.every((role) => userRoles.includes(role))) ||
-        !roles.some((role) => userRoles.includes(role)))
-    ) {
+    const hasRole =
+      !roles.length || matchAll
+        ? roles.every((role) => userRoles.includes(role))
+        : roles.some((role) => userRoles.includes(role))
+
+    if (!hasRole) {
       throw new AppError('Restricted Access', 403)
     }
 
