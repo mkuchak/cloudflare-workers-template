@@ -5,6 +5,7 @@ import { UserAgent } from '@/domain/entity/UserAgent'
 import { DAOFactoryPrisma } from '@/infra/factory/DAOFactoryPrisma'
 
 import { GetUserTokensInputDTO } from './GetUserTokensInputDTO'
+import { GetUserTokensOutputDTO } from './GetUserTokensOutputDTO'
 
 export class GetUserTokensQuery {
   userTokenDAO: UserTokenDAO;
@@ -13,7 +14,7 @@ export class GetUserTokensQuery {
     this.userTokenDAO = daoFactory.createUserTokenDAO()
   }
 
-  async execute (input: GetUserTokensInputDTO): Promise<any> {
+  async execute (input: GetUserTokensInputDTO): Promise<GetUserTokensOutputDTO> {
     const userTokens = await this.userTokenDAO.findByUserId(input.userId)
 
     for (const userToken of userTokens) {
