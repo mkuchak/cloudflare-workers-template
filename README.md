@@ -145,19 +145,19 @@ To know more check [prisma/prisma#12356](https://github.com/prisma/prisma/issues
 
 The default schema and API brings some useful things to start a project like user table, refresh token, authentication and authorization.
 
-![ER Diagram](https://user-images.githubusercontent.com/3791148/165161198-e9f41c80-a3f6-45b9-9fda-9c3a31569705.svg)
+![ER Diagram](https://user-images.githubusercontent.com/3791148/166557583-f575e8ad-a627-4476-8156-c1073d72fef0.svg)
 
 ## To-do
 
-- Dockerize the application
-- Start a clean architecture model
+- ~~Dockerize the application~~
+- ~~Start a clean architecture model~~
+- ~~Create a test suite with Jest~~
+- ~~Create http/request/response adapter~~
+- ~~Use [Web Crypto API](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/) to use less CPU-time~~
+- ~~Add error handling with response~~
 - Start a durable object model
-- Create a test suite with Jest
-- Create http/request/response adapter
-- Use [Web Crypto API](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/) to use less CPU-time
 - Add SendGrid mailer with provider to confirm email
 - Implement authentication and authorization
-- Add error handling with response
 - Start a CI/CD pipeline example with wrangler and GitHub Actions
 - ...
 - This is under construction yet
