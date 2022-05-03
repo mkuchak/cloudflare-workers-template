@@ -28,13 +28,13 @@ export class DeleteUserTokenUseCase {
       throw new AppError('Invalid Token', 401)
     }
 
-    // Soft delete enforcing expiration
+    // soft delete enforcing expiration
     const updatedUserToken = new UserToken({
       id: userToken.id,
       userId: userToken.userId,
       token: userToken.token,
       ...restInput,
-      expiresAt: new Date(Date.now() + 10), // 10 ms ahead to secure against clock skew (Workers locks the timer, but Node.js doesn't)
+      expiresAt: new Date(Date.now()), // expired
       createdAt: userToken.createdAt,
     })
 
