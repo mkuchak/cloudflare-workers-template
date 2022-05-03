@@ -53,6 +53,7 @@ export class UserTokenController {
 
   async deleteUserToken (request: Request) {
     const input = {
+      userId: request.user?.id,
       id: request.params.id,
       refreshToken: request.params.refreshToken,
       lastIp:

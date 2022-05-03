@@ -1,4 +1,5 @@
 export interface DeleteUserTokenInputDTO {
+  userId?: string,
   id?: string;
   refreshToken?: string;
   lastIp: string;

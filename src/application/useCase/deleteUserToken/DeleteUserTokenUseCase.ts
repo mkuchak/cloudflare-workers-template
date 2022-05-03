@@ -13,11 +13,13 @@ export class DeleteUserTokenUseCase {
   }
 
   async execute (input: DeleteUserTokenInputDTO): Promise<void> {
-    const { id, refreshToken, ...restInput } = input
+    const { id, refreshToken, userId, ...restInput } = input
 
     let userToken
+
     if (id) {
       userToken = await this.userTokenRepository.findById(id)
+      userToken = userToken.userId === userId && userToken
     } else if (refreshToken) {
       userToken = await this.userTokenRepository.findByToken(refreshToken)
     }
@@ -30,7 +32,7 @@ export class DeleteUserTokenUseCase {
     const updatedUserToken = new UserToken({
       id: userToken.id,
       userId: userToken.userId,
-      token: refreshToken,
+      token: userToken.token,
       ...restInput,
       expiresAt: new Date(Date.now() + 10), // 10 ms ahead to secure against clock skew (Workers locks the timer, but Node.js doesn't)
       createdAt: userToken.createdAt,
