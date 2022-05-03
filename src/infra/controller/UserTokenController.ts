@@ -1,8 +1,25 @@
+import { DAOFactory } from '@/application/factory/DAOFactory'
+import { GetUserTokensQuery } from '@/application/query/getUserTokens/GetUserTokensQuery'
 import { RefreshUserTokenUseCase } from '@/application/useCase/refreshUserToken/RefreshUserTokenUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
 export class UserTokenController {
-  constructor (readonly repositoryFactory: RepositoryFactory) {}
+  constructor (
+    readonly repositoryFactory: RepositoryFactory,
+    readonly daoFactory: DAOFactory,
+  ) {}
+
+  async getUserTokens (request: Request) {
+    const input = {
+      userId: request.user?.id,
+    }
+
+    const getUserTokens = new GetUserTokensQuery(this.daoFactory)
+
+    const output = await getUserTokens.execute(input)
+
+    return output
+  }
 
   async refreshUserToken (request: Request) {
     const input = {

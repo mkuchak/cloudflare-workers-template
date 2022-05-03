@@ -1,5 +1,6 @@
 import { BcryptjsHashAdapter } from './infra/adapter/hash/BcryptjsHashAdapter'
 import { NanoidAdapter } from './infra/adapter/uuid/NanoidAdapter'
+import { DAOFactoryPrisma } from './infra/factory/DAOFactoryPrisma'
 import { RepositoryFactoryPrisma } from './infra/factory/RepositoryFactoryPrisma'
 import { Router } from './infra/http/router/Router'
 import { WorktopHttp } from './infra/http/workers/WorktopHttp'
@@ -12,6 +13,7 @@ const router = new Router(
   // new ExpressFlareHttp(),
   // new ExpressHttp(), // TODO: only works on Node.js (npm run dev:node)
   new RepositoryFactoryPrisma(),
+  new DAOFactoryPrisma(),
   new BcryptjsHashAdapter(),
   new NanoidAdapter(),
 )

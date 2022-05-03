@@ -2,6 +2,7 @@ import { CountryLocaleMapAdapter } from '@/infra/adapter/countryMapper/CountryLo
 import { CountryMapper } from '@/infra/adapter/countryMapper/CountryMapper'
 
 export class Country {
+  code: string;
   locale: string;
   locales: string[];
   language: string;
@@ -28,6 +29,7 @@ export class Country {
       continent,
     } = countryMapper.map(country ?? 'US')
 
+    this.code = country
     this.locale = locale
     this.locales = locales
     this.language = language

@@ -40,6 +40,6 @@ export class UserToken {
   }
 
   private isExpired (expiresAt?: Date): boolean {
-    return expiresAt && expiresAt < new Date()
+    return expiresAt && new Date(expiresAt) < new Date(Date.now())
   }
 }

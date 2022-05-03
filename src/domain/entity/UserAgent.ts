@@ -2,7 +2,7 @@ import { UAParserAdapter } from '@/infra/adapter/userAgentParser/UAParserAdapter
 import { UserAgentParser } from '@/infra/adapter/userAgentParser/UserAgentParser'
 
 export class UserAgent {
-  userAgent: string;
+  tag: string;
   browser?: string;
   os?: string;
   device?: string;
@@ -14,7 +14,7 @@ export class UserAgent {
   ) {
     const parsedUserAgent = userAgentParser.parse(userAgent)
 
-    this.userAgent = userAgent
+    this.tag = userAgent
     this.browser = parsedUserAgent.browser
     this.os = parsedUserAgent.os
     this.device = parsedUserAgent.device

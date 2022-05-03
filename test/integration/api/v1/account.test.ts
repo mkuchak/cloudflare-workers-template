@@ -188,7 +188,7 @@ describe('/api/v1/account', () => {
     })
   })
 
-  describe('PUT /sessions/:refreshToken', () => {
+  describe('POST /sessions/:refreshToken', () => {
     it('should refresh access token', async () => {
       const input = {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
@@ -201,7 +201,7 @@ describe('/api/v1/account', () => {
         input,
       )
 
-      const { status, data: newData } = await axiosAPIClient.put(
+      const { status, data: newData } = await axiosAPIClient.post(
         `/account/sessions/${data.refreshToken}`,
       )
 
@@ -218,14 +218,50 @@ describe('/api/v1/account', () => {
       await axiosAPIClient.post('/account/register', input)
       await axiosAPIClient.post('/account/authenticate', input)
 
-      const { status, data } = await axiosAPIClient.put(
+      const { status, data } = await axiosAPIClient.post(
         '/account/sessions/wrong-refresh-token',
       )
 
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
-          error: 'Invalid Refresh Token',
+          error: 'Invalid Token',
+        }),
+      )
+    })
+  })
+
+  describe('DELETE /sessions/:refreshToken/token', () => {
+    it('should delete refresh token', async () => {
+      const input = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', input)
+      const { data } = await axiosAPIClient.post(
+        '/account/authenticate',
+        input,
+      )
+      const { status } = await axiosAPIClient.delete(
+        `/account/sessions/${data.refreshToken}/token`,
+      )
+      expect(status).toBe(204)
+    })
+
+    it('should return error when refresh token is already invalid', async () => {
+      const input = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', input)
+      await axiosAPIClient.post('/account/authenticate', input)
+      const { status, data } = await axiosAPIClient.delete(
+        '/account/sessions/invalid-refresh-token/token',
+      )
+      expect(status).toBe(401)
+      expect(data).toEqual(
+        expect.objectContaining({
+          error: 'Invalid Token',
         }),
       )
     })

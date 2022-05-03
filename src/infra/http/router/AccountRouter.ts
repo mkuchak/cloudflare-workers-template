@@ -1,3 +1,4 @@
+import { DAOFactory } from '@/application/factory/DAOFactory'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
 import { Hash } from '@/infra/adapter/hash/Hash'
@@ -7,12 +8,14 @@ import { UUID } from '@/infra/adapter/uuid/UUID'
 import { UserController } from '../../controller/UserController'
 import { UserTokenController } from '../../controller/UserTokenController'
 import { Http } from '../Http'
+import { isUser } from '../middleware/isUser'
 import { RouterResponse } from './Router'
 
-export class AuthenticationRouter {
+export class AccountRouter {
   constructor (
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
+    readonly daoFactory: DAOFactory,
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
   ) {}
@@ -45,43 +48,55 @@ export class AuthenticationRouter {
     )
 
     this.http.on(
-      'put',
+      'post',
       `${path}/sessions/:refreshToken`,
       async (request: Request): Promise<RouterResponse> => ({
         status: 201,
         payload: await new UserTokenController(
           this.repositoryFactory,
+          this.daoFactory,
         ).refreshUserToken(request),
       }),
     )
 
     this.http.on(
-      // TODO: implement this
+      'get',
+      `${path}/sessions`,
+      isUser(),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 200,
+        payload: await new UserTokenController(
+          this.repositoryFactory,
+          this.daoFactory,
+        ).getUserTokens(request),
+      }),
+    )
+
+    this.http.on(
       'delete',
       `${path}/sessions/:refreshToken/token`,
       async (request: Request): Promise<RouterResponse> => {
         return {
-          // status: 204, // No Content
-          status: 202,
-          payload: {
-            // temporary fake response
-            refreshToken: request.params.refreshToken,
-          },
+          status: 204,
+          payload: await new UserTokenController(
+            this.repositoryFactory,
+            this.daoFactory,
+          ).deleteUserToken(request),
         }
       },
     )
+
     this.http.on(
-      // TODO: implement this
       'delete',
       `${path}/sessions/:id/id`,
+      isUser(),
       async (request: Request): Promise<RouterResponse> => {
         return {
-          // status: 204, // No Content
-          status: 202,
-          payload: {
-            // temporary fake response
-            id: request.params.id,
-          },
+          status: 204,
+          payload: await new UserTokenController(
+            this.repositoryFactory,
+            this.daoFactory,
+          ).deleteUserToken(request),
         }
       },
     )
