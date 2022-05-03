@@ -145,7 +145,7 @@ To know more check [prisma/prisma#12356](https://github.com/prisma/prisma/issues
 
 The default schema and API brings some useful things to start a project like user table, refresh token, authentication and authorization.
 
-![ER Diagram](https://user-images.githubusercontent.com/3791148/166557583-f575e8ad-a627-4476-8156-c1073d72fef0.svg)
+![ER Diagram](https://user-images.githubusercontent.com/3791148/166566897-39ffc6d1-f3ba-4aff-ad7a-77dda0fabae2.svg)
 
 ## To-do
 
