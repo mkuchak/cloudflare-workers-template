@@ -231,6 +231,43 @@ describe('/api/v1/account', () => {
     })
   })
 
+  describe('GET /account/sessions', () => {
+    it('should return all user sessions', async () => {
+      const input = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', input)
+
+      const { data } = await axiosAPIClient.post(
+        '/account/authenticate',
+        input,
+      )
+      await axiosAPIClient.post('/account/authenticate', input)
+
+      const { status, data: sessions } = await axiosAPIClient.get(
+        '/account/sessions',
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        },
+      )
+      expect(status).toBe(200)
+      expect(sessions).toHaveLength(2)
+    })
+
+    it('should return error when user is not authenticated', async () => {
+      const { status, data } = await axiosAPIClient.get('/account/sessions')
+      expect(status).toBe(401)
+      expect(data).toEqual(
+        expect.objectContaining({
+          error: 'Not Authorized',
+        }),
+      )
+    })
+  })
+
   describe('DELETE /sessions/:refreshToken/token', () => {
     it('should delete refresh token', async () => {
       const input = {
@@ -260,6 +297,110 @@ describe('/api/v1/account', () => {
       )
       expect(status).toBe(401)
       expect(data).toEqual(
+        expect.objectContaining({
+          error: 'Invalid Token',
+        }),
+      )
+    })
+  })
+
+  describe('DELETE /sessions/:refreshToken/id', () => {
+    it('should delete refresh token', async () => {
+      const input = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', input)
+      const { data } = await axiosAPIClient.post(
+        '/account/authenticate',
+        input,
+      )
+      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      })
+      const { status } = await axiosAPIClient.delete(
+        `/account/sessions/${sessions[0].id}/id`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        },
+      )
+      expect(status).toBe(204)
+    })
+
+    it('should return error when refresh token is already invalid', async () => {
+      const input = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', input)
+      const { data } = await axiosAPIClient.post(
+        '/account/authenticate',
+        input,
+      )
+      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      })
+      await axiosAPIClient.delete(`/account/sessions/${sessions[0].id}/id`, {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      })
+      const { status, data: newData } = await axiosAPIClient.delete(
+        `/account/sessions/${sessions[0].id}/id`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.accessToken}`,
+          },
+        },
+      )
+      expect(status).toBe(401)
+      expect(newData).toEqual(
+        expect.objectContaining({
+          error: 'Invalid Token',
+        }),
+      )
+    })
+
+    it('should return error if token does not belong to authenticated user', async () => {
+      const firstInput = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      const secondInput = {
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
+        password: '12345@Aa',
+      }
+      await axiosAPIClient.post('/account/register', firstInput)
+      await axiosAPIClient.post('/account/register', secondInput)
+      const { data: right } = await axiosAPIClient.post(
+        '/account/authenticate',
+        firstInput,
+      )
+      const { data: wrong } = await axiosAPIClient.post(
+        '/account/authenticate',
+        secondInput,
+      )
+      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+        headers: {
+          Authorization: `Bearer ${right.accessToken}`,
+        },
+      })
+      const { status, data: error } = await axiosAPIClient.delete(
+        `/account/sessions/${sessions[0].id}/id`,
+        {
+          headers: {
+            Authorization: `Bearer ${wrong.accessToken}`,
+          },
+        },
+      )
+      expect(status).toBe(401)
+      expect(error).toEqual(
         expect.objectContaining({
           error: 'Invalid Token',
         }),
