@@ -47,6 +47,8 @@ export class AuthenticateUserUseCase {
     const accessToken = await jwt.sign(
       {
         id: user.id,
+        roles: ['admin', 'moderator'], // TODO: create a role entity
+        permissions: ['read_user'], // TODO: create a permission entity
         exp: Math.floor(Date.now() / 1000) + 60 * 15, // 15 minutes
       },
       'secret',

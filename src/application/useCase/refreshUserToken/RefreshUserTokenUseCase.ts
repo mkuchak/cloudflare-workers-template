@@ -25,17 +25,15 @@ export class RefreshUserTokenUseCase {
 
     const userToken = await this.userTokenRepository.findByToken(refreshToken)
 
-    if (
-      !userToken ||
-      userToken.expiresAt < new Date() ||
-      userToken.isEmailToken
-    ) {
-      throw new AppError('Invalid Refresh Token', 401)
+    if (!userToken || userToken.isEmailToken) {
+      throw new AppError('Invalid Token', 401)
     }
 
     const accessToken = await jwt.sign(
       {
         id: userToken.userId,
+        roles: ['admin', 'moderator'], // TODO: create a role entity
+        permissions: ['read_user'], // TODO: create a permission entity
         exp: Math.floor(Date.now() / 1000) + 60 * 15, // 15 minutes
       },
       'secret',

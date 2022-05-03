@@ -27,4 +27,14 @@ export class UserTokenRepositoryPrisma implements UserTokenRepository {
 
     return userToken && new UserToken(userToken)
   }
+
+  async findById (id: string): Promise<UserToken> {
+    const userToken = await this.client.userToken.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    return userToken && new UserToken(userToken)
+  }
 }
