@@ -3,10 +3,10 @@ import { UserAgentParser } from '@/infra/adapter/userAgentParser/UserAgentParser
 
 export class UserAgent {
   tag: string;
-  browser?: string;
-  os?: string;
-  device?: string;
-  platform?: string;
+  browser: string;
+  os: string;
+  device: string;
+  platform: string;
 
   constructor (
     userAgent: string,

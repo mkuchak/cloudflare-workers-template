@@ -32,6 +32,8 @@ interface Country {
 
 interface UserAgent {
   tag: string;
+  browser: string;
+  os: string;
   device: string;
   platform: string;
 }

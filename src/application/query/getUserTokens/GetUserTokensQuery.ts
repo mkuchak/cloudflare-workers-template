@@ -14,12 +14,12 @@ export class GetUserTokensQuery {
     this.userTokenDAO = daoFactory.createUserTokenDAO()
   }
 
-  async execute (input: GetUserTokensInputDTO): Promise<GetUserTokensOutputDTO> {
+  async execute (input: GetUserTokensInputDTO): Promise<GetUserTokensOutputDTO[]> {
     const userTokens = await this.userTokenDAO.findByUserId(input.userId)
 
     for (const userToken of userTokens) {
-      userToken.userAgent = new UserAgent(userToken.userAgent)
-      userToken.country = new Country(userToken.country)
+      userToken.userAgent = new UserAgent(userToken.userAgent as string)
+      userToken.country = new Country(userToken.country as string)
     }
 
     return userTokens
