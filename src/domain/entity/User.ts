@@ -10,7 +10,8 @@ export class User {
   password: string;
   name?: string;
   picture?: string;
-  emailVerified?: boolean = false;
+  isEmailVerified?: boolean = false;
+  isActive?: boolean = true;
   createdAt?: Date = new Date();
   updatedAt?: Date = new Date();
 
