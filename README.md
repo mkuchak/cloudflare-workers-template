@@ -6,16 +6,15 @@ Quickly go from MVP to scale with this template.
 
 <div align="center">
 
-![TypeScript](https://img.shields.io/badge/TypeScript-3178c6.svg?logo=typescript&logoColor=white)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F6821F?logo=cloudflare&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma-0C3249?logo=prisma)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white)
-![ESBuild](https://img.shields.io/badge/ESBuild-EDB30B?logo=esbuild&logoColor=white)
-![ESLint](https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white)
-![Jest](https://img.shields.io/badge/Jest-C21325.svg?logo=jest&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2496ED.svg?logo=docker&logoColor=white)
-![GitHubActions](https://img.shields.io/badge/GitHub_Actions-%232671E5.svg?logo=githubactions&logoColor=white)
-
+<img src="https://img.shields.io/badge/TypeScript-3178c6.svg?logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/Cloudflare-F6821F?logo=cloudflare&logoColor=white" />
+<img src="https://img.shields.io/badge/Prisma-0C3249?logo=prisma" />
+<img src="https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=white" />
+<img src="https://img.shields.io/badge/ESBuild-EDB30B?logo=esbuild&logoColor=white" />
+<img src="https://img.shields.io/badge/ESLint-4B32C3?logo=eslint&logoColor=white" />
+<img src="https://img.shields.io/badge/Jest-C21325.svg?logo=jest&logoColor=white" />
+<img src="https://img.shields.io/badge/Docker-2496ED.svg?logo=docker&logoColor=white" />
+<img src="https://img.shields.io/badge/GitHub_Actions-%232671E5.svg?logo=githubactions&logoColor=white" />
 
 </div>
 
@@ -28,17 +27,22 @@ git clone --depth 1 --branch main https://github.com/mkuchak/cloudflare-workers-
 
 Rename the app name in `package.json` and `wrangler.toml`.
 
-### Easy development mode start:
+### Easy development mode start
+
+Follow this order of commands to get started.
 
 ```bash
 # Copy the example .env file and modify as needed
 cp .env.example .env
 
-# Start database and dataproxy to develop locally (wait some seconds for container processes to rise)
+# Start database and dataproxy server to develop locally (wait some seconds for container processes to rise)
 docker-compose up -d
 
 # Install dependencies
 npm install
+
+# Generate Prisma Client using dataproxy feature
+npm run prisma:generate
 
 # Start development mode in a local environment that emulates production resources (Durable Objects, KV, etc.)
 npm run dev
@@ -48,7 +52,7 @@ npm run dev
 
 The Prisma Schema path is `src/infra/repository/prisma/schema.prisma`. You can change it in `package.json` if you want to, but is needed to change the Docker containers too in `docker-compose*.yml`.
 
-### Testing:
+### Testing
 
 When running the tests, an in-memory `MariaDB` database is instantiated with docker-compose so that the tests run quickly. Once instantiated, the database — along with the dataproxy — keeps running. This facilitates a new battery of tests.
 
@@ -68,7 +72,7 @@ docker-compose -f docker-compose.test.yml down
 
 **Do not start test containers** with the `docker-compose` command. These containers need to start from the `globalSetup.ts` file specified in the Jest settings.
 
-### Useful commands:
+### Useful commands
 
 ```bash
 # Build the app using ESBuild
@@ -91,9 +95,6 @@ npm run publish
 
 # Track the logs in production mode
 npm run logs
-
-# Generate Prisma Client with types using DataProxy
-npm run prisma:generate
 
 # Create migrations from schema modifications
 npm run prisma:create
