@@ -19,7 +19,7 @@ export class DeleteUserTokenUseCase {
 
     if (id) {
       userToken = await this.userTokenRepository.findById(id)
-      userToken = userToken.userId === userId && userToken
+      userToken = userToken?.userId === userId && userToken
     } else if (refreshToken) {
       userToken = await this.userTokenRepository.findByToken(refreshToken)
     }
