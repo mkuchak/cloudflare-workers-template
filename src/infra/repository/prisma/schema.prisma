@@ -57,7 +57,6 @@ model RoleUser {
   role      Role     @relation(fields: [roleId], references: [id])
   roleId    String
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Role {
@@ -78,7 +77,6 @@ model PermissionRole {
   permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId String
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now()) @updatedAt
 }
 
 model PermissionUser {
@@ -88,7 +86,6 @@ model PermissionUser {
   permission   Permission @relation(fields: [permissionId], references: [id])
   permissionId String
   createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now()) @updatedAt
 }
 
 model Permission {
