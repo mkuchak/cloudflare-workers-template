@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 import express from 'express'
-import { createPrismaExpressProxy } from 'prisma-proxy-express-server'
+import { createPrismaExpressProxy } from 'prisma-server-dataproxy'
 
 const app = express()
 const prisma = new PrismaClient()
