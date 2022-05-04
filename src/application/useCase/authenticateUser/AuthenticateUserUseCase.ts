@@ -1,5 +1,4 @@
-import jwt from '@tsndr/cloudflare-worker-jwt'
-
+import { config } from '@/config'
 import { Password } from '@/domain/entity/Password'
 import { UserToken } from '@/domain/entity/UserToken'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
@@ -7,6 +6,8 @@ import { UserRepository } from '@/domain/repository/UserRepository'
 import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
 import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
 import { Hash } from '@/infra/adapter/hash/Hash'
+import { CfwJWTAdapter } from '@/infra/adapter/jwt/CfwJWTAdapter'
+import { JWT } from '@/infra/adapter/jwt/JWT'
 import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
 import { UUID } from '@/infra/adapter/uuid/UUID'
 import { AppError } from '@/infra/error/AppError'
@@ -23,14 +24,13 @@ export class AuthenticateUserUseCase {
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
+    readonly jwt: JWT = new CfwJWTAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
   }
 
-  async execute (
-    input: AuthenticateUserInputDTO,
-  ): Promise<AuthenticateUserOutputDTO> {
+  async execute (input: AuthenticateUserInputDTO): Promise<AuthenticateUserOutputDTO> {
     const { email, password, ...restInput } = input
 
     const user = await this.userRepository.findByEmail(email)
@@ -43,22 +43,21 @@ export class AuthenticateUserUseCase {
       throw new AppError('Invalid Password', 401)
     }
 
-    // const accessToken = await new JwtAdapter().sign({
-    const accessToken = await jwt.sign(
+    const accessToken = await this.jwt.sign(
       {
         id: user.id,
         roles: ['admin', 'moderator'], // TODO: create a role entity
         permissions: ['read_user'], // TODO: create a permission entity
-        exp: Math.floor(Date.now() / 1000) + 60 * 15, // 15 minutes
+        exp: Math.floor(Date.now() / 1000) + 60 * config.jwtExpiration,
       },
-      'secret',
+      config.jwtSecret,
     )
 
     const userToken = new UserToken(
       {
         userId: user.id,
         ...restInput,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), // 30 days
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * config.refreshTokenExpiration),
       },
       this.uuid,
     )
