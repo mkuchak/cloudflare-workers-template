@@ -12,13 +12,19 @@ import { isUser } from '../middleware/isUser'
 import { RouterResponse } from './Router'
 
 export class AccountRouter {
+  userController: UserController;
+  userTokenController: UserTokenController;
+
   constructor (
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
     readonly daoFactory: DAOFactory,
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
-  ) {}
+  ) {
+    this.userController = new UserController(this.repositoryFactory, this.daoFactory, this.hash, this.uuid)
+    this.userTokenController = new UserTokenController(this.repositoryFactory, this.daoFactory)
+  }
 
   init (path: string = '') {
     this.http.on(
@@ -26,11 +32,7 @@ export class AccountRouter {
       `${path}/register`,
       async (request: Request): Promise<RouterResponse> => ({
         status: 201,
-        payload: await new UserController(
-          this.repositoryFactory,
-          this.hash,
-          this.uuid,
-        ).createUser(request),
+        payload: await this.userController.createUser(request),
       }),
     )
 
@@ -39,11 +41,7 @@ export class AccountRouter {
       `${path}/authenticate`,
       async (request: Request): Promise<RouterResponse> => ({
         status: 201,
-        payload: await new UserController(
-          this.repositoryFactory,
-          this.hash,
-          this.uuid,
-        ).authenticateUser(request),
+        payload: await this.userController.authenticateUser(request),
       }),
     )
 
@@ -52,10 +50,7 @@ export class AccountRouter {
       `${path}/sessions/:refreshToken`,
       async (request: Request): Promise<RouterResponse> => ({
         status: 201,
-        payload: await new UserTokenController(
-          this.repositoryFactory,
-          this.daoFactory,
-        ).refreshUserToken(request),
+        payload: await this.userTokenController.refreshUserToken(request),
       }),
     )
 
@@ -65,10 +60,7 @@ export class AccountRouter {
       isUser(),
       async (request: Request): Promise<RouterResponse> => ({
         status: 200,
-        payload: await new UserTokenController(
-          this.repositoryFactory,
-          this.daoFactory,
-        ).getUserTokens(request),
+        payload: await this.userTokenController.getUserTokens(request),
       }),
     )
 
@@ -78,27 +70,16 @@ export class AccountRouter {
       async (request: Request): Promise<RouterResponse> => {
         return {
           status: 204,
-          payload: await new UserTokenController(
-            this.repositoryFactory,
-            this.daoFactory,
-          ).deleteUserToken(request),
+          payload: await this.userTokenController.deleteUserToken(request),
         }
       },
     )
 
-    this.http.on(
-      'delete',
-      `${path}/sessions/:id/id`,
-      isUser(),
-      async (request: Request): Promise<RouterResponse> => {
-        return {
-          status: 204,
-          payload: await new UserTokenController(
-            this.repositoryFactory,
-            this.daoFactory,
-          ).deleteUserToken(request),
-        }
-      },
-    )
+    this.http.on('delete', `${path}/sessions/:id/id`, isUser(), async (request: Request): Promise<RouterResponse> => {
+      return {
+        status: 204,
+        payload: await this.userTokenController.deleteUserToken(request),
+      }
+    })
   }
 }

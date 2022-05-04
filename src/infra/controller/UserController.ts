@@ -1,3 +1,5 @@
+import { DAOFactory } from '@/application/factory/DAOFactory'
+import { GetUsersQuery } from '@/application/query/getUsers/GetUsersQuery'
 import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/AuthenticateUserUseCase'
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
@@ -10,6 +12,7 @@ import { UUID } from '../adapter/uuid/UUID'
 export class UserController {
   constructor (
     readonly repositoryFactory: RepositoryFactory,
+    readonly daoFactory: DAOFactory,
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
   ) {}
@@ -17,11 +20,7 @@ export class UserController {
   async createUser (request: Request) {
     const input = request.content
 
-    const createUserUseCase = new CreateUserUseCase(
-      this.repositoryFactory,
-      this.hash,
-      this.uuid,
-    )
+    const createUserUseCase = new CreateUserUseCase(this.repositoryFactory, this.hash, this.uuid)
 
     const output = await createUserUseCase.execute(input)
 
@@ -32,9 +31,7 @@ export class UserController {
     const input = {
       email: request.content.email.toLowerCase(),
       password: request.content.password,
-      lastIp:
-        request.headers.get('cf-connecting-ip') ||
-        request.headers.get('x-forwarded-for'),
+      lastIp: request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for'),
       userAgent: request.headers.get('user-agent'),
       asn: request.cf.asn,
       asOrganization: request.cf.asOrganization,
@@ -49,13 +46,23 @@ export class UserController {
       latitude: request.cf.latitude,
     }
 
-    const authenticateUserUseCase = new AuthenticateUserUseCase(
-      this.repositoryFactory,
-      this.hash,
-      this.uuid,
-    )
+    const authenticateUserUseCase = new AuthenticateUserUseCase(this.repositoryFactory, this.hash, this.uuid)
 
     const output = await authenticateUserUseCase.execute(input)
+
+    return output
+  }
+
+  async getUsers (request: Request) {
+    const input = {
+      page: Number(request.query.page) || 1,
+      records: Number(request.query.records) || 10,
+      order: request.query.order.includes('asc') ? 'asc' : 'desc',
+    }
+
+    const getUsers = new GetUsersQuery(this.daoFactory)
+
+    const output = await getUsers.execute(input)
 
     return output
   }
