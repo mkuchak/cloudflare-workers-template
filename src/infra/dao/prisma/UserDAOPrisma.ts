@@ -18,6 +18,33 @@ export class UserDAOPrisma implements UserDAO {
         isActive: true,
         createdAt: true,
         updatedAt: true,
+        RoleUser: {
+          select: {
+            role: {
+              select: {
+                label: true,
+                PermissionRole: {
+                  select: {
+                    permission: {
+                      select: {
+                        label: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        PermissionUser: {
+          select: {
+            permission: {
+              select: {
+                label: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: order,
