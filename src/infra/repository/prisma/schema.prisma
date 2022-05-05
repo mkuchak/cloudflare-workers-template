@@ -10,22 +10,22 @@ datasource db {
 }
 
 model User {
-  id             String           @id
-  email          String           @unique
-  password       String
-  name           String?
-  picture        String?
-  isEmailVerified  Boolean          @default(false)
-  isActive       Boolean          @default(true)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt
-  UserToken      UserToken[]
-  RoleUser       RoleUser[]
-  PermissionUser PermissionUser[]
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  name            String?
+  picture         String?
+  isEmailVerified Boolean          @default(false)
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @default(now()) @updatedAt
+  UserToken       UserToken[]
+  RoleUser        RoleUser[]
+  PermissionUser  PermissionUser[]
 }
 
 model UserToken {
-  id             String    @id
+  id             String    @id @default(uuid())
   user           User      @relation(fields: [userId], references: [id])
   userId         String
   token          String    @unique
@@ -51,7 +51,7 @@ model UserToken {
 }
 
 model RoleUser {
-  id        String   @id
+  id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
   role      Role     @relation(fields: [roleId], references: [id])
@@ -60,7 +60,7 @@ model RoleUser {
 }
 
 model Role {
-  id             String           @id
+  id             String           @id @default(uuid())
   label          String           @unique
   title          String?
   description    String?
@@ -71,7 +71,7 @@ model Role {
 }
 
 model PermissionRole {
-  id           String     @id
+  id           String     @id @default(uuid())
   role         Role       @relation(fields: [roleId], references: [id])
   roleId       String
   permission   Permission @relation(fields: [permissionId], references: [id])
@@ -80,7 +80,7 @@ model PermissionRole {
 }
 
 model PermissionUser {
-  id           String     @id
+  id           String     @id @default(uuid())
   user         User       @relation(fields: [userId], references: [id])
   userId       String
   permission   Permission @relation(fields: [permissionId], references: [id])
@@ -89,7 +89,7 @@ model PermissionUser {
 }
 
 model Permission {
-  id             String           @id
+  id             String           @id @default(uuid())
   label          String           @unique
   title          String?
   description    String?

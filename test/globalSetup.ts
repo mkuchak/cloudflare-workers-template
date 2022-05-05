@@ -32,7 +32,7 @@ export default async function () {
     await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:studio &'], CWD_PATH)
 
     // Seed only metadata if it exists (do not seed test records)
-    // await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:seed'], CWD_PATH)
+    await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:seed'], CWD_PATH)
 
     // Start dataproxy server and wait for it before starting tests
     await exec('dataproxy-test', ['sh', '-c', 'npm run start &'], CWD_PATH)

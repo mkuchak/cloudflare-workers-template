@@ -29,6 +29,7 @@ services:
       sh -c "until nc -z cfw-database 3306; do sleep 1; done &&
              npm run prisma:generate &&
              npm run prisma:migrate &&
+             npm run prisma:seed &&
              npm run prisma:studio &
              npm run start"
     environment:

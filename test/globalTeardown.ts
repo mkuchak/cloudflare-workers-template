@@ -8,10 +8,10 @@ export default async function () {
   } else {
     // Clean the database occasionally
     if (Math.ceil(Math.random() * 10) === 10) {
+      // Prisma when resetting the database also seeds the metadata
       await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:reset'], {
         cwd: join(__dirname),
       })
-      // await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:seed'], CWD_PATH)
     }
   }
 }
