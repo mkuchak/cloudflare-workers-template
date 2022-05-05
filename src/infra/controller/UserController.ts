@@ -10,14 +10,14 @@ import { NanoidAdapter } from '../adapter/uuid/NanoidAdapter'
 import { UUID } from '../adapter/uuid/UUID'
 
 export class UserController {
-  constructor (
+  constructor(
     readonly repositoryFactory: RepositoryFactory,
     readonly daoFactory: DAOFactory,
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
   ) {}
 
-  async createUser (request: Request) {
+  async createUser(request: Request) {
     const input = request.content
 
     const createUserUseCase = new CreateUserUseCase(this.repositoryFactory, this.hash, this.uuid)
@@ -27,7 +27,7 @@ export class UserController {
     return output
   }
 
-  async authenticateUser (request: Request) {
+  async authenticateUser(request: Request) {
     const input = {
       email: request.content.email.toLowerCase(),
       password: request.content.password,
@@ -53,7 +53,7 @@ export class UserController {
     return output
   }
 
-  async getUsers (request: Request) {
+  async getUsers(request: Request) {
     const input = {
       page: Number(request.query.page) || 1,
       records: Number(request.query.records) || 10,

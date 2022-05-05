@@ -8,13 +8,13 @@ import { GetUserTokensInputDTO } from './GetUserTokensInputDTO'
 import { GetUserTokensOutputDTO } from './GetUserTokensOutputDTO'
 
 export class GetUserTokensQuery {
-  userTokenDAO: UserTokenDAO;
+  userTokenDAO: UserTokenDAO
 
-  constructor (readonly daoFactory: DAOFactory = new DAOFactoryPrisma()) {
+  constructor(readonly daoFactory: DAOFactory = new DAOFactoryPrisma()) {
     this.userTokenDAO = daoFactory.createUserTokenDAO()
   }
 
-  async execute (input: GetUserTokensInputDTO): Promise<GetUserTokensOutputDTO[]> {
+  async execute(input: GetUserTokensInputDTO): Promise<GetUserTokensOutputDTO[]> {
     const userTokens = await this.userTokenDAO.findByUserId(input.userId)
 
     for (const userToken of userTokens) {

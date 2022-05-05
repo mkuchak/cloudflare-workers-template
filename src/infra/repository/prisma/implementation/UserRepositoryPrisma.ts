@@ -6,9 +6,9 @@ import { UserRepository } from '@/domain/repository/UserRepository'
 import { DataProxyPrismaClient } from '..'
 
 export class UserRepositoryPrisma implements UserRepository {
-  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
+  constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
-  async save (user: User): Promise<void> {
+  async save(user: User): Promise<void> {
     await this.client.user.upsert({
       where: {
         id: user.id,
@@ -18,7 +18,7 @@ export class UserRepositoryPrisma implements UserRepository {
     })
   }
 
-  async findById (id: string): Promise<User> {
+  async findById(id: string): Promise<User> {
     const user = await this.client.user.findFirst({
       where: {
         id,
@@ -28,7 +28,7 @@ export class UserRepositoryPrisma implements UserRepository {
     return user && new User(user)
   }
 
-  async findByEmail (email: string): Promise<User> {
+  async findByEmail(email: string): Promise<User> {
     const user = await this.client.user.findFirst({
       where: {
         email,

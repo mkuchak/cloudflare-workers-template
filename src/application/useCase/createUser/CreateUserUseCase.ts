@@ -13,9 +13,9 @@ import { CreateUserInputDTO } from './CreateUserInputDTO'
 import { CreateUserOutputDTO } from './CreateUserOutputDTO'
 
 export class CreateUserUseCase {
-  userRepository: UserRepository;
+  userRepository: UserRepository
 
-  constructor (
+  constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
@@ -23,10 +23,8 @@ export class CreateUserUseCase {
     this.userRepository = repositoryFactory.createUserRepository()
   }
 
-  async execute (input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
-    const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(
-      input.email,
-    ))
+  async execute(input: CreateUserInputDTO): Promise<CreateUserOutputDTO> {
+    const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(input.email))
 
     if (isEmailAlreadyRegistered) {
       throw new AppError('User Already Exists', 409)

@@ -17,10 +17,10 @@ import { AuthenticateUserInputDTO } from './AuthenticateUserInputDTO'
 import { AuthenticateUserOutputDTO } from './AuthenticateUserOutputDTO'
 
 export class AuthenticateUserUseCase {
-  userRepository: UserRepository;
-  userTokenRepository: UserTokenRepository;
+  userRepository: UserRepository
+  userTokenRepository: UserTokenRepository
 
-  constructor (
+  constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly hash: Hash = new BcryptjsHashAdapter(),
     readonly uuid: UUID = new NanoidAdapter(),
@@ -30,7 +30,7 @@ export class AuthenticateUserUseCase {
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
   }
 
-  async execute (input: AuthenticateUserInputDTO): Promise<AuthenticateUserOutputDTO> {
+  async execute(input: AuthenticateUserInputDTO): Promise<AuthenticateUserOutputDTO> {
     const { email, password, ...restInput } = input
 
     const user = await this.userRepository.findByEmail(email)
@@ -43,11 +43,16 @@ export class AuthenticateUserUseCase {
       throw new AppError('Invalid Password', 401)
     }
 
+    /**
+     * @attention Consider not storing this information in JWT and caching roles and permissions in KV
+     * Then retrieve the information inside the isUser/canUser middlewares and validate it
+     * So to retrieve this information on the client-side use a /me route, for example
+     */
     const accessToken = await this.jwt.sign(
       {
         id: user.id,
-        roles: ['admin', 'moderator'], // TODO: create a role entity
-        permissions: ['read_user'], // TODO: create a permission entity
+        roles: ['admin', 'moderator'],
+        permissions: ['read_user'],
         exp: Math.floor(Date.now() / 1000) + 60 * config.jwtExpiration,
       },
       config.jwtSecret,

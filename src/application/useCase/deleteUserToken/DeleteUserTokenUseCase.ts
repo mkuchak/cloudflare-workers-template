@@ -6,13 +6,13 @@ import { AppError } from '@/infra/error/AppError'
 import { DeleteUserTokenInputDTO } from './DeleteUserTokenInputDTO'
 
 export class DeleteUserTokenUseCase {
-  userTokenRepository: UserTokenRepository;
+  userTokenRepository: UserTokenRepository
 
-  constructor (readonly repositoryFactory: RepositoryFactory) {
+  constructor(readonly repositoryFactory: RepositoryFactory) {
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
   }
 
-  async execute (input: DeleteUserTokenInputDTO): Promise<void> {
+  async execute(input: DeleteUserTokenInputDTO): Promise<void> {
     const { id, refreshToken, userId, ...restInput } = input
 
     let userToken

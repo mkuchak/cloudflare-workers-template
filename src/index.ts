@@ -21,11 +21,7 @@ const router = new Router(
 router.init('/api/v1')
 
 export default {
-  async fetch<Environment = unknown, Context = unknown> (
-    request: Request,
-    env: Environment,
-    context: Context,
-  ) {
+  async fetch<Environment = unknown, Context = unknown>(request: Request, env: Environment, context: Context) {
     return router.http.listen(request, env, context)
   },
 }

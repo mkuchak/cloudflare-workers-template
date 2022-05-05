@@ -5,9 +5,9 @@ import { AppError } from '@/infra/error/AppError'
 
 // User Access Control List
 interface UserACL {
-  id: string;
-  roles: string[];
-  permissions: string[];
+  id: string
+  roles: string[]
+  permissions: string[]
 }
 
 export const canUser = (permissions: string[] = [], matchAll: boolean = false, jwt: JWT = new CfwJWTAdapter()) => {

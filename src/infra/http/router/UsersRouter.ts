@@ -11,9 +11,9 @@ import { isUser } from '../middleware/isUser'
 import { RouterResponse } from './Router'
 
 export class UsersRouter {
-  userController: UserController;
+  userController: UserController
 
-  constructor (
+  constructor(
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
     readonly daoFactory: DAOFactory,
@@ -23,7 +23,7 @@ export class UsersRouter {
     this.userController = new UserController(this.repositoryFactory, this.daoFactory, this.hash, this.uuid)
   }
 
-  init (path: string = '') {
+  init(path: string = '') {
     this.http.on(
       'get',
       `${path}`,

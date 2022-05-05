@@ -12,10 +12,10 @@ import { isUser } from '../middleware/isUser'
 import { RouterResponse } from './Router'
 
 export class AccountRouter {
-  userController: UserController;
-  userTokenController: UserTokenController;
+  userController: UserController
+  userTokenController: UserTokenController
 
-  constructor (
+  constructor(
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
     readonly daoFactory: DAOFactory,
@@ -26,7 +26,7 @@ export class AccountRouter {
     this.userTokenController = new UserTokenController(this.repositoryFactory, this.daoFactory)
   }
 
-  init (path: string = '') {
+  init(path: string = '') {
     this.http.on(
       'post',
       `${path}/register`,

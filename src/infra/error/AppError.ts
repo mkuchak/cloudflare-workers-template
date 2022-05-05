@@ -1,8 +1,8 @@
 export class AppError extends Error {
-  private readonly status: number;
-  private readonly error: string;
+  private readonly status: number
+  private readonly error: string
 
-  constructor (message: string = 'Internal Server Error', status: number = 500) {
+  constructor(message: string = 'Internal Server Error', status: number = 500) {
     super(message)
 
     Object.setPrototypeOf(this, new.target.prototype)

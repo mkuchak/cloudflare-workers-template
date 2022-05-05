@@ -1,18 +1,12 @@
-import {
-  json,
-  ThrowableRouter,
-  withContent,
-  withCookies,
-  withParams,
-} from 'itty-router-extras'
+import { json, ThrowableRouter, withContent, withCookies, withParams } from 'itty-router-extras'
 
 import { Http } from '../Http'
 
 export class IttyRouterHttp implements Http {
-  private readonly router: ThrowableRouter;
-  private readonly globalMiddlewares: any[] = [];
+  private readonly router: ThrowableRouter
+  private readonly globalMiddlewares: any[] = []
 
-  constructor (path?: string) {
+  constructor(path?: string) {
     this.router = ThrowableRouter({ base: path })
     this.listen = this.router.handle.bind(this.router)
     // TODO: add cors support
@@ -20,7 +14,7 @@ export class IttyRouterHttp implements Http {
     // TODO: add observability/logging
   }
 
-  async join (...handlers: any[]): Promise<void> {
+  async join(...handlers: any[]): Promise<void> {
     if (typeof handlers[0] === 'string') {
       const path = handlers.shift()
 
@@ -30,7 +24,7 @@ export class IttyRouterHttp implements Http {
     }
   }
 
-  async on (method: string, path: string, ...handlers: any[]): Promise<void> {
+  async on(method: string, path: string, ...handlers: any[]): Promise<void> {
     const callback = handlers.pop()
 
     this.router[method](
@@ -48,7 +42,7 @@ export class IttyRouterHttp implements Http {
     )
   }
 
-  async listen (request: any, ...extra: any): Promise<any> {
+  async listen(request: any, ...extra: any): Promise<any> {
     return this.listen(request, ...extra)
   }
 }

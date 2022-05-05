@@ -5,9 +5,9 @@ import { GetUserTokensOutputDTO } from '@/application/query/getUserTokens/GetUse
 import { DataProxyPrismaClient } from '@/infra/repository/prisma'
 
 export class UserTokenDAOPrisma implements UserTokenDAO {
-  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
+  constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
-  async findByUserId (userId: string): Promise<GetUserTokensOutputDTO[]> {
+  async findByUserId(userId: string): Promise<GetUserTokensOutputDTO[]> {
     return await this.client.userToken.findMany({
       select: {
         id: true,

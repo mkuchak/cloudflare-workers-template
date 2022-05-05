@@ -6,9 +6,9 @@ import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
 import { DataProxyPrismaClient } from '..'
 
 export class UserTokenRepositoryPrisma implements UserTokenRepository {
-  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
+  constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
-  async save (userToken: UserToken): Promise<void> {
+  async save(userToken: UserToken): Promise<void> {
     await this.client.userToken.upsert({
       where: {
         id: userToken.id,
@@ -18,7 +18,7 @@ export class UserTokenRepositoryPrisma implements UserTokenRepository {
     })
   }
 
-  async findByToken (token: string): Promise<UserToken> {
+  async findByToken(token: string): Promise<UserToken> {
     const userToken = await this.client.userToken.findFirst({
       where: {
         token,
@@ -28,7 +28,7 @@ export class UserTokenRepositoryPrisma implements UserTokenRepository {
     return userToken && new UserToken(userToken)
   }
 
-  async findById (id: string): Promise<UserToken> {
+  async findById(id: string): Promise<UserToken> {
     const userToken = await this.client.userToken.findFirst({
       where: {
         id,

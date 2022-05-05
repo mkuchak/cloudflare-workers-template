@@ -3,13 +3,13 @@ import UAParser from 'ua-parser-js'
 import { UserAgent, UserAgentParser } from './UserAgentParser'
 
 export class UAParserAdapter implements UserAgentParser {
-  private uaParser: UAParser.UAParserInstance;
+  private uaParser: UAParser.UAParserInstance
 
-  constructor () {
+  constructor() {
     this.uaParser = new UAParser()
   }
 
-  parse (userAgent: string): UserAgent {
+  parse(userAgent: string): UserAgent {
     const uaParsed = this.uaParser.setUA(userAgent).getResult()
 
     return {
@@ -17,14 +17,9 @@ export class UAParserAdapter implements UserAgentParser {
         uaParsed.browser.name && uaParsed.browser.version
           ? `${uaParsed.browser.name} ${uaParsed.browser.version}`
           : undefined,
-      os:
-        uaParsed.os.name && uaParsed.os.version
-          ? `${uaParsed.os.name} ${uaParsed.os.version}`
-          : undefined,
+      os: uaParsed.os.name && uaParsed.os.version ? `${uaParsed.os.name} ${uaParsed.os.version}` : undefined,
       device:
-        uaParsed.device.vendor && uaParsed.device.model
-          ? `${uaParsed.device.vendor} ${uaParsed.device.model}`
-          : 'PC',
+        uaParsed.device.vendor && uaParsed.device.model ? `${uaParsed.device.vendor} ${uaParsed.device.model}` : 'PC',
       platform: uaParsed.device.type ?? 'desktop',
     }
   }

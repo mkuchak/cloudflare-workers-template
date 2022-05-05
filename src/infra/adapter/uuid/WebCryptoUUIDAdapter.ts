@@ -1,7 +1,7 @@
 import { UUID } from './UUID'
 
 export class WebCryptoUUIDAdapter implements UUID {
-  generate (): string {
+  generate(): string {
     return crypto.randomUUID()
   }
 }

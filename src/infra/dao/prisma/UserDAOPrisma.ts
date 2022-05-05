@@ -4,10 +4,10 @@ import { UserDAO } from '@/application/dao/UserDAO'
 import { DataProxyPrismaClient } from '@/infra/repository/prisma'
 
 export class UserDAOPrisma implements UserDAO {
-  constructor (readonly client = DataProxyPrismaClient || new PrismaClient()) {}
+  constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   // Consider refactoring and applying cursor-based pagination for scale/performance
-  async findAll (page: number, records: number, order: 'desc' | 'asc'): Promise<any> {
+  async findAll(page: number, records: number, order: 'desc' | 'asc'): Promise<any> {
     const users = await this.client.user.findMany({
       select: {
         id: true,

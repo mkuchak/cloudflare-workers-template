@@ -10,10 +10,10 @@ import { Http } from '../Http'
 const METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']
 
 export class WorktopHttp implements Http {
-  private readonly router: any;
-  private readonly globalMiddlewares: any[] = [];
+  private readonly router: any
+  private readonly globalMiddlewares: any[] = []
 
-  constructor () {
+  constructor() {
     this.router = new Router()
 
     this.router.prepare = compose(
@@ -41,21 +41,27 @@ export class WorktopHttp implements Http {
     // TODO: add observability/logging
   }
 
-  async embedsRouteHandlers (request: Request, context: Context) {
-    try { request.content = await body(request) } catch { request.content = undefined }
-    try { request.cookies = parse(request.headers.get('cookie')) } catch { request.cookies = {} }
+  async embedsRouteHandlers(request: Request, context: Context) {
+    try {
+      request.content = await body(request)
+    } catch {
+      request.content = undefined
+    }
+    try {
+      request.cookies = parse(request.headers.get('cookie'))
+    } catch {
+      request.cookies = {}
+    }
     request.params = context.params
     request.query = Object.fromEntries(new URL(request.url).searchParams)
   }
 
-  async join (...handlers: any[]): Promise<void> {
+  async join(...handlers: any[]): Promise<void> {
     if (typeof handlers[0] === 'string') {
       const [path, handlerOrRouter] = handlers
 
       if (path.includes('*')) {
-        return METHODS.forEach((method) =>
-          this.router.add(method, path, handlerOrRouter),
-        )
+        return METHODS.forEach((method) => this.router.add(method, path, handlerOrRouter))
       }
 
       return this.router.mount(path, handlerOrRouter)
@@ -64,7 +70,7 @@ export class WorktopHttp implements Http {
     this.globalMiddlewares.push(...handlers)
   }
 
-  async on (method: string, path: string, ...handlers: any[]): Promise<void> {
+  async on(method: string, path: string, ...handlers: any[]): Promise<void> {
     const callback = handlers.pop()
 
     this.router.add(
@@ -72,9 +78,11 @@ export class WorktopHttp implements Http {
       path,
       compose(
         this.embedsRouteHandlers,
-        // TODO: globalMiddlewares could store path and middleware entries
-        // so this could be a function that returns equivalent handlers of this route path
-        // this way will be possible to add middlewares to specific group of paths
+        /**
+         * @improvement globalMiddlewares could store path and middleware entries
+         * so this could be a function that returns equivalent handlers of this route path
+         * this way will be possible to add middlewares to specific group of paths
+         */
         ...this.globalMiddlewares,
         ...handlers,
         async (request: any, response: any) => {
@@ -86,7 +94,7 @@ export class WorktopHttp implements Http {
     )
   }
 
-  async listen (): Promise<any> {
+  async listen(): Promise<any> {
     return start(this.listen)
   }
 }

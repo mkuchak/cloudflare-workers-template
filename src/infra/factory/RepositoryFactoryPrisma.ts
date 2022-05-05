@@ -6,13 +6,13 @@ import { UserRepositoryPrisma } from '../repository/prisma/implementation/UserRe
 import { UserTokenRepositoryPrisma } from '../repository/prisma/implementation/UserTokenRepositoryPrisma'
 
 export class RepositoryFactoryPrisma implements RepositoryFactory {
-  constructor (readonly client?: PrismaClient) {}
+  constructor(readonly client?: PrismaClient) {}
 
-  createUserRepository (): UserRepositoryPrisma {
+  createUserRepository(): UserRepositoryPrisma {
     return new UserRepositoryPrisma(this?.client)
   }
 
-  createUserTokenRepository (): UserTokenRepositoryPrisma {
+  createUserTokenRepository(): UserTokenRepositoryPrisma {
     return new UserTokenRepositoryPrisma(this?.client)
   }
 }

@@ -1,9 +1,9 @@
 import { AppError } from '@/infra/error/AppError'
 
 export class Email {
-  private email: string;
+  private email: string
 
-  constructor (email: string) {
+  constructor(email: string) {
     if (!this.isValid(email)) {
       throw new AppError('Invalid Email', 400)
     }
@@ -11,11 +11,11 @@ export class Email {
     this.email = email
   }
 
-  public getEmail (): string {
+  public getEmail(): string {
     return this.format(this.email)
   }
 
-  private isValid (email: string): boolean {
+  private isValid(email: string): boolean {
     // Allow only alphanumeric characters, plus -_.
     // Forbid the use of alias with +
     // At least one letter before the @
@@ -25,7 +25,7 @@ export class Email {
       .match(/^([a-z0-9_.-])+@([\da-z.-]+)\.([a-z.]{2,6})$/i)
   }
 
-  private format (email: string): string {
+  private format(email: string): string {
     return email.toLowerCase().trim()
   }
 }

@@ -11,16 +11,16 @@ import { RefreshUserTokenOutputDTO } from './RefreshUserTokenInputDTO'
 import { RefreshUserTokenInputDTO } from './RefreshUserTokenOutputDTO'
 
 export class RefreshUserTokenUseCase {
-  userTokenRepository: UserTokenRepository;
+  userTokenRepository: UserTokenRepository
 
-  constructor (
+  constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
     readonly jwt: JWT = new CfwJWTAdapter(),
   ) {
     this.userTokenRepository = repositoryFactory.createUserTokenRepository()
   }
 
-  async execute (input: RefreshUserTokenInputDTO): Promise<RefreshUserTokenOutputDTO> {
+  async execute(input: RefreshUserTokenInputDTO): Promise<RefreshUserTokenOutputDTO> {
     const { refreshToken, ...restInput } = input
 
     const userToken = await this.userTokenRepository.findByToken(refreshToken)
@@ -32,8 +32,8 @@ export class RefreshUserTokenUseCase {
     const accessToken = await this.jwt.sign(
       {
         id: userToken.userId,
-        roles: ['admin', 'moderator'], // TODO: create a role entity
-        permissions: ['read_user'], // TODO: create a permission entity
+        roles: ['admin', 'moderator'],
+        permissions: ['read_user'],
         exp: Math.floor(Date.now() / 1000) + 60 * config.jwtExpiration,
       },
       config.jwtSecret,

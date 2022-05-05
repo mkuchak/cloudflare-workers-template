@@ -6,7 +6,7 @@ import { role } from './seeds/role'
 
 const prisma = new PrismaClient()
 
-async function seed () {
+async function seed() {
   await prisma.permission.createMany({
     data: permission,
   })

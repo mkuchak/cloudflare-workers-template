@@ -11,19 +11,19 @@ import { AccountRouter } from './AccountRouter'
 import { UsersRouter } from './UsersRouter'
 
 export interface RouterResponse {
-  status: number;
-  redirect?: string;
-  headers?: any;
-  cookies?: any;
-  payload?: any;
-  cache?: number;
+  status: number
+  redirect?: string
+  headers?: any
+  cookies?: any
+  payload?: any
+  cache?: number
 }
 
 export class Router {
-  accountRouter: AccountRouter;
-  usersRouter: UsersRouter;
+  accountRouter: AccountRouter
+  usersRouter: UsersRouter
 
-  constructor (
+  constructor(
     readonly http: Http,
     readonly repositoryFactory: RepositoryFactory,
     readonly daoFactory: DAOFactory,
@@ -34,7 +34,7 @@ export class Router {
     this.usersRouter = new UsersRouter(this.http, this.repositoryFactory, this.daoFactory, this.hash, this.uuid)
   }
 
-  init (path: string = '') {
+  init(path: string = '') {
     this.accountRouter.init(`${path}/account`)
     this.usersRouter.init(`${path}/users`)
 

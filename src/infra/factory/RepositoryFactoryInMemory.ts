@@ -4,11 +4,11 @@ import { UserRepositoryInMemory } from '../repository/inMemory/UserRepositoryInM
 import { UserTokenRepositoryInMemory } from '../repository/inMemory/UserTokenRepositoryInMemory'
 
 export class RepositoryFactoryInMemory implements RepositoryFactory {
-  createUserRepository (): UserRepositoryInMemory {
+  createUserRepository(): UserRepositoryInMemory {
     return new UserRepositoryInMemory()
   }
 
-  createUserTokenRepository (): UserTokenRepositoryInMemory {
+  createUserTokenRepository(): UserTokenRepositoryInMemory {
     return new UserTokenRepositoryInMemory()
   }
 }

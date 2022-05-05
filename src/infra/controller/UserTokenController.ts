@@ -5,12 +5,9 @@ import { RefreshUserTokenUseCase } from '@/application/useCase/refreshUserToken/
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
 export class UserTokenController {
-  constructor (
-    readonly repositoryFactory: RepositoryFactory,
-    readonly daoFactory: DAOFactory,
-  ) {}
+  constructor(readonly repositoryFactory: RepositoryFactory, readonly daoFactory: DAOFactory) {}
 
-  async getUserTokens (request: Request) {
+  async getUserTokens(request: Request) {
     const input = {
       userId: request.user?.id,
     }
@@ -22,12 +19,10 @@ export class UserTokenController {
     return output
   }
 
-  async refreshUserToken (request: Request) {
+  async refreshUserToken(request: Request) {
     const input = {
       refreshToken: request.params.refreshToken,
-      lastIp:
-        request.headers.get('cf-connecting-ip') ||
-        request.headers.get('x-forwarded-for'),
+      lastIp: request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for'),
       userAgent: request.headers.get('user-agent'),
       asn: request.cf.asn,
       asOrganization: request.cf.asOrganization,
@@ -42,23 +37,19 @@ export class UserTokenController {
       latitude: request.cf.latitude,
     }
 
-    const refreshUserToken = new RefreshUserTokenUseCase(
-      this.repositoryFactory,
-    )
+    const refreshUserToken = new RefreshUserTokenUseCase(this.repositoryFactory)
 
     const output = await refreshUserToken.execute(input)
 
     return output
   }
 
-  async deleteUserToken (request: Request) {
+  async deleteUserToken(request: Request) {
     const input = {
       userId: request.user?.id,
       id: request.params.id,
       refreshToken: request.params.refreshToken,
-      lastIp:
-        request.headers.get('cf-connecting-ip') ||
-        request.headers.get('x-forwarded-for'),
+      lastIp: request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for'),
       userAgent: request.headers.get('user-agent'),
       asn: request.cf.asn,
       asOrganization: request.cf.asOrganization,

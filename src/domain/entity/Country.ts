@@ -2,32 +2,21 @@ import { CountryLocaleMapAdapter } from '@/infra/adapter/countryMapper/CountryLo
 import { CountryMapper } from '@/infra/adapter/countryMapper/CountryMapper'
 
 export class Country {
-  code: string;
-  locale: string;
-  locales: string[];
-  language: string;
-  languages: string[];
-  currency: string;
-  emoji: string;
-  capital: string;
-  name: string;
-  continent: string;
+  code: string
+  locale: string
+  locales: string[]
+  language: string
+  languages: string[]
+  currency: string
+  emoji: string
+  capital: string
+  name: string
+  continent: string
 
-  constructor (
-    country: string,
-    countryMapper: CountryMapper = new CountryLocaleMapAdapter(),
-  ) {
-    const {
-      locale,
-      locales,
-      language,
-      languages,
-      currency,
-      emoji,
-      capital,
-      name,
-      continent,
-    } = countryMapper.map(country ?? 'US')
+  constructor(country: string, countryMapper: CountryMapper = new CountryLocaleMapAdapter()) {
+    const { locale, locales, language, languages, currency, emoji, capital, name, continent } = countryMapper.map(
+      country ?? 'US',
+    )
 
     this.code = country
     this.locale = locale
