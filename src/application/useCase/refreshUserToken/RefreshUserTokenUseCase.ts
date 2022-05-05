@@ -39,6 +39,10 @@ export class RefreshUserTokenUseCase {
       config.jwtSecret,
     )
 
+    if (config.renewRefreshTokenExpiration) {
+      userToken.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * config.refreshTokenExpiration)
+    }
+
     const updatedUserToken = new UserToken({
       id: userToken.id,
       userId: userToken.userId,
