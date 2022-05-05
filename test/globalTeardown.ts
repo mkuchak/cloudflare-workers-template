@@ -11,6 +11,7 @@ export default async function () {
       await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:reset'], {
         cwd: join(__dirname),
       })
+      // await exec('dataproxy-test', ['sh', '-c', 'npm run prisma:seed'], CWD_PATH)
     }
   }
 }
