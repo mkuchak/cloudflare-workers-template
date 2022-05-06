@@ -19,11 +19,7 @@ export default async function () {
 
     await exec(
       'database-test',
-      [
-        'sh',
-        '-c',
-        'while ! mysqladmin ping -h 127.0.0.1 --silent; do sleep 1; done',
-      ],
+      ['sh', '-c', 'while ! mysqladmin ping -h 127.0.0.1 --silent; do sleep 1; done'],
       CWD_PATH,
     )
 
@@ -36,11 +32,7 @@ export default async function () {
 
     // Start dataproxy server and wait for it before starting tests
     await exec('dataproxy-test', ['sh', '-c', 'npm run start &'], CWD_PATH)
-    await exec(
-      'dataproxy-test',
-      ['sh', '-c', 'while ! netstat -tulpn | grep 9000; do sleep 1; done'],
-      CWD_PATH,
-    )
+    await exec('dataproxy-test', ['sh', '-c', 'while ! netstat -tulpn | grep 9000; do sleep 1; done'], CWD_PATH)
   }
 
   console.timeEnd('global-setup')
