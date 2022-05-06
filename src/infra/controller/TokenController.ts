@@ -1,25 +1,25 @@
 import { DAOFactory } from '@/application/factory/DAOFactory'
-import { GetUserTokensQuery } from '@/application/query/getUserTokens/GetUserTokensQuery'
-import { DeleteUserTokenUseCase } from '@/application/useCase/deleteUserToken/DeleteUserTokenUseCase'
-import { RefreshUserTokenUseCase } from '@/application/useCase/refreshUserToken/RefreshUserTokenUseCase'
+import { ListTokensQuery } from '@/application/query/listTokens/ListTokensQuery'
+import { DeleteTokenUseCase } from '@/application/useCase/deleteToken/DeleteTokenUseCase'
+import { RefreshTokenUseCase } from '@/application/useCase/refreshToken/RefreshTokenUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
-export class UserTokenController {
+export class TokenController {
   constructor(readonly repositoryFactory: RepositoryFactory, readonly daoFactory: DAOFactory) {}
 
-  async getUserTokens(request: Request) {
+  async listTokens(request: Request) {
     const input = {
       userId: request.user?.id,
     }
 
-    const getUserTokens = new GetUserTokensQuery(this.daoFactory)
+    const listTokens = new ListTokensQuery(this.daoFactory)
 
-    const output = await getUserTokens.execute(input)
+    const output = await listTokens.execute(input)
 
     return output
   }
 
-  async refreshUserToken(request: Request) {
+  async refreshToken(request: Request) {
     const input = {
       refreshToken: request.params.refreshToken,
       lastIp: request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for'),
@@ -37,14 +37,14 @@ export class UserTokenController {
       latitude: request.cf.latitude,
     }
 
-    const refreshUserToken = new RefreshUserTokenUseCase(this.repositoryFactory)
+    const refreshToken = new RefreshTokenUseCase(this.repositoryFactory)
 
-    const output = await refreshUserToken.execute(input)
+    const output = await refreshToken.execute(input)
 
     return output
   }
 
-  async deleteUserToken(request: Request) {
+  async deleteToken(request: Request) {
     const input = {
       userId: request.user?.id,
       id: request.params.id,
@@ -64,8 +64,8 @@ export class UserTokenController {
       latitude: request.cf.latitude,
     }
 
-    const deleteUserToken = new DeleteUserTokenUseCase(this.repositoryFactory)
+    const deleteToken = new DeleteTokenUseCase(this.repositoryFactory)
 
-    await deleteUserToken.execute(input)
+    await deleteToken.execute(input)
   }
 }

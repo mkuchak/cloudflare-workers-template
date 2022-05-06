@@ -1,14 +1,20 @@
 import { PrismaClient } from '@prisma/client'
 
-import { UserTokenDAO } from '@/application/dao/UserTokenDAO'
-import { GetUserTokensOutputDTO } from '@/application/query/getUserTokens/GetUserTokensOutputDTO'
+import { TokenDAO } from '@/application/dao/TokenDAO'
+import { ListTokensOutputDTO } from '@/application/query/listTokens/ListTokensOutputDTO'
 import { DataProxyPrismaClient } from '@/infra/repository/prisma'
 
-export class UserTokenDAOPrisma implements UserTokenDAO {
+export class TokenDAOPrisma implements TokenDAO {
   constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
-  async findByUserId(userId: string): Promise<GetUserTokensOutputDTO[]> {
-    return await this.client.userToken.findMany({
+  async findByUserId(userId: string, isEmailToken = false, isValid = true): Promise<ListTokensOutputDTO[]> {
+    const findValid = isValid && {
+      expiresAt: {
+        gt: new Date(),
+      },
+    }
+
+    return await this.client.token.findMany({
       select: {
         id: true,
         userAgent: true,
@@ -29,7 +35,8 @@ export class UserTokenDAOPrisma implements UserTokenDAO {
       },
       where: {
         userId,
-        isEmailToken: false,
+        isEmailToken,
+        ...findValid,
       },
       orderBy: {
         createdAt: 'desc',

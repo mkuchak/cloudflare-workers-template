@@ -1,9 +1,9 @@
 import { config } from '@/config'
 import { Password } from '@/domain/entity/Password'
-import { UserToken } from '@/domain/entity/UserToken'
+import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
+import { TokenRepository } from '@/domain/repository/TokenRepository'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { UserTokenRepository } from '@/domain/repository/UserTokenRepository'
 import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
 import { Hash } from '@/infra/adapter/hash/Hash'
 import { CfwJWTAdapter } from '@/infra/adapter/jwt/CfwJWTAdapter'
@@ -18,7 +18,7 @@ import { AuthenticateUserOutputDTO } from './AuthenticateUserOutputDTO'
 
 export class AuthenticateUserUseCase {
   userRepository: UserRepository
-  userTokenRepository: UserTokenRepository
+  tokenRepository: TokenRepository
 
   constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
@@ -27,7 +27,7 @@ export class AuthenticateUserUseCase {
     readonly jwt: JWT = new CfwJWTAdapter(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
-    this.userTokenRepository = repositoryFactory.createUserTokenRepository()
+    this.tokenRepository = repositoryFactory.createTokenRepository()
   }
 
   async execute(input: AuthenticateUserInputDTO): Promise<AuthenticateUserOutputDTO> {
@@ -58,7 +58,7 @@ export class AuthenticateUserUseCase {
       config.jwtSecret,
     )
 
-    const userToken = new UserToken(
+    const token = new Token(
       {
         userId: user.id,
         ...restInput,
@@ -67,11 +67,11 @@ export class AuthenticateUserUseCase {
       this.uuid,
     )
 
-    await this.userTokenRepository.save(userToken)
+    await this.tokenRepository.save(token)
 
     return {
       accessToken,
-      refreshToken: userToken.token,
+      refreshToken: token.value,
     }
   }
 }

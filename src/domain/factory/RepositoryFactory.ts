@@ -1,7 +1,7 @@
+import { TokenRepository } from '../repository/TokenRepository'
 import { UserRepository } from '../repository/UserRepository'
-import { UserTokenRepository } from '../repository/UserTokenRepository'
 
 export interface RepositoryFactory {
   createUserRepository(): UserRepository
-  createUserTokenRepository(): UserTokenRepository
+  createTokenRepository(): TokenRepository
 }

@@ -1,5 +1,5 @@
 import { DAOFactory } from '@/application/factory/DAOFactory'
-import { GetUsersQuery } from '@/application/query/getUsers/GetUsersQuery'
+import { ListUsersQuery } from '@/application/query/listUsers/ListUsersQuery'
 import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/AuthenticateUserUseCase'
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
@@ -53,16 +53,16 @@ export class UserController {
     return output
   }
 
-  async getUsers(request: Request) {
+  async listUsers(request: Request) {
     const input = {
       page: Number(request.query.page) || 1,
       records: Number(request.query.records) || 10,
       order: request.query.order.includes('asc') ? 'asc' : 'desc',
     }
 
-    const getUsers = new GetUsersQuery(this.daoFactory)
+    const listUsers = new ListUsersQuery(this.daoFactory)
 
-    const output = await getUsers.execute(input)
+    const output = await listUsers.execute(input)
 
     return output
   }

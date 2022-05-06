@@ -15,12 +15,12 @@ export class User {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(user: PickProps<User>, uuid: UUID = new NanoidAdapter()) {
-    Object.assign(this, user)
-    this.id = user.id ?? uuid.generate()
-    this.email = new Email(user.email).getEmail()
-    this.password = new Password(user.password).getPassword()
-    this.name = user.name && this.capitalize(user.name)
+  constructor(props: PickProps<User>, uuid: UUID = new NanoidAdapter()) {
+    Object.assign(this, props)
+    this.id = props.id ?? uuid.generate()
+    this.email = new Email(props.email).getEmail()
+    this.password = new Password(props.password).getPassword()
+    this.name = props.name && this.capitalize(props.name)
   }
 
   private capitalize(text: string): string {

@@ -1,4 +1,4 @@
-export interface GetUsersInputDTO {
+export interface ListUsersInputDTO {
   page?: number
   records?: number
   order?: string

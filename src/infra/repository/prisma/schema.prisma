@@ -10,25 +10,25 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(uuid())
-  email           String           @unique
+  id              String       @id @default(uuid())
+  email           String       @unique
   password        String
   name            String?
   picture         String?
-  isEmailVerified Boolean          @default(false)
-  isActive        Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @default(now()) @updatedAt
-  UserToken       UserToken[]
-  RoleUser        RoleUser[]
-  PermissionUser  PermissionUser[]
+  isEmailVerified Boolean      @default(false)
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @default(now()) @updatedAt
+  token           Token[]
+  role            Role[]
+  permission      Permission[]
 }
 
-model UserToken {
+model Token {
   id             String    @id @default(uuid())
   user           User      @relation(fields: [userId], references: [id])
   userId         String
-  token          String    @unique
+  value          String    @unique
   code           String?
   codeAttempts   Int?
   userAgent      String?
@@ -50,51 +50,24 @@ model UserToken {
   updatedAt      DateTime  @default(now()) @updatedAt
 }
 
-model RoleUser {
-  id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  role      Role     @relation(fields: [roleId], references: [id])
-  roleId    String
-  createdAt DateTime @default(now())
-}
-
 model Role {
-  id             String           @id @default(uuid())
-  label          String           @unique
-  title          String?
-  description    String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt
-  RoleUser       RoleUser[]
-  PermissionRole PermissionRole[]
-}
-
-model PermissionRole {
-  id           String     @id @default(uuid())
-  role         Role       @relation(fields: [roleId], references: [id])
-  roleId       String
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId String
-  createdAt    DateTime   @default(now())
-}
-
-model PermissionUser {
-  id           String     @id @default(uuid())
-  user         User       @relation(fields: [userId], references: [id])
-  userId       String
-  permission   Permission @relation(fields: [permissionId], references: [id])
-  permissionId String
-  createdAt    DateTime   @default(now())
+  id          String       @id @default(uuid())
+  label       String       @unique
+  title       String?
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now()) @updatedAt
+  user        User[]
+  permission  Permission[]
 }
 
 model Permission {
-  id             String           @id @default(uuid())
-  label          String           @unique
-  title          String?
-  description    String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt
-  PermissionRole PermissionRole[]
-  PermissionUser PermissionUser[]
+  id          String   @id @default(uuid())
+  label       String   @unique
+  title       String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  role        Role[]
+  user        User[]
 }

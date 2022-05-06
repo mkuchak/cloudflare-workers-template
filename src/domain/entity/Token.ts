@@ -2,10 +2,14 @@ import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
 import { UUID } from '@/infra/adapter/uuid/UUID'
 import { AppError } from '@/infra/error/AppError'
 
-export class UserToken {
+type TokenType = Omit<PickProps<Token>, 'value'> & {
+  value?: string
+}
+
+export class Token {
   id?: string
   userId: string
-  token?: string
+  value: string
   code?: string
   codeAttempts?: number
   userAgent?: string
@@ -26,14 +30,14 @@ export class UserToken {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(userToken: PickProps<UserToken>, uuid: UUID = new NanoidAdapter()) {
-    if (this.isExpired(userToken.expiresAt)) {
+  constructor(props: TokenType, uuid: UUID = new NanoidAdapter()) {
+    if (this.isExpired(props.expiresAt)) {
       throw new AppError('Invalid Token', 401)
     }
 
-    Object.assign(this, userToken)
-    this.id = userToken.id ?? uuid.generate()
-    this.token = userToken.token ?? uuid.generate(128)
+    Object.assign(this, props)
+    this.id = props.id ?? uuid.generate()
+    this.value = props.value ?? uuid.generate(128)
   }
 
   private isExpired(expiresAt?: Date): boolean {

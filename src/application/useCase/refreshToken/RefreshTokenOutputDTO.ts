@@ -1,7 +1,5 @@
-export interface DeleteUserTokenInputDTO {
-  userId?: string
-  id?: string
-  refreshToken?: string
+export interface RefreshTokenInputDTO {
+  refreshToken: string
   lastIp: string
   userAgent: string
   asn: number

@@ -30,7 +30,7 @@ export class UsersRouter {
       isUser(['admin']),
       async (request: Request): Promise<RouterResponse> => ({
         status: 200,
-        payload: await this.userController.getUsers(request),
+        payload: await this.userController.listUsers(request),
       }),
     )
   }

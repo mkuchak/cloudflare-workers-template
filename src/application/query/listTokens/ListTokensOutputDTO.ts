@@ -1,4 +1,4 @@
-export interface GetUserTokensOutputDTO {
+export interface ListTokensOutputDTO {
   id: string
   userAgent: UserAgent | string
   lastIp: string

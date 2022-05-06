@@ -15,7 +15,8 @@ async function seed() {
     data: role,
   })
 
-  await prisma.permissionRole.createMany({
+  await prisma.role.update({
+    where: { id: role.id },
     data: permissionRole,
   })
 }

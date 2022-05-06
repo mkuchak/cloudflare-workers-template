@@ -1,42 +1,42 @@
-import { UserToken } from '@/domain/entity/UserToken'
+import { Token } from '@/domain/entity/Token'
 
-describe('UserToken', () => {
+describe('Token', () => {
   it('should create a new user token', async () => {
-    const userToken = new UserToken({
+    const token = new Token({
       userId: '12345',
       expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
     })
 
-    expect(userToken).toEqual(
+    expect(token).toEqual(
       expect.objectContaining({
         userId: '12345',
       }),
     )
-    expect(userToken).toHaveProperty('id')
-    expect(userToken).toHaveProperty('token')
+    expect(token).toHaveProperty('id')
+    expect(token).toHaveProperty('value')
   })
 
   it('should create a new user token if no expired date is provided', async () => {
-    const userToken = new UserToken({
+    const token = new Token({
       userId: '12345',
     })
 
-    expect(userToken).toEqual(
+    expect(token).toEqual(
       expect.objectContaining({
         userId: '12345',
       }),
     )
-    expect(userToken).toHaveProperty('id')
-    expect(userToken).toHaveProperty('token')
+    expect(token).toHaveProperty('id')
+    expect(token).toHaveProperty('value')
   })
 
   it('should not create a user token with an expired date', async () => {
     expect(
       () =>
-        new UserToken({
+        new Token({
           id: '12345',
           userId: '12345',
-          token: '12345',
+          value: '12345',
           expiresAt: new Date(Date.now() - 1000), // expired
         }),
     ).toThrowError('Invalid Token')

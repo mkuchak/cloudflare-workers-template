@@ -1,11 +1,11 @@
 import type { PrismaClient } from '@prisma/client'
 
+import { TokenDAO } from '@/application/dao/TokenDAO'
 import { UserDAO } from '@/application/dao/UserDAO'
-import { UserTokenDAO } from '@/application/dao/UserTokenDAO'
 import { DAOFactory } from '@/application/factory/DAOFactory'
 
+import { TokenDAOPrisma } from '../dao/prisma/TokenDAOPrisma'
 import { UserDAOPrisma } from '../dao/prisma/UserDAOPrisma'
-import { UserTokenDAOPrisma } from '../dao/prisma/UserTokenDAOPrisma'
 
 export class DAOFactoryPrisma implements DAOFactory {
   constructor(readonly client?: PrismaClient) {}
@@ -14,7 +14,7 @@ export class DAOFactoryPrisma implements DAOFactory {
     return new UserDAOPrisma(this?.client)
   }
 
-  createUserTokenDAO(): UserTokenDAO {
-    return new UserTokenDAOPrisma(this?.client)
+  createTokenDAO(): TokenDAO {
+    return new TokenDAOPrisma(this?.client)
   }
 }
