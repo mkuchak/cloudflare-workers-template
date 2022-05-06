@@ -22,7 +22,7 @@
     "prisma:generate": "PRISMA_CLIENT_ENGINE_TYPE=dataproxy prisma generate",
     "dataproxy:start": "docker-compose up -d",
     "dataproxy:restart": "docker-compose down --remove-orphans && docker-compose up -d",
-    "dataproxy:reset": "docker-compose down --remove-orphans -v && docker-compose up -d --build -V",
+    "dataproxy:reset": "docker-compose down --rmi local --remove-orphans -v && docker-compose up -d --build -V --force-recreate --always-recreate-deps",
     "dataproxy:stop": "docker-compose down --remove-orphans",
     "test": "NODE_ENV=test dotenv -e .env.test -- node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js --verbose",
     "test:watch": "npm run test -- --watch --verbose",
