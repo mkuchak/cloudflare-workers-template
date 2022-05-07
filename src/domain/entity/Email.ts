@@ -1,4 +1,4 @@
-import { AppError } from '@/infra/error/AppError'
+import { AppError } from '@/shared/error/AppError'
 
 export class Email {
   private email: string

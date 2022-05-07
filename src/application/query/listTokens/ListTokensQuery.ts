@@ -2,7 +2,7 @@ import { TokenDAO } from '@/application/dao/TokenDAO'
 import { DAOFactory } from '@/application/factory/DAOFactory'
 import { Country } from '@/domain/entity/Country'
 import { UserAgent } from '@/domain/entity/UserAgent'
-import { DAOFactoryPrisma } from '@/infra/factory/DAOFactoryPrisma'
+import { DAOFactoryPrisma } from '@/shared/infra/factory/DAOFactoryPrisma'
 
 import { ListTokensInputDTO } from './ListTokensInputDTO'
 import { ListTokensOutputDTO } from './ListTokensOutputDTO'

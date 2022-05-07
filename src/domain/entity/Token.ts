@@ -1,6 +1,6 @@
-import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
-import { UUID } from '@/infra/adapter/uuid/UUID'
-import { AppError } from '@/infra/error/AppError'
+import { AppError } from '@/shared/error/AppError'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { UUID } from '@/shared/provider/UUID/UUID'
 
 type TokenType = Omit<PickProps<Token>, 'value'> & {
   value?: string
@@ -30,7 +30,7 @@ export class Token {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(props: TokenType, uuid: UUID = new NanoidAdapter()) {
+  constructor(props: TokenType, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     if (this.isExpired(props.expiresAt)) {
       throw new AppError('Invalid Token', 401)
     }

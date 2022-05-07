@@ -4,14 +4,10 @@ import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
-import { Hash } from '@/infra/adapter/hash/Hash'
-import { CfwJWTAdapter } from '@/infra/adapter/jwt/CfwJWTAdapter'
-import { JWT } from '@/infra/adapter/jwt/JWT'
-import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
-import { UUID } from '@/infra/adapter/uuid/UUID'
-import { AppError } from '@/infra/error/AppError'
-import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
+import { AppError } from '@/shared/error/AppError'
+import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
+import { JWT } from '@/shared/provider/JWT/JWT'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 import { AuthenticateUserInputDTO } from './AuthenticateUserInputDTO'
 import { AuthenticateUserOutputDTO } from './AuthenticateUserOutputDTO'
@@ -22,9 +18,7 @@ export class AuthenticateUserUseCase {
 
   constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
-    readonly hash: Hash = new BcryptjsHashAdapter(),
-    readonly uuid: UUID = new NanoidAdapter(),
-    readonly jwt: JWT = new CfwJWTAdapter(),
+    readonly jwt: JWT = new ProviderFactory().createJWTProvider(),
   ) {
     this.userRepository = repositoryFactory.createUserRepository()
     this.tokenRepository = repositoryFactory.createTokenRepository()
@@ -39,7 +33,7 @@ export class AuthenticateUserUseCase {
       throw new AppError('Invalid Password', 401) // avoid exposing the non-existence of the user
     }
 
-    if (!(await Password.isValid(password, user.password, this.hash))) {
+    if (!(await Password.isValid(password, user.password))) {
       throw new AppError('Invalid Password', 401)
     }
 
@@ -58,14 +52,11 @@ export class AuthenticateUserUseCase {
       config.jwtSecret,
     )
 
-    const token = new Token(
-      {
-        userId: user.id,
-        ...restInput,
-        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * config.refreshTokenExpiration),
-      },
-      this.uuid,
-    )
+    const token = new Token({
+      userId: user.id,
+      ...restInput,
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * config.refreshTokenExpiration),
+    })
 
     await this.tokenRepository.save(token)
 

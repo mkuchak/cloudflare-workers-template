@@ -1,5 +1,5 @@
-import { NanoidAdapter } from '@/infra/adapter/uuid/NanoidAdapter'
-import { UUID } from '@/infra/adapter/uuid/UUID'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { UUID } from '@/shared/provider/UUID/UUID'
 
 import { Email } from './Email'
 import { Password } from './Password'
@@ -15,7 +15,7 @@ export class User {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(props: PickProps<User>, uuid: UUID = new NanoidAdapter()) {
+  constructor(props: PickProps<User>, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     Object.assign(this, props)
     this.id = props.id ?? uuid.generate()
     this.email = new Email(props.email).getEmail()

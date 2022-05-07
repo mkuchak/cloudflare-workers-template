@@ -1,6 +1,6 @@
-import { BcryptjsHashAdapter } from '@/infra/adapter/hash/BcryptjsHashAdapter'
-import { Hash } from '@/infra/adapter/hash/Hash'
-import { AppError } from '@/infra/error/AppError'
+import { AppError } from '@/shared/error/AppError'
+import { Hash } from '@/shared/provider/Hash/Hash'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 export class Password {
   private password: string
@@ -31,12 +31,12 @@ export class Password {
   static async isValid(
     password: string,
     hashedPassword: string,
-    hash: Hash = new BcryptjsHashAdapter(),
+    hash: Hash = new ProviderFactory().createHashProvider(),
   ): Promise<boolean> {
     return await hash.compare(password, hashedPassword)
   }
 
-  static async hash(password: string, hash: Hash = new BcryptjsHashAdapter()): Promise<string> {
+  static async hash(password: string, hash: Hash = new ProviderFactory().createHashProvider()): Promise<string> {
     return await hash.generate(password)
   }
 }

@@ -1,7 +1,7 @@
 import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
-import { AppError } from '@/infra/error/AppError'
+import { AppError } from '@/shared/error/AppError'
 
 import { DeleteTokenInputDTO } from './DeleteTokenInputDTO'
 
@@ -28,13 +28,13 @@ export class DeleteTokenUseCase {
       throw new AppError('Invalid Token', 401)
     }
 
-    // soft delete enforcing expiration
+    // Soft delete enforcing expiration
     const updatedToken = new Token({
       id: token.id,
       userId: token.userId,
       value: token.value,
       ...restInput,
-      expiresAt: new Date(Date.now()), // expired
+      expiresAt: new Date(Date.now() + 10), // expired (10 ms to avoid clock skew)
       createdAt: token.createdAt,
     })
 

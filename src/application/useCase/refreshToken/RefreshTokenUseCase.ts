@@ -2,10 +2,10 @@ import { config } from '@/config'
 import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
-import { CfwJWTAdapter } from '@/infra/adapter/jwt/CfwJWTAdapter'
-import { JWT } from '@/infra/adapter/jwt/JWT'
-import { AppError } from '@/infra/error/AppError'
-import { RepositoryFactoryPrisma } from '@/infra/factory/RepositoryFactoryPrisma'
+import { AppError } from '@/shared/error/AppError'
+import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
+import { JWT } from '@/shared/provider/JWT/JWT'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 import { RefreshTokenOutputDTO } from './RefreshTokenInputDTO'
 import { RefreshTokenInputDTO } from './RefreshTokenOutputDTO'
@@ -15,7 +15,7 @@ export class RefreshTokenUseCase {
 
   constructor(
     readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma(),
-    readonly jwt: JWT = new CfwJWTAdapter(),
+    readonly jwt: JWT = new ProviderFactory().createJWTProvider(),
   ) {
     this.tokenRepository = repositoryFactory.createTokenRepository()
   }

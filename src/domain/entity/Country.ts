@@ -1,5 +1,5 @@
-import { CountryLocaleMapAdapter } from '@/infra/adapter/countryMapper/CountryLocaleMapAdapter'
-import { CountryMapper } from '@/infra/adapter/countryMapper/CountryMapper'
+import { CountryMapper } from '@/shared/provider/CountryMapper/CountryMapper'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 export class Country {
   code: string
@@ -13,7 +13,7 @@ export class Country {
   name: string
   continent: string
 
-  constructor(country: string, countryMapper: CountryMapper = new CountryLocaleMapAdapter()) {
+  constructor(country: string, countryMapper: CountryMapper = new ProviderFactory().createCountryMapperProvider()) {
     const { locale, locales, language, languages, currency, emoji, capital, name, continent } = countryMapper.map(
       country ?? 'US',
     )

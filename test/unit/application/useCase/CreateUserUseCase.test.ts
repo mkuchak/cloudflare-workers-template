@@ -1,18 +1,17 @@
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
-import { WebCryptoHashAdapter } from '@/infra/adapter/hash/WebCryptoHashAdapter'
-import { WebCryptoUUIDAdapter } from '@/infra/adapter/uuid/WebCryptoUUIDAdapter'
-import { RepositoryFactoryInMemory } from '@/infra/factory/RepositoryFactoryInMemory'
+import { RepositoryFactoryInMemory } from '@/shared/infra/factory/RepositoryFactoryInMemory'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { UUID } from '@/shared/provider/UUID/UUID'
 
-let uuid: WebCryptoUUIDAdapter
-let hash: WebCryptoHashAdapter
 let repositoryFactory: RepositoryFactoryInMemory
 let createUserUseCase: CreateUserUseCase
+let uuid: UUID
 
 beforeAll(async () => {
-  uuid = new WebCryptoUUIDAdapter()
-  hash = new WebCryptoHashAdapter()
   repositoryFactory = new RepositoryFactoryInMemory()
-  createUserUseCase = new CreateUserUseCase(repositoryFactory, hash, uuid)
+  createUserUseCase = new CreateUserUseCase(repositoryFactory)
+
+  uuid = new ProviderFactory().createUUIDProvider()
 })
 
 describe('CreateUserUseCase', () => {
@@ -41,8 +40,6 @@ describe('CreateUserUseCase', () => {
     }
     await createUserUseCase.execute(input)
 
-    await expect(createUserUseCase.execute(input)).rejects.toThrowError(
-      'User Already Exists',
-    )
+    await expect(createUserUseCase.execute(input)).rejects.toThrowError('User Already Exists')
   })
 })

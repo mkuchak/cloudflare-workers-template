@@ -1,6 +1,6 @@
 import { UserDAO } from '@/application/dao/UserDAO'
 import { DAOFactory } from '@/application/factory/DAOFactory'
-import { DAOFactoryPrisma } from '@/infra/factory/DAOFactoryPrisma'
+import { DAOFactoryPrisma } from '@/shared/infra/factory/DAOFactoryPrisma'
 
 import { ListUsersInputDTO } from './ListUsersInputDTO'
 

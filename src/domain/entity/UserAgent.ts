@@ -1,5 +1,5 @@
-import { UAParserAdapter } from '@/infra/adapter/userAgentParser/UAParserAdapter'
-import { UserAgentParser } from '@/infra/adapter/userAgentParser/UserAgentParser'
+import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { UserAgentParser } from '@/shared/provider/UserAgentParser/UserAgentParser'
 
 export class UserAgent {
   tag: string
@@ -8,7 +8,10 @@ export class UserAgent {
   device: string
   platform: string
 
-  constructor(userAgent: string, userAgentParser: UserAgentParser = new UAParserAdapter()) {
+  constructor(
+    userAgent: string,
+    userAgentParser: UserAgentParser = new ProviderFactory().createUserAgentParserProvider(),
+  ) {
     const parsedUserAgent = userAgentParser.parse(userAgent)
 
     this.tag = userAgent
