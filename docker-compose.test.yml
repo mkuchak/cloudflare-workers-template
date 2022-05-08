@@ -23,6 +23,6 @@ services:
     depends_on:
       - "database"
     volumes:
-      - ./src/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
+      - ./src/shared/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
     environment:
       DATABASE_URL: "mysql://root:root@database-test:3306/test"

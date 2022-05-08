@@ -24,7 +24,7 @@ services:
     depends_on:
       - "database"
     volumes:
-      - ./src/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
+      - ./src/shared/infra/repository/prisma:/home/dataproxy/prisma # schema.prisma directory
     command: >
       sh -c "until nc -z cfw-database 3306; do sleep 1; done &&
              npm run prisma:generate &&

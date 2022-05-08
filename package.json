@@ -33,7 +33,7 @@
     "postinstall": "patch-package"
   },
   "prisma": {
-    "schema": "./src/infra/repository/prisma/schema.prisma"
+    "schema": "./src/shared/infra/repository/prisma/schema.prisma"
   },
   "keywords": [],
   "author": "",
