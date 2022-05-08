@@ -1,5 +1,5 @@
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { CountryMapper } from '@/shared/provider/CountryMapper/CountryMapper'
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 export class Country {
   code: string

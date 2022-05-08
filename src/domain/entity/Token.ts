@@ -1,5 +1,5 @@
 import { AppError } from '@/shared/error/AppError'
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 
 type TokenType = Omit<PickProps<Token>, 'value'> & {

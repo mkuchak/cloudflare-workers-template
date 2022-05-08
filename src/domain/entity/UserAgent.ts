@@ -1,4 +1,4 @@
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UserAgentParser } from '@/shared/provider/UserAgentParser/UserAgentParser'
 
 export class UserAgent {

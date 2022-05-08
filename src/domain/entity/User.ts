@@ -1,4 +1,4 @@
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 
 import { Email } from './Email'

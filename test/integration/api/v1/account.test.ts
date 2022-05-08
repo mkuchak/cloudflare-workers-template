@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 import { startHttpServer, stopHttpServer } from '#/index'
 

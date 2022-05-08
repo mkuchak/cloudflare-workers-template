@@ -1,7 +1,8 @@
 import { config } from '@/config'
 import { AppError } from '@/shared/error/AppError'
 import { JWT } from '@/shared/provider/JWT/JWT'
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
+
+import { ProviderFactory } from '../../factory/ProviderFactory'
 
 // User Access Control List
 interface UserACL {

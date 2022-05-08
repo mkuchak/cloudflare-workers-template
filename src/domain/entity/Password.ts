@@ -1,6 +1,6 @@
 import { AppError } from '@/shared/error/AppError'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { Hash } from '@/shared/provider/Hash/Hash'
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 
 export class Password {
   private password: string

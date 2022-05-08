@@ -1,6 +1,6 @@
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { RepositoryFactoryInMemory } from '@/shared/infra/factory/RepositoryFactoryInMemory'
-import { ProviderFactory } from '@/shared/provider/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 
 let repositoryFactory: RepositoryFactoryInMemory
