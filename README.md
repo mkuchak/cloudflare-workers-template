@@ -50,7 +50,7 @@ npm run dev
 
 **ATTENTION**: Make sure you have configured the `.env` file with your `DATABASE_URL` on [Prisma Data Platform](https://www.prisma.io/dataplatform) before running `npm run prisma:generate` command. Every time the database URL is changed this command must be executed.
 
-The Prisma Schema path is `src/infra/repository/prisma/schema.prisma`. You can change it in `package.json` if you want to, but is needed to change the Docker containers too in `docker-compose*.yml`.
+The Prisma Schema path is `src/shared/infra/repository/prisma/schema.prisma`. You can change it in `package.json` if you want to, but is needed to change the Docker containers too in `docker-compose*.yml`.
 
 ### Testing
 
