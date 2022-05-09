@@ -14,7 +14,7 @@ export class ListUsersQuery {
   async execute(input: ListUsersInputDTO): Promise<any> {
     const { page, records, order } = input
 
-    const users = await this.userDAO.findAll(page, records, order)
+    const users = await this.userDAO.findAllWithPagination(page, records, order)
 
     return users
   }

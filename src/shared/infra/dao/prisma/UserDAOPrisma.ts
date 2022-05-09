@@ -8,7 +8,7 @@ export class UserDAOPrisma implements UserDAO {
   constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   // Consider refactoring and applying cursor-based pagination for scale/performance
-  async findAll(page: number, records: number, order: 'desc' | 'asc'): Promise<any> {
+  async findAllWithPagination(page: number, records: number, order: 'desc' | 'asc'): Promise<any> {
     const users = await this.client.user.findMany({
       select: {
         id: true,
@@ -20,19 +20,10 @@ export class UserDAOPrisma implements UserDAO {
         createdAt: true,
         updatedAt: true,
         role: {
-          select: {
-            label: true,
-            permission: {
-              select: {
-                label: true,
-              },
-            },
-          },
+          select: { label: true, permission: { select: { label: true } } },
         },
         permission: {
-          select: {
-            label: true,
-          },
+          select: { label: true },
         },
       },
       orderBy: {
