@@ -37,7 +37,7 @@ export class Token {
 
     Object.assign(this, props)
     this.id = props.id ?? uuid.generate()
-    this.value = props.value ?? uuid.generate(128)
+    this.value = props.value ?? uuid.generate(64)
   }
 
   private isExpired(expiresAt?: Date): boolean {
