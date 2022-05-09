@@ -3,6 +3,8 @@ import { UUID } from '@/shared/provider/UUID/UUID'
 
 import { Email } from './Email'
 import { Password } from './Password'
+import { Permission } from './Permission'
+import { Role } from './Role'
 
 export class User {
   id?: string
@@ -14,6 +16,8 @@ export class User {
   isActive?: boolean = true
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
+  role?: Role[] = []
+  permission?: Permission[] = []
 
   constructor(props: PickProps<User>, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     Object.assign(this, props)

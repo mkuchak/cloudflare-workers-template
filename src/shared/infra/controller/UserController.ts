@@ -8,7 +8,12 @@ export class UserController {
   constructor(readonly repositoryFactory: RepositoryFactory, readonly daoFactory: DAOFactory) {}
 
   async createUser(request: Request) {
-    const input = request.content
+    const input = {
+      email: request.content.email,
+      password: request.content.password,
+      name: request.content.name,
+      picture: request.content.picture,
+    }
 
     const createUserUseCase = new CreateUserUseCase(this.repositoryFactory)
 
