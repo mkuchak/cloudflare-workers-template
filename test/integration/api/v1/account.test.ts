@@ -23,7 +23,7 @@ afterAll(async () => {
   await stopHttpServer()
 })
 
-describe('/api/v1/account', () => {
+describe('/api/v1', () => {
   describe('POST /register', () => {
     it('should create user', async () => {
       const input = {
@@ -31,7 +31,7 @@ describe('/api/v1/account', () => {
         password: '12345@Aa',
       }
 
-      const { status, data } = await axiosAPIClient.post('/account/register', input)
+      const { status, data } = await axiosAPIClient.post('/register', input)
 
       expect(status).toBe(201)
       expect(data).toEqual(
@@ -47,8 +47,8 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      const { status, data } = await axiosAPIClient.post('/account/register', input)
+      await axiosAPIClient.post('/register', input)
+      const { status, data } = await axiosAPIClient.post('/register', input)
       expect(status).toBe(409)
       expect(data).toEqual(
         expect.objectContaining({
@@ -62,7 +62,7 @@ describe('/api/v1/account', () => {
         email: 'johndoe+1@gmail.com',
         password: '12345@Aa',
       }
-      const { status, data } = await axiosAPIClient.post('/account/register', input)
+      const { status, data } = await axiosAPIClient.post('/register', input)
       expect(status).toBe(400)
       expect(data).toEqual(
         expect.objectContaining({
@@ -76,7 +76,7 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345',
       }
-      const { status, data } = await axiosAPIClient.post('/account/register', input)
+      const { status, data } = await axiosAPIClient.post('/register', input)
       expect(status).toBe(400)
       expect(data).toEqual(
         expect.objectContaining({
@@ -92,9 +92,9 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
+      await axiosAPIClient.post('/register', input)
 
-      const { status, data } = await axiosAPIClient.post('/account/authenticate', input)
+      const { status, data } = await axiosAPIClient.post('/authenticate', input)
 
       expect(status).toBe(201)
       expect(data).toHaveProperty('accessToken')
@@ -106,7 +106,7 @@ describe('/api/v1/account', () => {
         email: 'johndoe+1@gmail.com',
         password: '12345@Aa',
       }
-      const { status, data } = await axiosAPIClient.post('/account/authenticate', input)
+      const { status, data } = await axiosAPIClient.post('/authenticate', input)
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -120,7 +120,7 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345',
       }
-      const { status, data } = await axiosAPIClient.post('/account/authenticate', input)
+      const { status, data } = await axiosAPIClient.post('/authenticate', input)
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -134,7 +134,7 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      const { status, data } = await axiosAPIClient.post('/account/authenticate', input)
+      const { status, data } = await axiosAPIClient.post('/authenticate', input)
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -148,8 +148,8 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      const { status, data } = await axiosAPIClient.post('/account/authenticate', {
+      await axiosAPIClient.post('/register', input)
+      const { status, data } = await axiosAPIClient.post('/authenticate', {
         email: input.email,
         password: '123456',
       })
@@ -168,11 +168,11 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
+      await axiosAPIClient.post('/register', input)
 
-      const { data } = await axiosAPIClient.post('/account/authenticate', input)
+      const { data } = await axiosAPIClient.post('/authenticate', input)
 
-      const { status, data: newData } = await axiosAPIClient.post(`/account/sessions/${data.refreshToken}`)
+      const { status, data: newData } = await axiosAPIClient.post(`/sessions/${data.refreshToken}`)
 
       expect(status).toBe(201)
       expect(newData).toHaveProperty('accessToken')
@@ -184,10 +184,10 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      await axiosAPIClient.post('/account/authenticate', input)
+      await axiosAPIClient.post('/register', input)
+      await axiosAPIClient.post('/authenticate', input)
 
-      const { status, data } = await axiosAPIClient.post('/account/sessions/wrong-refresh-token')
+      const { status, data } = await axiosAPIClient.post('/sessions/wrong-refresh-token')
 
       expect(status).toBe(401)
       expect(data).toEqual(
@@ -198,18 +198,18 @@ describe('/api/v1/account', () => {
     })
   })
 
-  describe('GET /account/sessions', () => {
+  describe('GET /sessions', () => {
     it('should return all user sessions', async () => {
       const input = {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
+      await axiosAPIClient.post('/register', input)
 
-      const { data } = await axiosAPIClient.post('/account/authenticate', input)
-      await axiosAPIClient.post('/account/authenticate', input)
+      const { data } = await axiosAPIClient.post('/authenticate', input)
+      await axiosAPIClient.post('/authenticate', input)
 
-      const { status, data: sessions } = await axiosAPIClient.get('/account/sessions', {
+      const { status, data: sessions } = await axiosAPIClient.get('/sessions', {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
@@ -219,7 +219,7 @@ describe('/api/v1/account', () => {
     })
 
     it('should return error when user is not authenticated', async () => {
-      const { status, data } = await axiosAPIClient.get('/account/sessions')
+      const { status, data } = await axiosAPIClient.get('/sessions')
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -235,9 +235,9 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      const { data } = await axiosAPIClient.post('/account/authenticate', input)
-      const { status } = await axiosAPIClient.delete(`/account/sessions/${data.refreshToken}/token`)
+      await axiosAPIClient.post('/register', input)
+      const { data } = await axiosAPIClient.post('/authenticate', input)
+      const { status } = await axiosAPIClient.delete(`/sessions/${data.refreshToken}/token`)
       expect(status).toBe(204)
     })
 
@@ -246,9 +246,9 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      await axiosAPIClient.post('/account/authenticate', input)
-      const { status, data } = await axiosAPIClient.delete('/account/sessions/invalid-refresh-token/token')
+      await axiosAPIClient.post('/register', input)
+      await axiosAPIClient.post('/authenticate', input)
+      const { status, data } = await axiosAPIClient.delete('/sessions/invalid-refresh-token/token')
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -264,14 +264,14 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      const { data } = await axiosAPIClient.post('/account/authenticate', input)
-      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+      await axiosAPIClient.post('/register', input)
+      const { data } = await axiosAPIClient.post('/authenticate', input)
+      const { data: sessions } = await axiosAPIClient.get('/sessions', {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
       })
-      const { status } = await axiosAPIClient.delete(`/account/sessions/${sessions[0].id}/id`, {
+      const { status } = await axiosAPIClient.delete(`/sessions/${sessions[0].id}/id`, {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
@@ -284,19 +284,19 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', input)
-      const { data } = await axiosAPIClient.post('/account/authenticate', input)
-      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+      await axiosAPIClient.post('/register', input)
+      const { data } = await axiosAPIClient.post('/authenticate', input)
+      const { data: sessions } = await axiosAPIClient.get('/sessions', {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
       })
-      await axiosAPIClient.delete(`/account/sessions/${sessions[0].id}/id`, {
+      await axiosAPIClient.delete(`/sessions/${sessions[0].id}/id`, {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
       })
-      const { status, data: newData } = await axiosAPIClient.delete(`/account/sessions/${sessions[0].id}/id`, {
+      const { status, data: newData } = await axiosAPIClient.delete(`/sessions/${sessions[0].id}/id`, {
         headers: {
           Authorization: `Bearer ${data.accessToken}`,
         },
@@ -318,16 +318,16 @@ describe('/api/v1/account', () => {
         email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
-      await axiosAPIClient.post('/account/register', firstInput)
-      await axiosAPIClient.post('/account/register', secondInput)
-      const { data: right } = await axiosAPIClient.post('/account/authenticate', firstInput)
-      const { data: wrong } = await axiosAPIClient.post('/account/authenticate', secondInput)
-      const { data: sessions } = await axiosAPIClient.get('/account/sessions', {
+      await axiosAPIClient.post('/register', firstInput)
+      await axiosAPIClient.post('/register', secondInput)
+      const { data: right } = await axiosAPIClient.post('/authenticate', firstInput)
+      const { data: wrong } = await axiosAPIClient.post('/authenticate', secondInput)
+      const { data: sessions } = await axiosAPIClient.get('/sessions', {
         headers: {
           Authorization: `Bearer ${right.accessToken}`,
         },
       })
-      const { status, data: error } = await axiosAPIClient.delete(`/account/sessions/${sessions[0].id}/id`, {
+      const { status, data: error } = await axiosAPIClient.delete(`/sessions/${sessions[0].id}/id`, {
         headers: {
           Authorization: `Bearer ${wrong.accessToken}`,
         },

@@ -43,8 +43,8 @@ export class AuthenticateUserUseCase {
 
     /**
      * @attention Consider not storing this information in JWT and caching roles and permissions in KV
-     * Then retrieve the information inside the isUser/canUser middlewares and validate it
-     * So to retrieve this information on the client-side use a /me route, for example
+     * Then retrieve the information inside the isUser/canUser middlewares through KV and validate it
+     * To obtain this information on the client-side use "/me" route
      */
     const roles = user.role.map((role) => role.label)
     const permissions = Array.from(

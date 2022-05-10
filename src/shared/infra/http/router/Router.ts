@@ -25,11 +25,21 @@ export class Router {
   }
 
   init(path: string = '') {
-    this.accountRouter.init(`${path}/account`)
+    this.accountRouter.init(`${path}`)
     this.usersRouter.init(`${path}/users`)
 
     this.http.join('*', () => {
       throw new AppError('Not Found', 404)
     })
+  }
+
+  static parsePath(path: string): any {
+    const paths = []
+    let current = path
+    while (current) {
+      paths.push(current)
+      current = current.split('/').slice(0, -1).join('/')
+    }
+    return paths
   }
 }

@@ -4,7 +4,7 @@ import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserController } from '../../controller/UserController'
 import { Http } from '../Http'
 import { isUser } from '../middleware/isUser'
-import { RouterResponse } from './Router'
+import { Router, RouterResponse } from './Router'
 
 export class UsersRouter {
   userController: UserController
@@ -14,6 +14,18 @@ export class UsersRouter {
   }
 
   init(path: string = '') {
+    const paths = Router.parsePath(path)
+
+    this.http.on(
+      'get',
+      `${paths[1]}/me`,
+      isUser(),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 200,
+        payload: await this.userController.getProfile(request),
+      }),
+    )
+
     this.http.on(
       'get',
       `${path}`,
@@ -21,6 +33,16 @@ export class UsersRouter {
       async (request: Request): Promise<RouterResponse> => ({
         status: 200,
         payload: await this.userController.listUsers(request),
+      }),
+    )
+
+    this.http.on(
+      'get',
+      `${path}/:id`,
+      isUser(['admin']),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 200,
+        payload: await this.userController.getUser(request),
       }),
     )
   }

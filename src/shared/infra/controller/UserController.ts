@@ -1,4 +1,6 @@
 import { DAOFactory } from '@/application/factory/DAOFactory'
+import { GetProfileQuery } from '@/application/query/getProfile/GetProfileQuery'
+import { GetUserQuery } from '@/application/query/getUser/GetUserQuery'
 import { ListUsersQuery } from '@/application/query/listUsers/ListUsersQuery'
 import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/AuthenticateUserUseCase'
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
@@ -55,9 +57,33 @@ export class UserController {
       order: request.query.order?.includes('asc') ? 'asc' : 'desc',
     }
 
-    const listUsers = new ListUsersQuery(this.daoFactory)
+    const listUsersQuery = new ListUsersQuery(this.daoFactory)
 
-    const output = await listUsers.execute(input)
+    const output = await listUsersQuery.execute(input)
+
+    return output
+  }
+
+  async getProfile(request: Request) {
+    const input = {
+      id: request.user.id,
+    }
+
+    const getProfileQuery = new GetProfileQuery(this.daoFactory)
+
+    const output = await getProfileQuery.execute(input)
+
+    return output
+  }
+
+  async getUser(request: Request) {
+    const input = {
+      id: request.params.id,
+    }
+
+    const getUserQuery = new GetUserQuery(this.daoFactory)
+
+    const output = await getUserQuery.execute(input)
 
     return output
   }
