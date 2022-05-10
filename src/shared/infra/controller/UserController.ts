@@ -52,7 +52,7 @@ export class UserController {
     const input = {
       page: Number(request.query.page) || 1,
       records: Number(request.query.records) || 10,
-      order: request.query.order.includes('asc') ? 'asc' : 'desc',
+      order: request.query.order?.includes('asc') ? 'asc' : 'desc',
     }
 
     const listUsers = new ListUsersQuery(this.daoFactory)
