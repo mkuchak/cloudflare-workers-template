@@ -144,7 +144,7 @@ To know more check [prisma/prisma#12356](https://github.com/prisma/prisma/issues
 
 ## Schema and features
 
-The default schema and API brings some useful things to start a project like user table, refresh token, authentication and authorization.
+The default schema and API brings some useful things to start a project like user table, refresh token, authentication and authorization (RBAC).
 
 ![ER Diagram](https://user-images.githubusercontent.com/3791148/167148444-f7fa0f61-4ac2-426d-b41c-06c0ccbee334.svg)
 

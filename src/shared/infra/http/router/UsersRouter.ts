@@ -45,5 +45,25 @@ export class UsersRouter {
         payload: await this.userController.getUser(request),
       }),
     )
+
+    this.http.on(
+      'post',
+      `${path}/:id/rbac`,
+      isUser(['admin']),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 201,
+        payload: await this.userController.createUserRBAC(request),
+      }),
+    )
+
+    this.http.on(
+      'delete',
+      `${path}/:id/rbac`,
+      isUser(['admin']),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 204,
+        payload: await this.userController.deleteUserRBAC(request),
+      }),
+    )
   }
 }

@@ -4,6 +4,8 @@ import { GetUserQuery } from '@/application/query/getUser/GetUserQuery'
 import { ListUsersQuery } from '@/application/query/listUsers/ListUsersQuery'
 import { AuthenticateUserUseCase } from '@/application/useCase/authenticateUser/AuthenticateUserUseCase'
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
+import { CreateUserRBACUseCase } from '@/application/useCase/createUserRBAC/CreateUserRBACUseCase'
+import { DeleteUserRBACUseCase } from '@/application/useCase/deleteUserRBAC/DeleteUserRBACUseCase'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 
 export class UserController {
@@ -86,5 +88,29 @@ export class UserController {
     const output = await getUserQuery.execute(input)
 
     return output
+  }
+
+  async createUserRBAC(request: Request) {
+    const input = {
+      id: request.params.id,
+      roles: request.content?.roles || [],
+      permissions: request.content?.permissions || [],
+    }
+
+    const createUserRBACUseCase = new CreateUserRBACUseCase(this.repositoryFactory)
+
+    await createUserRBACUseCase.execute(input)
+  }
+
+  async deleteUserRBAC(request: Request) {
+    const input = {
+      id: request.params.id,
+      roles: request.content?.roles || [],
+      permissions: request.content?.permissions || [],
+    }
+
+    const deleteUserRBACUseCase = new DeleteUserRBACUseCase(this.repositoryFactory)
+
+    await deleteUserRBACUseCase.execute(input)
   }
 }

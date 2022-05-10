@@ -11,18 +11,18 @@ export const permission = [
   },
   {
     id: nanoid(),
-    label: 'read_roles',
+    label: 'read_role',
   },
   {
     id: nanoid(),
-    label: 'write_roles',
+    label: 'write_role',
   },
   {
     id: nanoid(),
-    label: 'read_permissions',
+    label: 'read_permission',
   },
   {
     id: nanoid(),
-    label: 'write_permissions',
+    label: 'write_permission',
   },
 ]
