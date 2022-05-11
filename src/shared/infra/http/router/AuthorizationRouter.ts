@@ -42,7 +42,7 @@ export class AuthorizationRouter {
       `${path}/roles`,
       isUser(['admin']),
       async (request: Request): Promise<RouterResponse> => ({
-        status: 200,
+        status: 201,
         payload: await this.roleController.createRole(request),
       }),
     )
@@ -62,7 +62,7 @@ export class AuthorizationRouter {
       `${path}/permissions`,
       isUser(['admin']),
       async (request: Request): Promise<RouterResponse> => ({
-        status: 200,
+        status: 201,
         payload: await this.permissionController.createPermission(request),
       }),
     )
