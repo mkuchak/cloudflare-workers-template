@@ -9,7 +9,29 @@ export class RoleRepositoryPrisma implements RoleRepository {
   constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   async save(role: Role): Promise<void> {
-    throw new Error('Method not implemented.')
+    const { permission, ...restRole } = role
+
+    const permissions = permission.map((permission) =>
+      permission.id ? { id: permission.id } : { label: permission.label },
+    )
+
+    await this.client.role.upsert({
+      where: {
+        id: role.id,
+      },
+      update: {
+        ...restRole,
+        permission: {
+          set: permissions,
+        },
+      },
+      create: {
+        ...restRole,
+        permission: {
+          connect: permissions,
+        },
+      },
+    })
   }
 
   async findById(id: string): Promise<Role> {
@@ -36,5 +58,14 @@ export class RoleRepositoryPrisma implements RoleRepository {
     })
 
     return role && new Role(role)
+  }
+
+  async deleteById(id: string): Promise<void> {
+    console.log('deleteById', id)
+    await this.client.role.delete({
+      where: {
+        id,
+      },
+    })
   }
 }

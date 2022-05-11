@@ -17,7 +17,7 @@ export class GetProfileQuery {
     const user = await this.userDAO.findById(input.id)
 
     if (!user) {
-      throw new AppError('User Inexistent', 400)
+      throw new AppError('User Inexistent', 404)
     }
 
     const { id, isActive, role, permission, createdAt, updatedAt, ...userData } = user

@@ -4,8 +4,8 @@ import { JWT } from '@/shared/provider/JWT/JWT'
 
 import { ProviderFactory } from '../../factory/ProviderFactory'
 
-// User Access Control List
-interface UserACL {
+// User Role-based Access Control
+interface UserRBAC {
   id: string
   roles: string[]
   permissions: string[]
@@ -25,7 +25,7 @@ export const canUser = (
       throw new AppError('Invalid Token', 401)
     }
 
-    const { id: userId, permissions: userRoles, permissions: userPermissions } = jwt.decode(accessToken) as UserACL
+    const { id: userId, permissions: userRoles, permissions: userPermissions } = jwt.decode(accessToken) as UserRBAC
 
     const hasPermission =
       !permissions.length || matchAll

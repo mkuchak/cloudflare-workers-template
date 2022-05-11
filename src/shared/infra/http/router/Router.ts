@@ -3,7 +3,8 @@ import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { AppError } from '@/shared/error/AppError'
 
 import { Http } from '../Http'
-import { AccountRouter } from './AccountRouter'
+import { AuthenticationRouter } from './AuthenticationRouter'
+import { AuthorizationRouter } from './AuthorizationRouter'
 import { UsersRouter } from './UsersRouter'
 
 export interface RouterResponse {
@@ -16,16 +17,19 @@ export interface RouterResponse {
 }
 
 export class Router {
-  accountRouter: AccountRouter
+  authenticationRouter: AuthenticationRouter
+  authorizationRouter: AuthorizationRouter
   usersRouter: UsersRouter
 
   constructor(readonly http: Http, readonly repositoryFactory: RepositoryFactory, readonly daoFactory: DAOFactory) {
-    this.accountRouter = new AccountRouter(this.http, this.repositoryFactory, this.daoFactory)
+    this.authenticationRouter = new AuthenticationRouter(this.http, this.repositoryFactory, this.daoFactory)
+    this.authorizationRouter = new AuthorizationRouter(this.http, this.repositoryFactory, this.daoFactory)
     this.usersRouter = new UsersRouter(this.http, this.repositoryFactory, this.daoFactory)
   }
 
   init(path: string = '') {
-    this.accountRouter.init(`${path}`)
+    this.authenticationRouter.init(`${path}`)
+    this.authorizationRouter.init(`${path}`)
     this.usersRouter.init(`${path}/users`)
 
     this.http.join('*', () => {

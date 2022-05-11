@@ -7,7 +7,7 @@ import { Http } from '../Http'
 import { isUser } from '../middleware/isUser'
 import { RouterResponse } from './Router'
 
-export class AccountRouter {
+export class AuthenticationRouter {
   userController: UserController
   tokenController: TokenController
 

@@ -3,26 +3,26 @@ import { nanoid } from 'nanoid'
 export const permission = [
   {
     id: nanoid(),
-    label: 'read_user',
+    label: 'read:user',
   },
   {
     id: nanoid(),
-    label: 'write_user',
+    label: 'write:user',
   },
   {
     id: nanoid(),
-    label: 'read_role',
+    label: 'read:role',
   },
   {
     id: nanoid(),
-    label: 'write_role',
+    label: 'write:role',
   },
   {
     id: nanoid(),
-    label: 'read_permission',
+    label: 'read:permission',
   },
   {
     id: nanoid(),
-    label: 'write_permission',
+    label: 'write:permission',
   },
 ]

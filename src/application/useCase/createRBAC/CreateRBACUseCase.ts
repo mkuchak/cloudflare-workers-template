@@ -1,46 +1,29 @@
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { PermissionRepository } from '@/domain/repository/PermissionRepository'
 import { RoleRepository } from '@/domain/repository/RoleRepository'
-import { UserRepository } from '@/domain/repository/UserRepository'
 import { AppError } from '@/shared/error/AppError'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 
-import { CreateUserRBACInputDTO } from './CreateUserRBACInputDTO'
+import { CreateRBACInputDTO } from './CreateRBACInputDTO'
 
-export class CreateUserRBACUseCase {
-  userRepository: UserRepository
+export class CreateRBACUseCase {
   roleRepository: RoleRepository
   permissionRepository: PermissionRepository
 
   constructor(readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma()) {
-    this.userRepository = repositoryFactory.createUserRepository()
     this.roleRepository = repositoryFactory.createRoleRepository()
     this.permissionRepository = repositoryFactory.createPermissionRepository()
   }
 
-  async execute(input: CreateUserRBACInputDTO): Promise<void> {
-    const user = await this.userRepository.findById(input.id)
+  async execute(input: CreateRBACInputDTO): Promise<void> {
+    const role = await this.roleRepository.findById(input.id)
 
-    if (!user) {
-      throw new AppError('User Inexistent', 404)
+    if (!role) {
+      throw new AppError('Role Inexistent', 404)
     }
 
-    if (!input.roles.length && !input.permissions.length) {
-      throw new AppError('Role Or Permission Inexistent', 404)
-    }
-
-    const roles = []
-
-    for (const role of input.roles) {
-      const roleExists = role.id
-        ? await this.roleRepository.findById(role.id)
-        : await this.roleRepository.findByLabel(role.label)
-
-      if (!roleExists) {
-        throw new AppError('Role Inexistent', 404)
-      }
-
-      roles.push(roleExists)
+    if (!input.permissions.length) {
+      throw new AppError('Permission Inexistent', 404)
     }
 
     const permissions = []
@@ -57,21 +40,9 @@ export class CreateUserRBACUseCase {
       permissions.push(permissionExists)
     }
 
-    const rolesLabels = []
-
-    for (const role of user.role) {
-      rolesLabels.push(role.label)
-    }
-
-    for (const role of roles) {
-      if (!rolesLabels.includes(role.label)) {
-        rolesLabels.push(role.label)
-      }
-    }
-
     const permissionsLabels = []
 
-    for (const permission of user.permission) {
+    for (const permission of role.permission) {
       permissionsLabels.push(permission.label)
     }
 
@@ -81,9 +52,8 @@ export class CreateUserRBACUseCase {
       }
     }
 
-    user.role = rolesLabels.map((label) => ({ label }))
-    user.permission = permissionsLabels.map((label) => ({ label }))
+    role.permission = permissionsLabels.map((label) => ({ label }))
 
-    await this.userRepository.save(user)
+    await this.roleRepository.save(role)
   }
 }

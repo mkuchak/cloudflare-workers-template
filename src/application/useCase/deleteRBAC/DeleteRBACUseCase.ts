@@ -1,46 +1,29 @@
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { PermissionRepository } from '@/domain/repository/PermissionRepository'
 import { RoleRepository } from '@/domain/repository/RoleRepository'
-import { UserRepository } from '@/domain/repository/UserRepository'
 import { AppError } from '@/shared/error/AppError'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 
-import { DeleteUserRBACInputDTO } from './DeleteUserRBACInputDTO'
+import { DeleteRBACInputDTO } from './DeleteRBACInputDTO'
 
-export class DeleteUserRBACUseCase {
-  userRepository: UserRepository
+export class DeleteRBACUseCase {
   roleRepository: RoleRepository
   permissionRepository: PermissionRepository
 
   constructor(readonly repositoryFactory: RepositoryFactory = new RepositoryFactoryPrisma()) {
-    this.userRepository = repositoryFactory.createUserRepository()
     this.roleRepository = repositoryFactory.createRoleRepository()
     this.permissionRepository = repositoryFactory.createPermissionRepository()
   }
 
-  async execute(input: DeleteUserRBACInputDTO): Promise<void> {
-    const user = await this.userRepository.findById(input.id)
+  async execute(input: DeleteRBACInputDTO): Promise<void> {
+    const role = await this.roleRepository.findById(input.id)
 
-    if (!user) {
-      throw new AppError('User Inexistent', 404)
+    if (!role) {
+      throw new AppError('Role Inexistent', 404)
     }
 
-    if (!input.roles.length && !input.permissions.length) {
-      throw new AppError('Role Or Permission Inexistent', 404)
-    }
-
-    const roles = []
-
-    for (const role of input.roles) {
-      const roleExists = role.id
-        ? await this.roleRepository.findById(role.id)
-        : await this.roleRepository.findByLabel(role.label)
-
-      if (!roleExists) {
-        throw new AppError('Role Inexistent', 404)
-      }
-
-      roles.push(roleExists)
+    if (!input.permissions.length) {
+      throw new AppError('Permission Inexistent', 404)
     }
 
     const permissions = []
@@ -57,23 +40,9 @@ export class DeleteUserRBACUseCase {
       permissions.push(permissionExists)
     }
 
-    const userRolesLabels = []
-
-    for (const role of user.role) {
-      userRolesLabels.push(role.label)
-    }
-
-    const deleteRolesLabels: string[] = []
-
-    for (const role of roles) {
-      if (!deleteRolesLabels.includes(role.label)) {
-        deleteRolesLabels.push(role.label)
-      }
-    }
-
     const userPermissionsLabels = []
 
-    for (const permission of user.permission) {
+    for (const permission of role.permission) {
       userPermissionsLabels.push(permission.label)
     }
 
@@ -85,11 +54,10 @@ export class DeleteUserRBACUseCase {
       }
     }
 
-    user.role = userRolesLabels.filter((label) => !deleteRolesLabels.includes(label)).map((label) => ({ label }))
-    user.permission = userPermissionsLabels
+    role.permission = userPermissionsLabels
       .filter((label) => !deletePermissionsLabels.includes(label))
       .map((label) => ({ label }))
 
-    await this.userRepository.save(user)
+    await this.roleRepository.save(role)
   }
 }

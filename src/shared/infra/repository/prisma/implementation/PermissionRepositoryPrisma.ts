@@ -9,7 +9,13 @@ export class PermissionRepositoryPrisma implements PermissionRepository {
   constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   async save(permission: Permission): Promise<void> {
-    throw new Error('Method not implemented.')
+    await this.client.permission.upsert({
+      where: {
+        id: permission.id,
+      },
+      update: permission,
+      create: permission,
+    })
   }
 
   async findById(id: string): Promise<Permission> {
@@ -30,5 +36,13 @@ export class PermissionRepositoryPrisma implements PermissionRepository {
     })
 
     return permission && new Permission(permission)
+  }
+
+  async deleteById(id: string): Promise<void> {
+    await this.client.permission.delete({
+      where: {
+        id,
+      },
+    })
   }
 }
