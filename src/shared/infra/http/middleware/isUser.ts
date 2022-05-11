@@ -29,8 +29,8 @@ export const isUser = (
 
     const hasRole =
       !roles.length || matchAll
-        ? roles.every((role) => userRoles.includes(role))
-        : roles.some((role) => userRoles.includes(role))
+        ? roles.every((role) => userRoles?.includes(role))
+        : roles.some((role) => userRoles?.includes(role))
 
     if (!hasRole) {
       throw new AppError('Restricted Access', 403)

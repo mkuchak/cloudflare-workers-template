@@ -29,8 +29,8 @@ export const canUser = (
 
     const hasPermission =
       !permissions.length || matchAll
-        ? permissions.every((permission) => userPermissions.includes(permission))
-        : permissions.some((permission) => userPermissions.includes(permission))
+        ? permissions.every((permission) => userPermissions?.includes(permission))
+        : permissions.some((permission) => userPermissions?.includes(permission))
 
     if (!hasPermission) {
       throw new AppError('Restricted Access', 403)
