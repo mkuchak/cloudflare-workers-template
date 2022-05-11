@@ -11,7 +11,7 @@ export class RoleRepositoryPrisma implements RoleRepository {
   async save(role: Role): Promise<void> {
     const { permission, ...restRole } = role
 
-    const permissions = permission.map((permission) =>
+    const permissions = permission?.map((permission) =>
       permission.id ? { id: permission.id } : { label: permission.label },
     )
 
@@ -61,7 +61,6 @@ export class RoleRepositoryPrisma implements RoleRepository {
   }
 
   async deleteById(id: string): Promise<void> {
-    console.log('deleteById', id)
     await this.client.role.delete({
       where: {
         id,
