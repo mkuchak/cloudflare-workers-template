@@ -1,7 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
-import { nanoid } from 'nanoid'
 
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { startHttpServer, stopHttpServer } from '#/index'
+
+const uuid = new ProviderFactory().createUUIDProvider()
 
 let axiosAPIClient: AxiosInstance
 
@@ -23,7 +25,7 @@ describe('/api/v1', () => {
   describe('POST /register', () => {
     it('should create user', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
 
@@ -40,7 +42,7 @@ describe('/api/v1', () => {
 
     it('should return error when email is already registered', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -69,7 +71,7 @@ describe('/api/v1', () => {
 
     it('should return error when password is invalid', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345',
       }
       const { status, data } = await axiosAPIClient.post('/register', input)
@@ -85,7 +87,7 @@ describe('/api/v1', () => {
   describe('POST /authenticate', () => {
     it('should authenticate user', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -113,7 +115,7 @@ describe('/api/v1', () => {
 
     it('should return error when password is invalid', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345',
       }
       const { status, data } = await axiosAPIClient.post('/authenticate', input)
@@ -127,7 +129,7 @@ describe('/api/v1', () => {
 
     it('should return error when email is not registered', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       const { status, data } = await axiosAPIClient.post('/authenticate', input)
@@ -141,7 +143,7 @@ describe('/api/v1', () => {
 
     it('should return error when password is wrong', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -161,7 +163,7 @@ describe('/api/v1', () => {
   describe('POST /sessions/:refreshToken', () => {
     it('should refresh access token', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -177,7 +179,7 @@ describe('/api/v1', () => {
 
     it('should return error when refresh token is invalid', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -197,7 +199,7 @@ describe('/api/v1', () => {
   describe('GET /sessions', () => {
     it('should return all user sessions', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -228,7 +230,7 @@ describe('/api/v1', () => {
   describe('DELETE /sessions/:refreshToken/token', () => {
     it('should delete refresh token', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -239,7 +241,7 @@ describe('/api/v1', () => {
 
     it('should return error when refresh token is already invalid', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -257,7 +259,7 @@ describe('/api/v1', () => {
   describe('DELETE /sessions/:refreshToken/id', () => {
     it('should delete refresh token', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -277,7 +279,7 @@ describe('/api/v1', () => {
 
     it('should return error when refresh token is already invalid', async () => {
       const input = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', input)
@@ -307,11 +309,11 @@ describe('/api/v1', () => {
 
     it('should return error if token does not belong to authenticated user', async () => {
       const firstInput = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       const secondInput = {
-        email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+        email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
         password: '12345@Aa',
       }
       await axiosAPIClient.post('/register', firstInput)

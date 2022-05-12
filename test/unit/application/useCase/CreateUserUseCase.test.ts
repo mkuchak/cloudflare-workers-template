@@ -1,7 +1,8 @@
-import { nanoid } from 'nanoid'
-
 import { CreateUserUseCase } from '@/application/useCase/createUser/CreateUserUseCase'
+import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { RepositoryFactoryInMemory } from '@/shared/infra/factory/RepositoryFactoryInMemory'
+
+const uuid = new ProviderFactory().createUUIDProvider()
 
 let repositoryFactory: RepositoryFactoryInMemory
 let createUserUseCase: CreateUserUseCase
@@ -14,7 +15,7 @@ beforeAll(async () => {
 describe('CreateUserUseCase', () => {
   it('should create a new user with a valid email and password', async () => {
     const input = {
-      email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+      email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
       password: '12345@Aa',
     }
     await createUserUseCase.execute(input)
@@ -32,7 +33,7 @@ describe('CreateUserUseCase', () => {
 
   it('should throw an error if the email is already taken', async () => {
     const input = {
-      email: `john_doe_${nanoid().toLowerCase()}@gmail.com`,
+      email: `john_doe_${uuid.generate().toLowerCase()}@gmail.com`,
       password: '12345@Aa',
     }
     await createUserUseCase.execute(input)
