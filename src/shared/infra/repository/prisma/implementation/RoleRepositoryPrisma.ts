@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
+import { Permission } from '@/domain/entity/Permission'
 import { Role } from '@/domain/entity/Role'
 import { RoleRepository } from '@/domain/repository/RoleRepository'
 
@@ -44,7 +45,14 @@ export class RoleRepositoryPrisma implements RoleRepository {
       },
     })
 
-    return role && new Role(role)
+    if (!role) return
+
+    const { permission, ...restRole } = role
+
+    return new Role({
+      ...restRole,
+      permission: permission?.map((permission) => new Permission(permission)),
+    })
   }
 
   async findByLabel(label: string): Promise<Role> {
@@ -57,7 +65,14 @@ export class RoleRepositoryPrisma implements RoleRepository {
       },
     })
 
-    return role && new Role(role)
+    if (!role) return
+
+    const { permission, ...restRole } = role
+
+    return new Role({
+      ...restRole,
+      permission: permission?.map((permission) => new Permission(permission)),
+    })
   }
 
   async deleteById(id: string): Promise<void> {

@@ -29,8 +29,6 @@ export class CreateUserRBACUseCase {
       throw new AppError('Role Or Permission Inexistent', 404)
     }
 
-    const roles = []
-
     for (const role of input.roles) {
       const roleExists = role.id
         ? await this.roleRepository.findById(role.id)
@@ -40,10 +38,8 @@ export class CreateUserRBACUseCase {
         throw new AppError('Role Inexistent', 404)
       }
 
-      roles.push(roleExists)
+      user.addRole(roleExists)
     }
-
-    const permissions = []
 
     for (const permission of input.permissions) {
       const permissionExists = permission.id
@@ -54,35 +50,8 @@ export class CreateUserRBACUseCase {
         throw new AppError('Permission Inexistent', 404)
       }
 
-      permissions.push(permissionExists)
+      user.addPermission(permissionExists)
     }
-
-    const rolesLabels = []
-
-    for (const role of user.role) {
-      rolesLabels.push(role.label)
-    }
-
-    for (const role of roles) {
-      if (!rolesLabels.includes(role.label)) {
-        rolesLabels.push(role.label)
-      }
-    }
-
-    const permissionsLabels = []
-
-    for (const permission of user.permission) {
-      permissionsLabels.push(permission.label)
-    }
-
-    for (const permission of permissions) {
-      if (!permissionsLabels.includes(permission.label)) {
-        permissionsLabels.push(permission.label)
-      }
-    }
-
-    user.role = rolesLabels.map((label) => ({ label }))
-    user.permission = permissionsLabels.map((label) => ({ label }))
 
     await this.userRepository.save(user)
   }

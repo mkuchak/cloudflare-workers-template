@@ -26,8 +26,6 @@ export class DeleteRBACUseCase {
       throw new AppError('Permission Inexistent', 404)
     }
 
-    const permissions = []
-
     for (const permission of input.permissions) {
       const permissionExists = permission.id
         ? await this.permissionRepository.findById(permission.id)
@@ -37,26 +35,8 @@ export class DeleteRBACUseCase {
         throw new AppError('Permission Inexistent', 404)
       }
 
-      permissions.push(permissionExists)
+      role.removePermission(permissionExists)
     }
-
-    const userPermissionsLabels = []
-
-    for (const permission of role.permission) {
-      userPermissionsLabels.push(permission.label)
-    }
-
-    const deletePermissionsLabels: string[] = []
-
-    for (const permission of permissions) {
-      if (!deletePermissionsLabels.includes(permission.label)) {
-        deletePermissionsLabels.push(permission.label)
-      }
-    }
-
-    role.permission = userPermissionsLabels
-      .filter((label) => !deletePermissionsLabels.includes(label))
-      .map((label) => ({ label }))
 
     await this.roleRepository.save(role)
   }

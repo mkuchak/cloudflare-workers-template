@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
+import { Permission } from '@/domain/entity/Permission'
+import { Role } from '@/domain/entity/Role'
 import { User } from '@/domain/entity/User'
 import { UserRepository } from '@/domain/repository/UserRepository'
 
@@ -55,18 +57,22 @@ export class UserRepositoryPrisma implements UserRepository {
             label: true,
             createdAt: true,
             updatedAt: true,
-            permission: {
-              select: { id: true, title: true, description: true, label: true, createdAt: true, updatedAt: true },
-            },
+            permission: true,
           },
         },
-        permission: {
-          select: { id: true, title: true, description: true, label: true, createdAt: true, updatedAt: true },
-        },
+        permission: true,
       },
     })
 
-    return user && new User(user)
+    if (!user) return
+
+    const { role, permission, ...restUser } = user
+
+    return new User({
+      ...restUser,
+      role: role?.map((role) => new Role(role)),
+      permission: permission?.map((permission) => new Permission(permission)),
+    })
   }
 
   async findByEmail(email: string): Promise<User> {
@@ -83,17 +89,21 @@ export class UserRepositoryPrisma implements UserRepository {
             label: true,
             createdAt: true,
             updatedAt: true,
-            permission: {
-              select: { id: true, title: true, description: true, label: true, createdAt: true, updatedAt: true },
-            },
+            permission: true,
           },
         },
-        permission: {
-          select: { id: true, title: true, description: true, label: true, createdAt: true, updatedAt: true },
-        },
+        permission: true,
       },
     })
 
-    return user && new User(user)
+    if (!user) return
+
+    const { role, permission, ...restUser } = user
+
+    return new User({
+      ...restUser,
+      role: role?.map((role) => new Role(role)),
+      permission: permission?.map((permission) => new Permission(permission)),
+    })
   }
 }

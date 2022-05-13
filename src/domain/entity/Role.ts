@@ -8,15 +8,22 @@ export class Role {
   label: string
   title?: string
   description?: string
-  permission?: Permission[]
+  permission?: Permission[] = []
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
   constructor(props: PickProps<Role>, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     Object.assign(this, props)
     this.id = props.id ?? uuid.generate()
-    if (this.permission) {
-      this.permission = this.permission.map((permission) => new Permission(permission))
+  }
+
+  addPermission(permission: Permission): void {
+    if (!this.permission.find((p) => p.id === permission.id || p.label === permission.label)) {
+      this.permission.push(permission)
     }
+  }
+
+  removePermission(permission: Permission): void {
+    this.permission = this.permission.filter((p) => p.id !== permission.id && p.label !== permission.label)
   }
 }

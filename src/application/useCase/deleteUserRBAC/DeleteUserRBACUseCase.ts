@@ -29,8 +29,6 @@ export class DeleteUserRBACUseCase {
       throw new AppError('Role Or Permission Inexistent', 404)
     }
 
-    const roles = []
-
     for (const role of input.roles) {
       const roleExists = role.id
         ? await this.roleRepository.findById(role.id)
@@ -40,10 +38,8 @@ export class DeleteUserRBACUseCase {
         throw new AppError('Role Inexistent', 404)
       }
 
-      roles.push(roleExists)
+      user.removeRole(roleExists)
     }
-
-    const permissions = []
 
     for (const permission of input.permissions) {
       const permissionExists = permission.id
@@ -54,41 +50,8 @@ export class DeleteUserRBACUseCase {
         throw new AppError('Permission Inexistent', 404)
       }
 
-      permissions.push(permissionExists)
+      user.removePermission(permissionExists)
     }
-
-    const userRolesLabels = []
-
-    for (const role of user.role) {
-      userRolesLabels.push(role.label)
-    }
-
-    const deleteRolesLabels: string[] = []
-
-    for (const role of roles) {
-      if (!deleteRolesLabels.includes(role.label)) {
-        deleteRolesLabels.push(role.label)
-      }
-    }
-
-    const userPermissionsLabels = []
-
-    for (const permission of user.permission) {
-      userPermissionsLabels.push(permission.label)
-    }
-
-    const deletePermissionsLabels: string[] = []
-
-    for (const permission of permissions) {
-      if (!deletePermissionsLabels.includes(permission.label)) {
-        deletePermissionsLabels.push(permission.label)
-      }
-    }
-
-    user.role = userRolesLabels.filter((label) => !deleteRolesLabels.includes(label)).map((label) => ({ label }))
-    user.permission = userPermissionsLabels
-      .filter((label) => !deletePermissionsLabels.includes(label))
-      .map((label) => ({ label }))
 
     await this.userRepository.save(user)
   }

@@ -53,4 +53,24 @@ export class User {
 
     return (firstLetter + secondLetter).toUpperCase() || undefined
   }
+
+  addRole(role: Role): void {
+    if (!this.role.find((r) => r.id === role.id || r.label === role.label)) {
+      this.role.push(role)
+    }
+  }
+
+  removeRole(role: Role): void {
+    this.role = this.role.filter((r) => r.id !== role.id && r.label !== role.label)
+  }
+
+  addPermission(permission: Permission): void {
+    if (!this.permission.find((p) => p.id === permission.id || p.label === permission.label)) {
+      this.permission.push(permission)
+    }
+  }
+
+  removePermission(permission: Permission): void {
+    this.permission = this.permission.filter((p) => p.id !== permission.id && p.label !== permission.label)
+  }
 }
