@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios'
 import { accessTokenFactory, permissionFactory, roleFactory, userFactory } from '#/factory'
 import { startHttpServer, stopHttpServer } from '#/index'
 
-let axiosAPIClient: AxiosInstance
+let api: AxiosInstance
 let adminOptions: any
 let userOptions: any
 
@@ -11,7 +11,7 @@ beforeAll(async () => {
   const apiPort = await startHttpServer()
   const baseURL = `http://localhost:${apiPort}/api/v1`
 
-  axiosAPIClient = axios.create({
+  api = axios.create({
     baseURL,
     validateStatus: () => true,
   })
@@ -28,13 +28,13 @@ describe('/api/v1', () => {
   describe('GET /me', () => {
     it('should return the user data', async () => {
       const user = userFactory()
-      await axiosAPIClient.post('/register', user)
-      const { data: session } = await axiosAPIClient.post('/authenticate', {
+      await api.post('/register', user)
+      const { data: session } = await api.post('/authenticate', {
         email: user.email,
         password: user.password,
       })
 
-      const { status, data } = await axiosAPIClient.get('/me', {
+      const { status, data } = await api.get('/me', {
         headers: { Authorization: `Bearer ${session.accessToken}` },
       })
 
@@ -52,7 +52,7 @@ describe('/api/v1', () => {
     })
 
     it('should return an error when the user is not authenticated', async () => {
-      const { status, data } = await axiosAPIClient.get('/me')
+      const { status, data } = await api.get('/me')
 
       expect(status).toBe(401)
       expect(data).toEqual(
@@ -66,9 +66,9 @@ describe('/api/v1', () => {
   describe('GET /users', () => {
     it('should return the users', async () => {
       const user = userFactory()
-      await axiosAPIClient.post('/register', user)
+      await api.post('/register', user)
 
-      const { status, data } = await axiosAPIClient.get('/users', adminOptions)
+      const { status, data } = await api.get('/users', adminOptions)
 
       expect(status).toBe(200)
       expect(data).toEqual(
@@ -95,7 +95,7 @@ describe('/api/v1', () => {
     })
 
     it('should return an error when the user is not authorized', async () => {
-      const { status, data } = await axiosAPIClient.get('/users', userOptions)
+      const { status, data } = await api.get('/users', userOptions)
 
       expect(status).toBe(403)
       expect(data).toEqual(
@@ -109,9 +109,9 @@ describe('/api/v1', () => {
   describe('GET /users/:id', () => {
     it('should return the user', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
-      const { status, data } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { status, data } = await api.get(`/users/${userData.id}`, adminOptions)
 
       expect(status).toBe(200)
       expect(data).toEqual(
@@ -131,7 +131,7 @@ describe('/api/v1', () => {
     })
 
     it('should return an error when the user is not authorized', async () => {
-      const { status, data } = await axiosAPIClient.get('/users/some-user-id', userOptions)
+      const { status, data } = await api.get('/users/some-user-id', userOptions)
 
       expect(status).toBe(403)
       expect(data).toEqual(
@@ -145,18 +145,14 @@ describe('/api/v1', () => {
   describe('POST /users/:id/rbac', () => {
     it('should update the user roles', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const role = roleFactory()
-      const { data: roleData } = await axiosAPIClient.post('/roles', role, adminOptions)
+      const { data: roleData } = await api.post('/roles', role, adminOptions)
 
-      const { status } = await axiosAPIClient.post(
-        `/users/${userData.id}/rbac`,
-        { roles: [{ id: roleData.id }] },
-        adminOptions,
-      )
+      const { status } = await api.post(`/users/${userData.id}/rbac`, { roles: [{ id: roleData.id }] }, adminOptions)
 
-      const { data: userDataWithRole } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithRole } = await api.get(`/users/${userData.id}`, adminOptions)
       const userRole = userDataWithRole.role.find((r: any) => r.label === roleData.label)
 
       expect(status).toBe(201)
@@ -169,12 +165,12 @@ describe('/api/v1', () => {
 
     it('should update the user permissions', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const permission = permissionFactory()
-      const { data: permissionData } = await axiosAPIClient.post('/permissions', permission, adminOptions)
+      const { data: permissionData } = await api.post('/permissions', permission, adminOptions)
 
-      const { status } = await axiosAPIClient.post(
+      const { status } = await api.post(
         `/users/${userData.id}/rbac`,
         {
           permissions: [{ id: permissionData.id }],
@@ -182,7 +178,7 @@ describe('/api/v1', () => {
         adminOptions,
       )
 
-      const { data: userDataWithPermission } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithPermission } = await api.get(`/users/${userData.id}`, adminOptions)
       const userPermission = userDataWithPermission.permission.find((p: any) => p.label === permissionData.label)
 
       expect(status).toBe(201)
@@ -195,14 +191,14 @@ describe('/api/v1', () => {
 
     it('should update the user roles and permissions', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const role = roleFactory()
       const permission = permissionFactory()
-      await axiosAPIClient.post('/roles', role, adminOptions)
-      await axiosAPIClient.post('/permissions', permission, adminOptions)
+      await api.post('/roles', role, adminOptions)
+      await api.post('/permissions', permission, adminOptions)
 
-      const { status } = await axiosAPIClient.post(
+      const { status } = await api.post(
         `/users/${userData.id}/rbac`,
         {
           roles: [{ label: role.label }],
@@ -211,7 +207,7 @@ describe('/api/v1', () => {
         adminOptions,
       )
 
-      const { data: userDataWithRoleAndPermission } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithRoleAndPermission } = await api.get(`/users/${userData.id}`, adminOptions)
       const userRole = userDataWithRoleAndPermission.role.find((r: any) => r.label === role.label)
       const userPermission = userDataWithRoleAndPermission.permission.find((p: any) => p.label === permission.label)
 
@@ -229,7 +225,7 @@ describe('/api/v1', () => {
     })
 
     it('should return an error when the user is not authorized', async () => {
-      const { status, data } = await axiosAPIClient.post('/users/some-user-id/rbac', {}, userOptions)
+      const { status, data } = await api.post('/users/some-user-id/rbac', {}, userOptions)
 
       expect(status).toBe(403)
       expect(data).toEqual(
@@ -243,19 +239,19 @@ describe('/api/v1', () => {
   describe('DELETE /users/:id/rbac', () => {
     it('should remove the user roles', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const role = roleFactory()
-      const { data: roleData } = await axiosAPIClient.post('/roles', role, adminOptions)
+      const { data: roleData } = await api.post('/roles', role, adminOptions)
 
-      await axiosAPIClient.post(`/users/${userData.id}/rbac`, { roles: [{ id: roleData.id }] }, adminOptions)
+      await api.post(`/users/${userData.id}/rbac`, { roles: [{ id: roleData.id }] }, adminOptions)
 
-      const { status } = await axiosAPIClient.delete(`/users/${userData.id}/rbac`, {
+      const { status } = await api.delete(`/users/${userData.id}/rbac`, {
         data: { roles: [{ id: roleData.id }] },
         ...adminOptions,
       })
 
-      const { data: userDataWithRole } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithRole } = await api.get(`/users/${userData.id}`, adminOptions)
       const userRole = userDataWithRole.role.find((r: any) => r.label === roleData.label)
 
       expect(status).toBe(204)
@@ -264,23 +260,19 @@ describe('/api/v1', () => {
 
     it('should remove the user permissions', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const permission = permissionFactory()
-      const { data: permissionData } = await axiosAPIClient.post('/permissions', permission, adminOptions)
+      const { data: permissionData } = await api.post('/permissions', permission, adminOptions)
 
-      await axiosAPIClient.post(
-        `/users/${userData.id}/rbac`,
-        { permissions: [{ id: permissionData.id }] },
-        adminOptions,
-      )
+      await api.post(`/users/${userData.id}/rbac`, { permissions: [{ id: permissionData.id }] }, adminOptions)
 
-      const { status } = await axiosAPIClient.delete(`/users/${userData.id}/rbac`, {
+      const { status } = await api.delete(`/users/${userData.id}/rbac`, {
         data: { permissions: [{ id: permissionData.id }] },
         ...adminOptions,
       })
 
-      const { data: userDataWithPermission } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithPermission } = await api.get(`/users/${userData.id}`, adminOptions)
       const userPermission = userDataWithPermission.permission.find((p: any) => p.label === permissionData.label)
 
       expect(status).toBe(204)
@@ -289,14 +281,14 @@ describe('/api/v1', () => {
 
     it('should remove the user roles and permissions', async () => {
       const user = userFactory()
-      const { data: userData } = await axiosAPIClient.post('/register', user)
+      const { data: userData } = await api.post('/register', user)
 
       const role = roleFactory()
       const permission = permissionFactory()
-      await axiosAPIClient.post('/roles', role, adminOptions)
-      await axiosAPIClient.post('/permissions', permission, adminOptions)
+      await api.post('/roles', role, adminOptions)
+      await api.post('/permissions', permission, adminOptions)
 
-      await axiosAPIClient.post(
+      await api.post(
         `/users/${userData.id}/rbac`,
         {
           roles: [{ label: role.label }],
@@ -305,7 +297,7 @@ describe('/api/v1', () => {
         adminOptions,
       )
 
-      const { status } = await axiosAPIClient.delete(`/users/${userData.id}/rbac`, {
+      const { status } = await api.delete(`/users/${userData.id}/rbac`, {
         data: {
           roles: [{ label: role.label }],
           permissions: [{ label: permission.label }],
@@ -313,7 +305,7 @@ describe('/api/v1', () => {
         ...adminOptions,
       })
 
-      const { data: userDataWithRoleAndPermission } = await axiosAPIClient.get(`/users/${userData.id}`, adminOptions)
+      const { data: userDataWithRoleAndPermission } = await api.get(`/users/${userData.id}`, adminOptions)
       const userRole = userDataWithRoleAndPermission.role.find((r: any) => r.label === role.label)
       const userPermission = userDataWithRoleAndPermission.permission.find((p: any) => p.label === permission.label)
 
@@ -323,7 +315,7 @@ describe('/api/v1', () => {
     })
 
     it('should return an error when the user is not authorized', async () => {
-      const { status, data } = await axiosAPIClient.delete('/users/some-user-id/rbac', userOptions)
+      const { status, data } = await api.delete('/users/some-user-id/rbac', userOptions)
 
       expect(status).toBe(403)
       expect(data).toEqual(

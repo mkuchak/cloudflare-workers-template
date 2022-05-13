@@ -6,11 +6,18 @@ import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 const uuid = new ProviderFactory().createUUIDProvider()
 const jwt = new ProviderFactory().createJWTProvider()
 
-export const userFactory = () => ({
-  email: faker.internet.email(),
-  password: faker.internet.password(16, false, /\w/, '1@Aa'),
-  name: faker.name.findName(),
-  picture: faker.image.avatar(),
+interface UserFactory {
+  email?: string
+  password?: string
+  name?: string
+  picture?: string
+}
+
+export const userFactory = ({ email, password, name, picture }: UserFactory = {}) => ({
+  email: email || faker.internet.email(),
+  password: password || faker.internet.password(16, false, /\w/, '1@Aa'),
+  name: name || faker.name.findName(),
+  picture: picture || faker.image.avatar(),
 })
 
 export const roleFactory = () => ({
