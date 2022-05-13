@@ -38,7 +38,9 @@ describe('/api/v1', () => {
     it('should return error when email is already registered', async () => {
       const user = userFactory()
       await api.post('/register', user)
+
       const { status, data } = await api.post('/register', user)
+
       expect(status).toBe(409)
       expect(data).toEqual(
         expect.objectContaining({
@@ -49,7 +51,9 @@ describe('/api/v1', () => {
 
     it('should return error when email is invalid', async () => {
       const user = userFactory({ email: 'johndoe+1@gmail.com' })
+
       const { status, data } = await api.post('/register', user)
+
       expect(status).toBe(400)
       expect(data).toEqual(
         expect.objectContaining({
@@ -60,7 +64,9 @@ describe('/api/v1', () => {
 
     it('should return error when password is invalid', async () => {
       const user = userFactory({ password: '12345' })
+
       const { status, data } = await api.post('/register', user)
+
       expect(status).toBe(400)
       expect(data).toEqual(
         expect.objectContaining({
@@ -84,7 +90,9 @@ describe('/api/v1', () => {
 
     it('should return error when email is invalid', async () => {
       const user = userFactory({ email: 'johndoe+1@gmail.com' })
+
       const { status, data } = await api.post('/authenticate', user)
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -95,7 +103,9 @@ describe('/api/v1', () => {
 
     it('should return error when password is invalid', async () => {
       const user = userFactory({ password: '12345' })
+
       const { status, data } = await api.post('/authenticate', user)
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -106,7 +116,9 @@ describe('/api/v1', () => {
 
     it('should return error when email is not registered', async () => {
       const user = userFactory()
+
       const { status, data } = await api.post('/authenticate', user)
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -118,10 +130,12 @@ describe('/api/v1', () => {
     it('should return error when password is wrong', async () => {
       const user = userFactory()
       await api.post('/register', user)
+
       const { status, data } = await api.post('/authenticate', {
-        email: user.email.toLowerCase(),
+        email: user.email,
         password: '123456',
       })
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -135,7 +149,6 @@ describe('/api/v1', () => {
     it('should refresh access token', async () => {
       const user = userFactory()
       await api.post('/register', user)
-
       const { data } = await api.post('/authenticate', user)
 
       const { status, data: newData } = await api.post(`/sessions/${data.refreshToken}`)
@@ -146,10 +159,6 @@ describe('/api/v1', () => {
     })
 
     it('should return error when refresh token is invalid', async () => {
-      const user = userFactory()
-      await api.post('/register', user)
-      await api.post('/authenticate', user)
-
       const { status, data } = await api.post('/sessions/wrong-refresh-token')
 
       expect(status).toBe(401)
@@ -165,21 +174,19 @@ describe('/api/v1', () => {
     it('should return all user sessions', async () => {
       const user = userFactory()
       await api.post('/register', user)
-
       const { data } = await api.post('/authenticate', user)
       await api.post('/authenticate', user)
+      const userOptions = { headers: { Authorization: `Bearer ${data.accessToken}` } }
 
-      const { status, data: sessions } = await api.get('/sessions', {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
+      const { status, data: sessions } = await api.get('/sessions', userOptions)
+
       expect(status).toBe(200)
       expect(sessions).toHaveLength(2)
     })
 
     it('should return error when user is not authenticated', async () => {
       const { status, data } = await api.get('/sessions')
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -194,7 +201,9 @@ describe('/api/v1', () => {
       const user = userFactory()
       await api.post('/register', user)
       const { data } = await api.post('/authenticate', user)
+
       const { status } = await api.delete(`/sessions/${data.refreshToken}/token`)
+
       expect(status).toBe(204)
     })
 
@@ -202,7 +211,9 @@ describe('/api/v1', () => {
       const user = userFactory()
       await api.post('/register', user)
       await api.post('/authenticate', user)
+
       const { status, data } = await api.delete('/sessions/invalid-refresh-token/token')
+
       expect(status).toBe(401)
       expect(data).toEqual(
         expect.objectContaining({
@@ -217,16 +228,11 @@ describe('/api/v1', () => {
       const user = userFactory()
       await api.post('/register', user)
       const { data } = await api.post('/authenticate', user)
-      const { data: sessions } = await api.get('/sessions', {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
-      const { status } = await api.delete(`/sessions/${sessions[0].id}/id`, {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
+      const userOptions = { headers: { Authorization: `Bearer ${data.accessToken}` } }
+      const { data: sessions } = await api.get('/sessions', userOptions)
+
+      const { status } = await api.delete(`/sessions/${sessions[0].id}/id`, userOptions)
+
       expect(status).toBe(204)
     })
 
@@ -234,21 +240,12 @@ describe('/api/v1', () => {
       const user = userFactory()
       await api.post('/register', user)
       const { data } = await api.post('/authenticate', user)
-      const { data: sessions } = await api.get('/sessions', {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
-      await api.delete(`/sessions/${sessions[0].id}/id`, {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
-      const { status, data: newData } = await api.delete(`/sessions/${sessions[0].id}/id`, {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      })
+      const userOptions = { headers: { Authorization: `Bearer ${data.accessToken}` } }
+      const { data: sessions } = await api.get('/sessions', userOptions)
+      await api.delete(`/sessions/${sessions[0].id}/id`, userOptions)
+
+      const { status, data: newData } = await api.delete(`/sessions/${sessions[0].id}/id`, userOptions)
+
       expect(status).toBe(401)
       expect(newData).toEqual(
         expect.objectContaining({
@@ -263,17 +260,13 @@ describe('/api/v1', () => {
       await api.post('/register', firstUser)
       await api.post('/register', secondUser)
       const { data: right } = await api.post('/authenticate', firstUser)
+      const rightOptions = { headers: { Authorization: `Bearer ${right.accessToken}` } }
       const { data: wrong } = await api.post('/authenticate', secondUser)
-      const { data: sessions } = await api.get('/sessions', {
-        headers: {
-          Authorization: `Bearer ${right.accessToken}`,
-        },
-      })
-      const { status, data: error } = await api.delete(`/sessions/${sessions[0].id}/id`, {
-        headers: {
-          Authorization: `Bearer ${wrong.accessToken}`,
-        },
-      })
+      const wrongOptions = { headers: { Authorization: `Bearer ${wrong.accessToken}` } }
+
+      const { data: sessions } = await api.get('/sessions', rightOptions)
+      const { status, data: error } = await api.delete(`/sessions/${sessions[0].id}/id`, wrongOptions)
+
       expect(status).toBe(401)
       expect(error).toEqual(
         expect.objectContaining({
