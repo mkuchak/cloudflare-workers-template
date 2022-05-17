@@ -1,7 +1,7 @@
 import { Role } from '@/domain/entity/Role'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { RoleRepository } from '@/domain/repository/RoleRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 
 import { CreateRoleInputDTO } from './CreateRoleInputDTO'
@@ -18,7 +18,7 @@ export class CreateRoleUseCase {
     const roleExists = !!(await this.roleRepository.findByLabel(input.label))
 
     if (roleExists) {
-      throw new AppError('Role Already Exists', 409)
+      throw new HttpError('Role Already Exists', 409)
     }
 
     const role = new Role(input)

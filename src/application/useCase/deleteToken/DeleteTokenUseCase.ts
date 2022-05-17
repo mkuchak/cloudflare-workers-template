@@ -1,7 +1,7 @@
 import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 
 import { DeleteTokenInputDTO } from './DeleteTokenInputDTO'
 
@@ -25,7 +25,7 @@ export class DeleteTokenUseCase {
     }
 
     if (!token || token.isEmailToken) {
-      throw new AppError('Invalid Token', 401)
+      throw new HttpError('Invalid Token', 401)
     }
 
     // Soft delete enforcing expiration

@@ -4,7 +4,7 @@ import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 import { JWT } from '@/shared/provider/JWT/JWT'
@@ -30,15 +30,15 @@ export class AuthenticateUserUseCase {
     const user = await this.userRepository.findByEmail(email)
 
     if (!user) {
-      throw new AppError('Invalid Password', 401) // avoid exposing the non-existence of the user
+      throw new HttpError('Invalid Password', 401) // avoid exposing the non-existence of the user
     }
 
     if (!user.isActive) {
-      throw new AppError('User Inactive', 401)
+      throw new HttpError('User Inactive', 401)
     }
 
     if (!(await Password.isValid(password, user.password))) {
-      throw new AppError('Invalid Password', 401)
+      throw new HttpError('Invalid Password', 401)
     }
 
     /**

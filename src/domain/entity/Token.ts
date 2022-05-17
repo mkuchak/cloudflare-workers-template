@@ -1,4 +1,4 @@
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 
@@ -32,7 +32,7 @@ export class Token {
 
   constructor(props: TokenType, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     if (this.isExpired(props.expiresAt)) {
-      throw new AppError('Invalid Token', 401)
+      throw new HttpError('Invalid Token', 401)
     }
 
     Object.assign(this, props)

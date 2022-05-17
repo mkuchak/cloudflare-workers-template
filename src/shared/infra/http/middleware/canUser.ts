@@ -1,5 +1,5 @@
 import { config } from '@/config'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { JWT } from '@/shared/provider/JWT/JWT'
 
 import { ProviderFactory } from '../../factory/ProviderFactory'
@@ -22,7 +22,7 @@ export const canUser = (
     const isValidToken = accessToken && (await jwt.verify(accessToken, config.jwtSecret))
 
     if (!isValidToken) {
-      throw new AppError('Invalid Token', 401)
+      throw new HttpError('Invalid Token', 401)
     }
 
     const { id: userId, permissions: userRoles, permissions: userPermissions } = jwt.decode(accessToken) as UserRBAC
@@ -33,7 +33,7 @@ export const canUser = (
         : permissions.some((permission) => userPermissions?.includes(permission))
 
     if (!hasPermission) {
-      throw new AppError('Restricted Access', 403)
+      throw new HttpError('Restricted Access', 403)
     }
 
     request.user = {

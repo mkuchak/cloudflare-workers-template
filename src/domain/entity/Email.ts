@@ -1,11 +1,11 @@
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 
 export class Email {
   private email: string
 
   constructor(email: string) {
     if (!this.isValid(email)) {
-      throw new AppError('Invalid Email', 400)
+      throw new HttpError('Invalid Email', 400)
     }
 
     this.email = email

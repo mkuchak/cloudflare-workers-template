@@ -1,6 +1,6 @@
 import { DAOFactory } from '@/application/factory/DAOFactory'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 
 import { Http } from '../Http'
 import { AuthenticationRouter } from './AuthenticationRouter'
@@ -33,7 +33,7 @@ export class Router {
     this.usersRouter.init(`${path}/users`)
 
     this.http.join('*', () => {
-      throw new AppError('Not Found', 404)
+      throw new HttpError('Not Found', 404)
     })
   }
 

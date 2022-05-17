@@ -1,6 +1,6 @@
 import { UserDAO } from '@/application/dao/UserDAO'
 import { DAOFactory } from '@/application/factory/DAOFactory'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { DAOFactoryPrisma } from '@/shared/infra/factory/DAOFactoryPrisma'
 
 import { GetUserInputDTO } from './GetUserInputDTO'
@@ -17,7 +17,7 @@ export class GetUserQuery {
     const user = await this.userDAO.findById(input.id)
 
     if (!user) {
-      throw new AppError('User Inexistent', 404)
+      throw new HttpError('User Inexistent', 404)
     }
 
     return user

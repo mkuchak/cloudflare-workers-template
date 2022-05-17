@@ -1,7 +1,7 @@
 import { Permission } from '@/domain/entity/Permission'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { PermissionRepository } from '@/domain/repository/PermissionRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 
 import { CreatePermissionInputDTO } from './CreatePermissionInputDTO'
@@ -18,7 +18,7 @@ export class CreatePermissionUseCase {
     const permissionExists = !!(await this.permissionRepository.findByLabel(input.label))
 
     if (permissionExists) {
-      throw new AppError('Permission Already Exists', 409)
+      throw new HttpError('Permission Already Exists', 409)
     }
 
     const permission = new Permission(input)

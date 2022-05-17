@@ -3,7 +3,7 @@ import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 import { JWT } from '@/shared/provider/JWT/JWT'
@@ -29,13 +29,13 @@ export class RefreshTokenUseCase {
     const token = await this.tokenRepository.findByToken(refreshToken)
 
     if (!token || token.isEmailToken) {
-      throw new AppError('Invalid Token', 401)
+      throw new HttpError('Invalid Token', 401)
     }
 
     const user = await this.userRepository.findById(token.userId)
 
     if (!user || !user.isActive) {
-      throw new AppError('Invalid Token', 401)
+      throw new HttpError('Invalid Token', 401)
     }
 
     const roles = user.role.map((role) => role.label)

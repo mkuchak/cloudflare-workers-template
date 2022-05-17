@@ -2,7 +2,7 @@ import { Password } from '@/domain/entity/Password'
 import { User } from '@/domain/entity/User'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { RepositoryFactoryPrisma } from '@/shared/infra/factory/RepositoryFactoryPrisma'
 
 import { CreateUserInputDTO } from './CreateUserInputDTO'
@@ -19,7 +19,7 @@ export class CreateUserUseCase {
     const isEmailAlreadyRegistered = !!(await this.userRepository.findByEmail(input.email))
 
     if (isEmailAlreadyRegistered) {
-      throw new AppError('User Already Exists', 409)
+      throw new HttpError('User Already Exists', 409)
     }
 
     const user = new User(input)

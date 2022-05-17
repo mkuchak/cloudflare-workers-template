@@ -1,4 +1,4 @@
-import { AppError } from '@/shared/error/AppError'
+import { HttpError } from '@/shared/error/HttpError'
 import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { Hash } from '@/shared/provider/Hash/Hash'
 
@@ -7,7 +7,7 @@ export class Password {
 
   constructor(password: string) {
     if (!this.isSecure(password)) {
-      throw new AppError('Weak Password', 400)
+      throw new HttpError('Weak Password', 400)
     }
 
     this.password = password
