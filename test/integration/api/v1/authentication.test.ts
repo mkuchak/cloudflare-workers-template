@@ -145,7 +145,7 @@ describe('/api/v1', () => {
     })
   })
 
-  describe('POST /sessions/:refreshToken', () => {
+  describe('POST /sessions/:tokenValue', () => {
     it('should refresh access token', async () => {
       const user = userFactory()
       await api.post('/register', user)
@@ -196,7 +196,7 @@ describe('/api/v1', () => {
     })
   })
 
-  describe('DELETE /sessions/:refreshToken/token', () => {
+  describe('DELETE /sessions/:tokenValue/token', () => {
     it('should delete refresh token', async () => {
       const user = userFactory()
       await api.post('/register', user)
@@ -223,7 +223,7 @@ describe('/api/v1', () => {
     })
   })
 
-  describe('DELETE /sessions/:refreshToken/id', () => {
+  describe('DELETE /sessions/:tokenId/id', () => {
     it('should delete refresh token', async () => {
       const user = userFactory()
       await api.post('/register', user)
