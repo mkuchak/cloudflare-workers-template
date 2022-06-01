@@ -3,6 +3,8 @@ import { UUID } from '@/shared/provider/UUID/UUID'
 
 import { Permission } from './Permission'
 
+type RoleProps = PickProps<Role>
+
 export class Role {
   id?: string
   label: string
@@ -12,7 +14,7 @@ export class Role {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(props: PickProps<Role>, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
+  constructor(props: RoleProps, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     Object.assign(this, props)
     this.id = props.id ?? uuid.generate()
   }

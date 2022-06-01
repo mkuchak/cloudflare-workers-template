@@ -2,7 +2,7 @@ import { HttpError } from '@/shared/error/HttpError'
 import { ProviderFactory } from '@/shared/infra/factory/ProviderFactory'
 import { UUID } from '@/shared/provider/UUID/UUID'
 
-type TokenType = Omit<PickProps<Token>, 'value'> & {
+type TokenProps = Omit<PickProps<Token>, 'value'> & {
   value?: string
 }
 
@@ -30,7 +30,7 @@ export class Token {
   createdAt?: Date = new Date()
   updatedAt?: Date = new Date()
 
-  constructor(props: TokenType, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
+  constructor(props: TokenProps, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     if (this.isExpired(props.expiresAt)) {
       throw new HttpError('Invalid Token', 401)
     }
