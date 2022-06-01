@@ -57,19 +57,20 @@ export class AuthenticationRouter {
     this.http.on(
       'delete',
       `${path}/sessions/:refreshToken/token`,
-      async (request: Request): Promise<RouterResponse> => {
-        return {
-          status: 204,
-          payload: await this.tokenController.deleteToken(request),
-        }
-      },
-    )
-
-    this.http.on('delete', `${path}/sessions/:id/id`, isUser(), async (request: Request): Promise<RouterResponse> => {
-      return {
+      async (request: Request): Promise<RouterResponse> => ({
         status: 204,
         payload: await this.tokenController.deleteToken(request),
-      }
-    })
+      }),
+    )
+
+    this.http.on(
+      'delete',
+      `${path}/sessions/:id/id`,
+      isUser(),
+      async (request: Request): Promise<RouterResponse> => ({
+        status: 204,
+        payload: await this.tokenController.deleteToken(request),
+      }),
+    )
   }
 }
