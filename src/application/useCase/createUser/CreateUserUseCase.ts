@@ -1,4 +1,3 @@
-import { Password } from '@/domain/entity/Password'
 import { User } from '@/domain/entity/User'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { UserRepository } from '@/domain/repository/UserRepository'
@@ -23,7 +22,8 @@ export class CreateUserUseCase {
     }
 
     const user = new User(input)
-    user.password = await Password.hash(user.password)
+
+    await user.password.hash()
 
     await this.userRepository.save(user)
 

@@ -1,3 +1,4 @@
+import { Password } from '@/domain/entity/Password'
 import { User } from '@/domain/entity/User'
 
 const validEmails = ['johndoe@gmail.com', 'john_doe@gmail.com', 'john.doe@gmail.com', 'john-doe@gmail.com', 'johndoe@hotmail.com.br', 'jd@pm.me']
@@ -13,11 +14,13 @@ describe('User', () => {
         password: validPasswords[Math.floor(Math.random() * validPasswords.length)],
       }
       const user = new User(data)
+
       expect(user).toBeInstanceOf(User)
       expect(user).toHaveProperty('id')
       expect(user.email).toBe(data.email)
-      expect(user.password).toBe(data.password)
-      expect(user).toEqual(expect.objectContaining(data))
+      expect(user.password).toBeInstanceOf(Password)
+      expect(user.password.getValue()).toBe(data.password)
+      expect(user).toEqual(expect.objectContaining({ email: data.email }))
     })
   })
 
@@ -28,11 +31,13 @@ describe('User', () => {
         password,
       }
       const user = new User(data)
+
       expect(user).toBeInstanceOf(User)
       expect(user).toHaveProperty('id')
       expect(user.email).toBe(data.email)
-      expect(user.password).toBe(data.password)
-      expect(user).toEqual(expect.objectContaining(data))
+      expect(user.password).toBeInstanceOf(Password)
+      expect(user.password.getValue()).toBe(data.password)
+      expect(user).toEqual(expect.objectContaining({ email: data.email }))
     })
   })
 

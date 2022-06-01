@@ -6,10 +6,14 @@ import { Password } from './Password'
 import { Permission } from './Permission'
 import { Role } from './Role'
 
+type UserType = Omit<PickProps<User>, 'password'> & {
+  password: string
+}
+
 export class User {
   id?: string
   email: string
-  password: string
+  password: Password
   name?: string
   picture?: string
   isEmailVerified?: boolean = false
@@ -19,11 +23,11 @@ export class User {
   role?: Role[] = []
   permission?: Permission[] = []
 
-  constructor(props: PickProps<User>, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
+  constructor(props: UserType, uuid: UUID = new ProviderFactory().createUUIDProvider()) {
     Object.assign(this, props)
     this.id = props.id ?? uuid.generate()
-    this.email = new Email(props.email).getEmail()
-    this.password = new Password(props.password).getPassword()
+    this.email = new Email(props.email).getValue()
+    this.password = new Password(props.password)
     this.name = props.name && this.capitalize(props.name)
   }
 

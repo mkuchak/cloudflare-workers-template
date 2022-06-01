@@ -11,7 +11,7 @@ export class Email {
     this.email = email
   }
 
-  public getEmail(): string {
+  public getValue(): string {
     return this.format(this.email)
   }
 

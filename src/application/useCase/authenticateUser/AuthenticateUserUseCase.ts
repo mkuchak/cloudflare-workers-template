@@ -1,5 +1,4 @@
 import { config } from '@/config'
-import { Password } from '@/domain/entity/Password'
 import { Token } from '@/domain/entity/Token'
 import { RepositoryFactory } from '@/domain/factory/RepositoryFactory'
 import { TokenRepository } from '@/domain/repository/TokenRepository'
@@ -37,7 +36,7 @@ export class AuthenticateUserUseCase {
       throw new HttpError('User Inactive', 401)
     }
 
-    if (!(await Password.isValid(password, user.password))) {
+    if (!(await user.password.isValid(password))) {
       throw new HttpError('Invalid Password', 401)
     }
 

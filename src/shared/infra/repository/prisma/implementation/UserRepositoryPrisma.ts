@@ -11,7 +11,7 @@ export class UserRepositoryPrisma implements UserRepository {
   constructor(readonly client = DataProxyPrismaClient || new PrismaClient()) {}
 
   async save(user: User): Promise<void> {
-    const { role, permission, ...restUser } = user
+    const { role, permission, password, ...restUser } = user
 
     const roles = role.map((role) => (role.id ? { id: role.id } : { label: role.label }))
     const permissions = permission.map((permission) =>
@@ -24,6 +24,7 @@ export class UserRepositoryPrisma implements UserRepository {
       },
       update: {
         ...restUser,
+        password: password.getValue(),
         role: {
           set: roles,
         },
@@ -33,6 +34,7 @@ export class UserRepositoryPrisma implements UserRepository {
       },
       create: {
         ...restUser,
+        password: password.getValue(),
         role: {
           connect: roles,
         },
