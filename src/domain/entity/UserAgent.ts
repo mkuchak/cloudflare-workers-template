@@ -12,12 +12,7 @@ export class UserAgent {
     userAgent: string,
     userAgentParser: UserAgentParser = new ProviderFactory().createUserAgentParserProvider(),
   ) {
-    const parsedUserAgent = userAgentParser.parse(userAgent)
-
+    Object.assign(this, userAgentParser.parse(userAgent))
     this.tag = userAgent
-    this.browser = parsedUserAgent.browser
-    this.os = parsedUserAgent.os
-    this.device = parsedUserAgent.device
-    this.platform = parsedUserAgent.platform
   }
 }
