@@ -29,7 +29,7 @@ Rename the app name in `package.json` and `wrangler.toml`.
 
 ### Easy development mode start
 
-Follow this order of commands to get started.
+Be sure to use the `.nvmrc` Node.js version. If using nvm, type `nvm install <version> && nvm use`. The recommended version is needed to work with some dependencies like Miniflare. Next, follow this order of commands to get started.
 
 ```bash
 # Copy the example .env file and modify as needed
@@ -47,6 +47,8 @@ npm run prisma:generate
 # Start development mode in a local environment that emulates production resources (Durable Objects, KV, etc.)
 npm run dev
 ```
+
+**Problems with Docker when downloading images**? [Specify DNS servers for Docker](https://docs.docker.com/engine/install/linux-postinstall/#specify-dns-servers-for-docker)
 
 **ATTENTION**: Make sure you have configured the `.env` file with your `DATABASE_URL` on [Prisma Data Platform](https://www.prisma.io/dataplatform) before running `npm run prisma:generate` command. Every time the database URL is changed this command must be executed.
 
