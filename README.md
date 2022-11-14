@@ -32,6 +32,9 @@ Rename the app name in `package.json` and `wrangler.toml`.
 Be sure to use the `.nvmrc` Node.js version. If using nvm, type `nvm install <version> && nvm use`. The recommended version is needed to work with some dependencies like Miniflare. Next, follow this order of commands to get started.
 
 ```bash
+# Check .nvmrc for the Node.js version
+node -v
+
 # Copy the example .env file and modify as needed
 cp .env.example .env
 
@@ -53,6 +56,9 @@ npm run dev
 **ATTENTION**: Make sure you have configured the `.env` file with your `DATABASE_URL` on [Prisma Data Platform](https://www.prisma.io/dataplatform) before running `npm run prisma:generate` command. Every time the database URL is changed this command must be executed.
 
 The Prisma Schema path is `src/shared/infra/repository/prisma/schema.prisma`. You can change it in `package.json` if you want to, but is needed to change the Docker containers too in `docker-compose*.yml`.
+
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Cloudflare%20Workers%20Template&uri=https%3A%2F%2Fgist.githubusercontent.com%2Fmkuchak%2Fdddcf33b56d9cbe3bcb2bf0f9bf3b12b%2Fraw%2F98840d37e697fb5ba5bed28b25fbb170f22b629d%2Finsomnia.json)
+
 
 ### Testing
 
