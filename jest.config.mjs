@@ -1,5 +1,5 @@
 export default {
-  testTimeout: 10000,
+  testTimeout: 30000,
   clearMocks: true,
   coverageProvider: 'v8',
   globalSetup: './test/globalSetup.ts',
