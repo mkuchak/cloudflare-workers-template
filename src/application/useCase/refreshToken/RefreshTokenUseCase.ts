@@ -38,21 +38,11 @@ export class RefreshTokenUseCase {
       throw new HttpError('Invalid Token', 401)
     }
 
-    const roles = user.role.map((role) => role.label)
-    const permissions = Array.from(
-      new Set(
-        [].concat(
-          user.role.reduce((acc, role) => [...acc, ...role.permission.map((permission) => permission.label)], []),
-          user.permission.map((permission) => permission.label),
-        ),
-      ),
-    )
-
     const accessToken = await this.jwt.sign(
       {
         id: token.userId,
-        roles,
-        permissions,
+        roles: user.rolesLabels,
+        permissions: user.permissionsLabels,
         exp: Math.floor(Date.now() / 1000) + 60 * config.jwtExpiration,
       },
       config.jwtSecret,

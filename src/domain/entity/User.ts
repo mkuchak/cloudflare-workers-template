@@ -58,6 +58,21 @@ export class User {
     return (firstLetter + secondLetter).toUpperCase() || undefined
   }
 
+  get rolesLabels(): string[] {
+    return this.role.map((role) => role.label)
+  }
+
+  get permissionsLabels(): string[] {
+    return Array.from(
+      new Set(
+        [].concat(
+          this.role.reduce((acc, role) => [...acc, ...role.permission.map((permission) => permission.label)], []),
+          this.permission.map((permission) => permission.label),
+        ),
+      ),
+    )
+  }
+
   addRole(role: Role): void {
     if (!this.role.find((r) => r.id === role.id || r.label === role.label)) {
       this.role.push(role)
